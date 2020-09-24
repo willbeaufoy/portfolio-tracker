@@ -1,0 +1,12 @@
+type Holding @model {
+  id: ID!
+  name: String!
+  trades: [Trade] @connection(keyName: "byHolding", fields: ["id"])
+}
+
+type Trade @model @key(name: "byHolding", fields: ["holdingID"]) {
+  id: ID!
+  holdingID: ID!
+  holding: Holding @connection(fields: ["holdingID"])
+  amount: Float!
+}
