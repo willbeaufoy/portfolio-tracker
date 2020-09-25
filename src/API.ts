@@ -4,10 +4,12 @@
 
 export type CreateHoldingInput = {
   id?: string | null,
+  username: string,
   name: string,
 };
 
 export type ModelHoldingConditionInput = {
+  username?: ModelStringInput | null,
   name?: ModelStringInput | null,
   and?: Array< ModelHoldingConditionInput | null > | null,
   or?: Array< ModelHoldingConditionInput | null > | null,
@@ -56,6 +58,7 @@ export type ModelSizeInput = {
 
 export type UpdateHoldingInput = {
   id: string,
+  username?: string | null,
   name?: string | null,
 };
 
@@ -117,6 +120,7 @@ export type DeleteTradeInput = {
 
 export type ModelHoldingFilterInput = {
   id?: ModelIDInput | null,
+  username?: ModelStringInput | null,
   name?: ModelStringInput | null,
   and?: Array< ModelHoldingFilterInput | null > | null,
   or?: Array< ModelHoldingFilterInput | null > | null,
@@ -141,6 +145,7 @@ export type CreateHoldingMutation = {
   createHolding:  {
     __typename: "Holding",
     id: string,
+    username: string,
     name: string,
     trades:  {
       __typename: "ModelTradeConnection",
@@ -168,6 +173,7 @@ export type UpdateHoldingMutation = {
   updateHolding:  {
     __typename: "Holding",
     id: string,
+    username: string,
     name: string,
     trades:  {
       __typename: "ModelTradeConnection",
@@ -195,6 +201,7 @@ export type DeleteHoldingMutation = {
   deleteHolding:  {
     __typename: "Holding",
     id: string,
+    username: string,
     name: string,
     trades:  {
       __typename: "ModelTradeConnection",
@@ -226,6 +233,7 @@ export type CreateTradeMutation = {
     holding:  {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",
@@ -253,6 +261,7 @@ export type UpdateTradeMutation = {
     holding:  {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",
@@ -280,6 +289,7 @@ export type DeleteTradeMutation = {
     holding:  {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",
@@ -302,6 +312,7 @@ export type GetHoldingQuery = {
   getHolding:  {
     __typename: "Holding",
     id: string,
+    username: string,
     name: string,
     trades:  {
       __typename: "ModelTradeConnection",
@@ -332,6 +343,7 @@ export type ListHoldingsQuery = {
     items:  Array< {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",
@@ -356,6 +368,7 @@ export type GetTradeQuery = {
     holding:  {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",
@@ -386,6 +399,7 @@ export type ListTradesQuery = {
       holding:  {
         __typename: "Holding",
         id: string,
+        username: string,
         name: string,
         createdAt: string,
         updatedAt: string,
@@ -402,6 +416,7 @@ export type OnCreateHoldingSubscription = {
   onCreateHolding:  {
     __typename: "Holding",
     id: string,
+    username: string,
     name: string,
     trades:  {
       __typename: "ModelTradeConnection",
@@ -424,6 +439,7 @@ export type OnUpdateHoldingSubscription = {
   onUpdateHolding:  {
     __typename: "Holding",
     id: string,
+    username: string,
     name: string,
     trades:  {
       __typename: "ModelTradeConnection",
@@ -446,6 +462,7 @@ export type OnDeleteHoldingSubscription = {
   onDeleteHolding:  {
     __typename: "Holding",
     id: string,
+    username: string,
     name: string,
     trades:  {
       __typename: "ModelTradeConnection",
@@ -472,6 +489,7 @@ export type OnCreateTradeSubscription = {
     holding:  {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",
@@ -494,6 +512,7 @@ export type OnUpdateTradeSubscription = {
     holding:  {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",
@@ -516,6 +535,7 @@ export type OnDeleteTradeSubscription = {
     holding:  {
       __typename: "Holding",
       id: string,
+      username: string,
       name: string,
       trades:  {
         __typename: "ModelTradeConnection",

@@ -9,6 +9,7 @@ export const createHolding = /* GraphQL */ `
   ) {
     createHolding(input: $input, condition: $condition) {
       id
+      username
       name
       trades {
         items {
@@ -32,6 +33,7 @@ export const updateHolding = /* GraphQL */ `
   ) {
     updateHolding(input: $input, condition: $condition) {
       id
+      username
       name
       trades {
         items {
@@ -55,6 +57,7 @@ export const deleteHolding = /* GraphQL */ `
   ) {
     deleteHolding(input: $input, condition: $condition) {
       id
+      username
       name
       trades {
         items {
@@ -81,6 +84,7 @@ export const createTrade = /* GraphQL */ `
       holdingID
       holding {
         id
+        username
         name
         trades {
           nextToken
@@ -104,6 +108,7 @@ export const updateTrade = /* GraphQL */ `
       holdingID
       holding {
         id
+        username
         name
         trades {
           nextToken
@@ -127,6 +132,7 @@ export const deleteTrade = /* GraphQL */ `
       holdingID
       holding {
         id
+        username
         name
         trades {
           nextToken

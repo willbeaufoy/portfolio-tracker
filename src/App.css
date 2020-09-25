@@ -1,14 +1,17 @@
-.App {
+.App-header {
   background-color: #282c34;
-  height: 100%;
+  color: white;
+  display: grid;
+  font-size: 24px;
+  grid-template-columns: [first] 20% auto [last] 20%;
+}
+
+.App-Title {
   text-align: center;
 }
 
-.App-header {
+.App-Content {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
