@@ -7,6 +7,7 @@ export const getHolding = /* GraphQL */ `
     getHolding(id: $id) {
       id
       username
+      code
       name
       trades {
         items {
@@ -33,6 +34,7 @@ export const listHoldings = /* GraphQL */ `
       items {
         id
         username
+        code
         name
         trades {
           nextToken
@@ -52,6 +54,7 @@ export const getTrade = /* GraphQL */ `
       holding {
         id
         username
+        code
         name
         trades {
           nextToken
@@ -78,6 +81,7 @@ export const listTrades = /* GraphQL */ `
         holding {
           id
           username
+          code
           name
           createdAt
           updatedAt

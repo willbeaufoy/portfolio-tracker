@@ -16,7 +16,7 @@ type UserData = {
 export type HoldingData = {
   id: string;
   username: string;
-  name: string;
+  code: string;
 };
 
 const App = () => {
@@ -37,6 +37,7 @@ const App = () => {
     (API.graphql(graphqlOperation(listHoldings)) as Promise<any>).then(
       (holdings) => {
         setHoldings(holdings.data.listHoldings.items);
+        console.log(holdings);
         setIsDataLoaded(true);
       },
     );
