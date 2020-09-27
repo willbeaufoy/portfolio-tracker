@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import './App.css';
-import HoldingForm from './AddHolding';
-import Holdings from './Holdings';
-import UserInfo from './UserInfo';
 import {Auth} from 'aws-amplify';
 import {withAuthenticator} from '@aws-amplify/ui-react';
 import {API, graphqlOperation} from 'aws-amplify';
 import {listHoldings} from './graphql/queries';
+import './App.css';
+import HoldingForm from './AddHolding';
+import Holdings from './Holdings';
+import UserInfo from './UserInfo';
 
 type UserData = {
   username: string;
@@ -16,8 +16,12 @@ type UserData = {
 export type HoldingData = {
   id: string;
   username: string;
-  code: string;
+  symbol: string;
+  price: number;
 };
+
+export const API_BASE =
+  'https://api.marketstack.com/v1/eod/latest/?access_key=234043173339712ba846306b3581836c&symbols=';
 
 const App = () => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -35,9 +39,10 @@ const App = () => {
     });
 
     (API.graphql(graphqlOperation(listHoldings)) as Promise<any>).then(
-      (holdings) => {
-        setHoldings(holdings.data.listHoldings.items);
-        console.log(holdings);
+      async (res) => {
+        const holdings = res.data.listHoldings.items;
+        await applyPrices(holdings);
+        setHoldings(holdings);
         setIsDataLoaded(true);
       },
     );
@@ -61,5 +66,22 @@ const App = () => {
     );
   }
 };
+
+/**
+ * Fetches the latest EOD prices for the given holdings from the API and
+ * applies them to the holdings.
+ */
+async function applyPrices(holdings: HoldingData[]) {
+  const symbols = holdings.map((h) => h.symbol).join();
+  try {
+    const res = await fetch(`${API_BASE}${symbols}`);
+    const resJson = await res.json();
+    for (const [i, stock] of resJson.data.entries()) {
+      holdings[i].price = stock.close;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 export default withAuthenticator(App);

@@ -12,12 +12,13 @@ type AddHoldingProps = {
 const AddHolding = (props: AddHoldingProps) => (
   <div>
     <Formik
-      initialValues={{code: ''}}
+      initialValues={{symbol: ''}}
       onSubmit={(values, {setSubmitting}) => {
         setTimeout(() => {
           const input = {
             username: props.username,
-            code: values.code,
+            symbol: values.symbol,
+            name: values.symbol,
           };
           API.graphql(graphqlOperation(createHolding, {input}));
           setSubmitting(false);
@@ -28,11 +29,11 @@ const AddHolding = (props: AddHoldingProps) => (
         <Form className="AddHolding-Form">
           <Field
             type="text"
-            name="code"
+            name="symbol"
             placeholder="Add Holding (Ticker symbol)"
           />
           <button type="submit" disabled={isSubmitting}>
-            Submit
+            Add
           </button>
         </Form>
       )}

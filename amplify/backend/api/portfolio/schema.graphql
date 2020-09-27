@@ -1,7 +1,7 @@
 type Holding @model {
   id: ID!
   username: String!
-  code: String!
+  symbol: String!
   name: String!
   trades: [Trade] @connection(keyName: "byHolding", fields: ["id"])
 }
