@@ -1,4 +1,6 @@
 import React from 'react';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import {HoldingData} from './App';
 import Holding from './Holding';
 import './Holdings.css';
@@ -12,9 +14,13 @@ const Holdings = (props: HoldingsProps) => (
   <div className="Holdings">
     <h2>Holdings</h2>
     <div className="Holdings-Holdings">
-      {props.holdings.map((d: HoldingData, i) => (
-        <Holding key={i} data={d}></Holding>
-      ))}
+      <List>
+        {props.holdings.map((d: HoldingData, i) => (
+          <ListItem>
+            <Holding key={i} data={d}></Holding>
+          </ListItem>
+        ))}
+      </List>
     </div>
   </div>
 );
