@@ -13,5 +13,6 @@ type Trade @model @key(name: "byHolding", fields: ["holdingID"]) {
   date: Int!
   shares: Float!
   price: Float!
+  fee: Float!
   holding: Holding @connection(fields: ["holdingID"])
 }

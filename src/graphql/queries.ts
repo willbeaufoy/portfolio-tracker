@@ -17,6 +17,7 @@ export const getHolding = /* GraphQL */ `
           date
           shares
           price
+          fee
           createdAt
           updatedAt
         }
@@ -58,6 +59,7 @@ export const getTrade = /* GraphQL */ `
       date
       shares
       price
+      fee
       holding {
         id
         username
@@ -88,6 +90,7 @@ export const listTrades = /* GraphQL */ `
         date
         shares
         price
+        fee
         holding {
           id
           username

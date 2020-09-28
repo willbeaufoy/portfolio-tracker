@@ -17,6 +17,7 @@ export const onCreateHolding = /* GraphQL */ `
           date
           shares
           price
+          fee
           createdAt
           updatedAt
         }
@@ -42,6 +43,7 @@ export const onUpdateHolding = /* GraphQL */ `
           date
           shares
           price
+          fee
           createdAt
           updatedAt
         }
@@ -67,6 +69,7 @@ export const onDeleteHolding = /* GraphQL */ `
           date
           shares
           price
+          fee
           createdAt
           updatedAt
         }
@@ -85,6 +88,7 @@ export const onCreateTrade = /* GraphQL */ `
       date
       shares
       price
+      fee
       holding {
         id
         username
@@ -110,6 +114,7 @@ export const onUpdateTrade = /* GraphQL */ `
       date
       shares
       price
+      fee
       holding {
         id
         username
@@ -135,6 +140,7 @@ export const onDeleteTrade = /* GraphQL */ `
       date
       shares
       price
+      fee
       holding {
         id
         username

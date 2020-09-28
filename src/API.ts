@@ -78,6 +78,7 @@ export type CreateTradeInput = {
   date: number,
   shares: number,
   price: number,
+  fee: number,
 };
 
 export type ModelTradeConditionInput = {
@@ -85,6 +86,7 @@ export type ModelTradeConditionInput = {
   date?: ModelIntInput | null,
   shares?: ModelFloatInput | null,
   price?: ModelFloatInput | null,
+  fee?: ModelFloatInput | null,
   and?: Array< ModelTradeConditionInput | null > | null,
   or?: Array< ModelTradeConditionInput | null > | null,
   not?: ModelTradeConditionInput | null,
@@ -136,6 +138,7 @@ export type UpdateTradeInput = {
   date?: number | null,
   shares?: number | null,
   price?: number | null,
+  fee?: number | null,
 };
 
 export type DeleteTradeInput = {
@@ -159,6 +162,7 @@ export type ModelTradeFilterInput = {
   date?: ModelIntInput | null,
   shares?: ModelFloatInput | null,
   price?: ModelFloatInput | null,
+  fee?: ModelFloatInput | null,
   and?: Array< ModelTradeFilterInput | null > | null,
   or?: Array< ModelTradeFilterInput | null > | null,
   not?: ModelTradeFilterInput | null,
@@ -186,6 +190,7 @@ export type CreateHoldingMutation = {
         date: number,
         shares: number,
         price: number,
+        fee: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -218,6 +223,7 @@ export type UpdateHoldingMutation = {
         date: number,
         shares: number,
         price: number,
+        fee: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -250,6 +256,7 @@ export type DeleteHoldingMutation = {
         date: number,
         shares: number,
         price: number,
+        fee: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -273,6 +280,7 @@ export type CreateTradeMutation = {
     date: number,
     shares: number,
     price: number,
+    fee: number,
     holding:  {
       __typename: "Holding",
       id: string,
@@ -305,6 +313,7 @@ export type UpdateTradeMutation = {
     date: number,
     shares: number,
     price: number,
+    fee: number,
     holding:  {
       __typename: "Holding",
       id: string,
@@ -337,6 +346,7 @@ export type DeleteTradeMutation = {
     date: number,
     shares: number,
     price: number,
+    fee: number,
     holding:  {
       __typename: "Holding",
       id: string,
@@ -377,6 +387,7 @@ export type GetHoldingQuery = {
         date: number,
         shares: number,
         price: number,
+        fee: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -426,6 +437,7 @@ export type GetTradeQuery = {
     date: number,
     shares: number,
     price: number,
+    fee: number,
     holding:  {
       __typename: "Holding",
       id: string,
@@ -461,6 +473,7 @@ export type ListTradesQuery = {
       date: number,
       shares: number,
       price: number,
+      fee: number,
       holding:  {
         __typename: "Holding",
         id: string,
@@ -495,6 +508,7 @@ export type OnCreateHoldingSubscription = {
         date: number,
         shares: number,
         price: number,
+        fee: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -522,6 +536,7 @@ export type OnUpdateHoldingSubscription = {
         date: number,
         shares: number,
         price: number,
+        fee: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -549,6 +564,7 @@ export type OnDeleteHoldingSubscription = {
         date: number,
         shares: number,
         price: number,
+        fee: number,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -567,6 +583,7 @@ export type OnCreateTradeSubscription = {
     date: number,
     shares: number,
     price: number,
+    fee: number,
     holding:  {
       __typename: "Holding",
       id: string,
@@ -594,6 +611,7 @@ export type OnUpdateTradeSubscription = {
     date: number,
     shares: number,
     price: number,
+    fee: number,
     holding:  {
       __typename: "Holding",
       id: string,
@@ -621,6 +639,7 @@ export type OnDeleteTradeSubscription = {
     date: number,
     shares: number,
     price: number,
+    fee: number,
     holding:  {
       __typename: "Holding",
       id: string,
