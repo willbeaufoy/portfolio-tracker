@@ -3,12 +3,15 @@ type Holding @model {
   username: String!
   symbol: String!
   name: String!
+  currency: String!
   trades: [Trade] @connection(keyName: "byHolding", fields: ["id"])
 }
 
 type Trade @model @key(name: "byHolding", fields: ["holdingID"]) {
   id: ID!
   holdingID: ID!
+  date: Int!
+  shares: Float!
+  price: Float!
   holding: Holding @connection(fields: ["holdingID"])
-  amount: Float!
 }
