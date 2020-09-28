@@ -17,36 +17,37 @@ export default function Holdings(props: HoldingsProps) {
     open[i] = !open[i];
     setOpen([...open]);
   };
-
   return (
     <div className="Holdings">
       <h2>Holdings</h2>
-      <div className="Holdings-Holdings">
-        <List>
-          {props.holdings.map((h, i) => (
-            <React.Fragment key={i}>
-              <ListItem
-                button
-                onClick={() => {
-                  handleClick(i);
-                }}
-              >
-                <div className="Holding">
-                  <div>{h.symbol}</div>
-                  <div>{h.price}</div>
-                </div>
-              </ListItem>
-              <Collapse in={open[i]} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItem button>
-                    <AddTrade holding={h}></AddTrade>
-                  </ListItem>
-                </List>
-              </Collapse>
-            </React.Fragment>
-          ))}
-        </List>
-      </div>
+      {Boolean(props.holdings.length) && (
+        <div className="Holdings-Holdings">
+          <List>
+            {props.holdings.map((h, i) => (
+              <React.Fragment key={i}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    handleClick(i);
+                  }}
+                >
+                  <div className="Holding">
+                    <div>{h.symbol}</div>
+                    <div>{h.price}</div>
+                  </div>
+                </ListItem>
+                <Collapse in={open[i]} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItem button>
+                      <AddTrade holding={h}></AddTrade>
+                    </ListItem>
+                  </List>
+                </Collapse>
+              </React.Fragment>
+            ))}
+          </List>
+        </div>
+      )}
     </div>
   );
 }

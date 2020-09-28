@@ -41,8 +41,10 @@ const App = () => {
     (API.graphql(graphqlOperation(listHoldings)) as Promise<any>).then(
       async (res) => {
         const holdings = res.data.listHoldings.items;
-        await applyPrices(holdings);
-        setHoldings(holdings);
+        if (holdings.length) {
+          await applyPrices(holdings);
+          setHoldings(holdings);
+        }
         setIsDataLoaded(true);
       },
     );

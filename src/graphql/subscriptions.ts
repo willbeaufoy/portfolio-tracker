@@ -9,11 +9,14 @@ export const onCreateHolding = /* GraphQL */ `
       username
       symbol
       name
+      currency
       trades {
         items {
           id
           holdingID
-          amount
+          date
+          shares
+          price
           createdAt
           updatedAt
         }
@@ -31,11 +34,14 @@ export const onUpdateHolding = /* GraphQL */ `
       username
       symbol
       name
+      currency
       trades {
         items {
           id
           holdingID
-          amount
+          date
+          shares
+          price
           createdAt
           updatedAt
         }
@@ -53,11 +59,14 @@ export const onDeleteHolding = /* GraphQL */ `
       username
       symbol
       name
+      currency
       trades {
         items {
           id
           holdingID
-          amount
+          date
+          shares
+          price
           createdAt
           updatedAt
         }
@@ -73,18 +82,21 @@ export const onCreateTrade = /* GraphQL */ `
     onCreateTrade {
       id
       holdingID
+      date
+      shares
+      price
       holding {
         id
         username
         symbol
         name
+        currency
         trades {
           nextToken
         }
         createdAt
         updatedAt
       }
-      amount
       createdAt
       updatedAt
     }
@@ -95,18 +107,21 @@ export const onUpdateTrade = /* GraphQL */ `
     onUpdateTrade {
       id
       holdingID
+      date
+      shares
+      price
       holding {
         id
         username
         symbol
         name
+        currency
         trades {
           nextToken
         }
         createdAt
         updatedAt
       }
-      amount
       createdAt
       updatedAt
     }
@@ -117,18 +132,21 @@ export const onDeleteTrade = /* GraphQL */ `
     onDeleteTrade {
       id
       holdingID
+      date
+      shares
+      price
       holding {
         id
         username
         symbol
         name
+        currency
         trades {
           nextToken
         }
         createdAt
         updatedAt
       }
-      amount
       createdAt
       updatedAt
     }

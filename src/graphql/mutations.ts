@@ -12,11 +12,14 @@ export const createHolding = /* GraphQL */ `
       username
       symbol
       name
+      currency
       trades {
         items {
           id
           holdingID
-          amount
+          date
+          shares
+          price
           createdAt
           updatedAt
         }
@@ -37,11 +40,14 @@ export const updateHolding = /* GraphQL */ `
       username
       symbol
       name
+      currency
       trades {
         items {
           id
           holdingID
-          amount
+          date
+          shares
+          price
           createdAt
           updatedAt
         }
@@ -62,11 +68,14 @@ export const deleteHolding = /* GraphQL */ `
       username
       symbol
       name
+      currency
       trades {
         items {
           id
           holdingID
-          amount
+          date
+          shares
+          price
           createdAt
           updatedAt
         }
@@ -85,18 +94,21 @@ export const createTrade = /* GraphQL */ `
     createTrade(input: $input, condition: $condition) {
       id
       holdingID
+      date
+      shares
+      price
       holding {
         id
         username
         symbol
         name
+        currency
         trades {
           nextToken
         }
         createdAt
         updatedAt
       }
-      amount
       createdAt
       updatedAt
     }
@@ -110,18 +122,21 @@ export const updateTrade = /* GraphQL */ `
     updateTrade(input: $input, condition: $condition) {
       id
       holdingID
+      date
+      shares
+      price
       holding {
         id
         username
         symbol
         name
+        currency
         trades {
           nextToken
         }
         createdAt
         updatedAt
       }
-      amount
       createdAt
       updatedAt
     }
@@ -135,18 +150,21 @@ export const deleteTrade = /* GraphQL */ `
     deleteTrade(input: $input, condition: $condition) {
       id
       holdingID
+      date
+      shares
+      price
       holding {
         id
         username
         symbol
         name
+        currency
         trades {
           nextToken
         }
         createdAt
         updatedAt
       }
-      amount
       createdAt
       updatedAt
     }

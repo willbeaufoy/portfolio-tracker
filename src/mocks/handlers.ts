@@ -18,7 +18,7 @@ export const handlers = [
   rest.get(API_BASE, (req, res, ctx) => {
     return res(ctx.json(holdingsData));
   }),
-  rest.post('https://cognito-idp.eu-west-2.amazonaws.com/', (req, res, ctx) => {
-    console.log('in cognito');
-  }),
+  // rest.post('https://cognito-idp.eu-west-2.amazonaws.com/', (req, res, ctx) => {
+  //   console.log('in cognito');
+  // }),
 ];
