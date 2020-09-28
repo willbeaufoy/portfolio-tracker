@@ -5,5 +5,12 @@
   padding: 10px;
 }
 
-.Holdings-Holdings {
+.Holding {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.Holding > div {
+  width: 100px;
 }

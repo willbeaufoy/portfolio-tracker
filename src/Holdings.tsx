@@ -2,7 +2,6 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {HoldingData} from './App';
-import Holding from './Holding';
 import './Holdings.css';
 
 type HoldingsProps = {
@@ -15,9 +14,12 @@ const Holdings = (props: HoldingsProps) => (
     <h2>Holdings</h2>
     <div className="Holdings-Holdings">
       <List>
-        {props.holdings.map((d: HoldingData, i) => (
+        {props.holdings.map((h) => (
           <ListItem>
-            <Holding key={i} data={d}></Holding>
+            <div className="Holding">
+              <div>{h.symbol}</div>
+              <div>{h.price}</div>
+            </div>
           </ListItem>
         ))}
       </List>
