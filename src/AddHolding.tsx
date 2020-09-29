@@ -2,7 +2,7 @@ import React from 'react';
 import {Formik, Form, Field} from 'formik';
 import {API, graphqlOperation} from 'aws-amplify';
 import {createHolding} from './graphql/mutations';
-import './AddHolding';
+import './AddHolding.css';
 
 type AddHoldingProps = {
   username: string;

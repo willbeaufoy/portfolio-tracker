@@ -1,4 +1,8 @@
-.HoldingForm-Form {
-  display: inline-flex;
-  flex-wrap: wrap;
+.AddHolding-Form {
+  display: flex;
+  gap: 5px;
+}
+
+.AddHolding-Form > * {
+  max-width: 100px;
 }
