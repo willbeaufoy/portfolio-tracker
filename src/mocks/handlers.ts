@@ -1,5 +1,5 @@
 import {rest} from 'msw';
-import {API_BASE} from '../App';
+import {MS_EOD_LATEST_BASE_URL} from '../utils';
 
 const holdingsData = {
   data: [
@@ -15,7 +15,7 @@ const holdingsData = {
 };
 
 export const handlers = [
-  rest.get(API_BASE, (req, res, ctx) => {
+  rest.get(MS_EOD_LATEST_BASE_URL, (req, res, ctx) => {
     return res(ctx.json(holdingsData));
   }),
   // rest.post('https://cognito-idp.eu-west-2.amazonaws.com/', (req, res, ctx) => {

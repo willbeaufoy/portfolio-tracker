@@ -7,6 +7,7 @@ import './App.css';
 import HoldingForm from './AddHolding';
 import Holdings from './Holdings';
 import UserInfo from './UserInfo';
+import {buildEodRequest} from './utils';
 
 type UserData = {
   username: string;
@@ -19,9 +20,6 @@ export type HoldingData = {
   symbol: string;
   price: number;
 };
-
-export const API_BASE =
-  'https://api.marketstack.com/v1/eod/latest/?access_key=234043173339712ba846306b3581836c&symbols=';
 
 const App = () => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -74,15 +72,15 @@ const App = () => {
  * applies them to the holdings.
  */
 async function applyPrices(holdings: HoldingData[]) {
-  const symbols = holdings.map((h) => h.symbol).join();
+  const symbols = holdings.map((h) => h.symbol);
   try {
-    const res = await fetch(`${API_BASE}${symbols}`);
+    const res = await fetch(buildEodRequest(symbols));
     const resJson = await res.json();
     for (const [i, stock] of resJson.data.entries()) {
       holdings[i].price = stock.close;
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }
 
