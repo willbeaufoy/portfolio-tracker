@@ -10,7 +10,7 @@ type Holding @model {
 type Trade @model @key(name: "byHolding", fields: ["holdingID"]) {
   id: ID!
   holdingID: ID!
-  date: Int!
+  date: AWSTimestamp!
   shares: Float!
   price: Float!
   fee: Float!

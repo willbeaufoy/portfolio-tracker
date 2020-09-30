@@ -1,8 +1,10 @@
 .AddTrade-Form {
   display: flex;
+  flex-direction: column;
   gap: 5px;
 }
 
-.AddTrade-Form > * {
-  max-width: 150px;
+.form-row {
+  display: flex;
+  gap: 5px;
 }
