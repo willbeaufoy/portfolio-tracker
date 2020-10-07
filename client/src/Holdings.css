@@ -5,12 +5,18 @@
   padding: 10px;
 }
 
-.Holding {
+.holding {
   display: flex;
   gap: 20px;
   min-width: 600px;
 }
 
-.Holding > div {
+.holding > div {
   width: 100px;
+}
+
+.trade {
+  display: flex;
+  gap: 20px;
+  margin-left: 20px;
 }

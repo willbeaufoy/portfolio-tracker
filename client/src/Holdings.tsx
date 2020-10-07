@@ -10,7 +10,7 @@ type HoldingsProps = {
   holdings: HoldingData[];
 };
 
-/** Display of all the user's holdings with option to add more. */
+/** Displays of all the user's holdings (and their trades) with option to add more. */
 export default function Holdings(props: HoldingsProps) {
   const [open, setOpen] = React.useState(props.holdings.map(() => false));
   const handleClick = (i: number) => {
@@ -31,14 +31,26 @@ export default function Holdings(props: HoldingsProps) {
                     handleClick(i);
                   }}
                 >
-                  <div className="Holding">
+                  <div className="holding">
                     <div>{h.symbol}</div>
                     <div>{h.price}</div>
                   </div>
                 </ListItem>
                 <Collapse in={open[i]} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItem button>
+                  <List component="div">
+                    <ListItem className="trade">
+                      <div>Date</div>
+                      <div>Price</div>
+                      <div>Fee</div>
+                    </ListItem>
+                    {h.trades.map((t) => (
+                      <ListItem className="trade">
+                        <div>{t.date}</div>
+                        <div>{t.price}</div>
+                        <div>{t.fee}</div>
+                      </ListItem>
+                    ))}
+                    <ListItem className="trade">
                       <AddTrade holding={h}></AddTrade>
                     </ListItem>
                   </List>

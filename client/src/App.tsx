@@ -17,6 +17,15 @@ export type HoldingData = {
   username: string;
   symbol: string;
   price: number;
+  trades: TradeData[];
+};
+
+type TradeData = {
+  id: string;
+  holding: 0;
+  date: string;
+  price: number;
+  fee: number;
 };
 
 const App = () => {
