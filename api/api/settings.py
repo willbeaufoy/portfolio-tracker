@@ -19,16 +19,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'mm%f5m-zovsov5j=w+8!5qsn@5r7#048h2cl8w3gv=&u%is4n)'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'portfolio-api.eba-ef93xgpm.us-west-2.elasticbeanstalk.com'
+    'portfolio-api.eba-ef93xgpm.us-west-2.elasticbeanstalk.com',
 ]
 
 
@@ -132,3 +131,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+if os.environ.get('DJANGO_DEVELOPMENT'):
+    DEBUG = True
