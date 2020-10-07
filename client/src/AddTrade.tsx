@@ -1,9 +1,8 @@
-import React from 'react';
-import {Formik, Form, Field} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import DatePicker from 'react-datepicker';
-import {API, graphqlOperation} from 'aws-amplify';
-import {createTrade} from './graphql/mutations';
+import React from 'react';
 import {HoldingData} from './App';
+import {createTrade} from './api_utils';
 import './AddTrade.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -23,14 +22,13 @@ export default function AddTrade(props: AddTradeProps) {
       onSubmit={(values, {setSubmitting}) => {
         setTimeout(() => {
           const input = {
-            holdingID: props.holding.id,
-            date: values.date.getTime(),
+            holding: props.holding.id,
+            date: values.date.toISOString().split('T')[0],
             shares: values.shares,
             price: values.price,
             fee: 0,
           };
-          console.log(input);
-          API.graphql(graphqlOperation(createTrade, {input}));
+          createTrade(input);
           setSubmitting(false);
         }, 400);
       }}

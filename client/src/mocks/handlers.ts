@@ -1,11 +1,15 @@
 import {rest} from 'msw';
-import {MS_EOD_LATEST_BASE_URL} from '../utils';
+import {MS_EOD_LATEST_BASE_URL} from '../settings';
 
 const holdingsData = {
   data: [
     {
       symbol: 'AMZN',
       close: 3000,
+    },
+    {
+      symbol: 'BOO.XLON',
+      close: 3.31,
     },
     {
       symbol: 'TSLA',

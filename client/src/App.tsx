@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Auth} from 'aws-amplify';
 import {withAuthenticator} from '@aws-amplify/ui-react';
-import {API, graphqlOperation} from 'aws-amplify';
-import {listHoldings} from './graphql/queries';
 import './App.css';
 import HoldingForm from './AddHolding';
 import Holdings from './Holdings';
 import UserInfo from './UserInfo';
-import {buildEodRequest} from './utils';
+import {applyPrices, listHoldings} from './api_utils';
 
 type UserData = {
   username: string;
@@ -34,18 +32,14 @@ const App = () => {
     Auth.currentUserInfo().then((userInfo) => {
       setUserInfo(userInfo);
       setIsUserLoaded(true);
-    });
-
-    (API.graphql(graphqlOperation(listHoldings)) as Promise<any>).then(
-      async (res) => {
-        const holdings = res.data.listHoldings.items;
+      listHoldings(userInfo.username).then(async (holdings) => {
         if (holdings.length) {
           await applyPrices(holdings);
           setHoldings(holdings);
         }
         setIsDataLoaded(true);
-      },
-    );
+      });
+    });
   }, []);
 
   if (!isUserLoaded || !isDataLoaded) {
@@ -66,22 +60,5 @@ const App = () => {
     );
   }
 };
-
-/**
- * Fetches the latest EOD prices for the given holdings from the API and
- * applies them to the holdings.
- */
-async function applyPrices(holdings: HoldingData[]) {
-  const symbols = holdings.map((h) => h.symbol);
-  try {
-    const res = await fetch(buildEodRequest(symbols));
-    const resJson = await res.json();
-    for (const [i, stock] of resJson.data.entries()) {
-      holdings[i].price = stock.close;
-    }
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 export default withAuthenticator(App);

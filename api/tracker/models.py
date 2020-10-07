@@ -7,9 +7,13 @@ class Holding(models.Model):
     name = models.CharField(max_length=50)
     currency = models.CharField(max_length=3)
 
+    class Meta:
+        ordering = ['name']
+
 
 class Trade(models.Model):
-    holding = models.ForeignKey(Holding, on_delete=models.CASCADE)
+    holding = models.ForeignKey(
+        Holding, related_name='trades', on_delete=models.CASCADE)
     date = models.DateField()
     shares = models.FloatField()
     price = models.FloatField()

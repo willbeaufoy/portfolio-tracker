@@ -1,4 +1,4 @@
-import {buildEodRequest} from './utils';
+import {buildEodRequest} from './api_utils';
 
 test('builds latest EOD URL', () => {
   expect(buildEodRequest(['AMZN', 'TSLA'])).toBe(

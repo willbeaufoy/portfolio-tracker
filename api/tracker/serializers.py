@@ -1,12 +1,38 @@
 from rest_framework import serializers
 
-from tracker.models import Holding
+from tracker.models import Holding, Trade
+
+
+class TradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trade
+        fields = ['holding', 'date', 'shares', 'price', 'fee']
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Trade` instance, given the validated data.
+        """
+        return Trade.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing `Trade` instance, given the validated data.
+        """
+        instance.holding = validated_data.get('holding', instance.holding)
+        instance.date = validated_data.get('date', instance.date)
+        instance.shares = validated_data.get('shares', instance.shares)
+        instance.price = validated_data.get('price', instance.price)
+        instance.fee = validated_data.get('fee', instance.fee)
+        instance.save()
+        return instance
 
 
 class HoldingSerializer(serializers.ModelSerializer):
+    trades = TradeSerializer(many=True, read_only=True)
+
     class Meta:
         model = Holding
-        fields = ['symbol', 'name', 'currency']
+        fields = ['id', 'username', 'symbol', 'name', 'currency', 'trades']
 
     def create(self, validated_data):
         """
@@ -18,6 +44,7 @@ class HoldingSerializer(serializers.ModelSerializer):
         """
         Update and return an existing `Holding` instance, given the validated data.
         """
+        instance.username = validated_data.get('username', instance.username)
         instance.symbol = validated_data.get('symbol', instance.symbol)
         instance.name = validated_data.get('name', instance.name)
         instance.currency = validated_data.get('currency', instance.currency)
