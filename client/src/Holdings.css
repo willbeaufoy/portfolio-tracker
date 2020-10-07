@@ -14,9 +14,3 @@
 .holding > div {
   width: 100px;
 }
-
-.trade {
-  display: flex;
-  gap: 20px;
-  margin-left: 20px;
-}

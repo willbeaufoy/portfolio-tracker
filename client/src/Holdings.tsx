@@ -1,10 +1,17 @@
-import React from 'react';
+import './Holdings.css';
+import AddTrade from './AddTrade';
 import Collapse from '@material-ui/core/Collapse';
+import {HoldingData} from './App';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import AddTrade from './AddTrade';
-import {HoldingData} from './App';
-import './Holdings.css';
+import Paper from '@material-ui/core/Paper';
+import React from 'react';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 type HoldingsProps = {
   holdings: HoldingData[];
@@ -37,20 +44,30 @@ export default function Holdings(props: HoldingsProps) {
                   </div>
                 </ListItem>
                 <Collapse in={open[i]} timeout="auto" unmountOnExit>
+                  <TableContainer component={Paper}>
+                    <Table size="small" aria-label="Trades table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Date</TableCell>
+                          <TableCell align="right">Price</TableCell>
+                          <TableCell align="right">Fee</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {h.trades.map((t, i) => (
+                          <TableRow key={i}>
+                            <TableCell component="th" scope="row">
+                              {t.date}
+                            </TableCell>
+                            <TableCell align="right">{t.price}</TableCell>
+                            <TableCell align="right">{t.fee}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                   <List component="div">
-                    <ListItem className="trade">
-                      <div>Date</div>
-                      <div>Price</div>
-                      <div>Fee</div>
-                    </ListItem>
-                    {h.trades.map((t) => (
-                      <ListItem className="trade">
-                        <div>{t.date}</div>
-                        <div>{t.price}</div>
-                        <div>{t.fee}</div>
-                      </ListItem>
-                    ))}
-                    <ListItem className="trade">
+                    <ListItem>
                       <AddTrade holding={h}></AddTrade>
                     </ListItem>
                   </List>
