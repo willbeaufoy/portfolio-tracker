@@ -13,7 +13,7 @@ type UserData = {
 };
 
 export type HoldingData = {
-  id: string;
+  id: number;
   username: string;
   symbol: string;
   price: number;
@@ -21,9 +21,10 @@ export type HoldingData = {
 };
 
 type TradeData = {
-  id: string;
-  holding: 0;
+  id: number;
+  holding: number;
   date: string;
+  quantity: number;
   price: number;
   fee: number;
 };

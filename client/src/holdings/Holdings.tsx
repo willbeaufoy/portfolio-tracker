@@ -44,28 +44,32 @@ export default function Holdings(props: HoldingsProps) {
                   </div>
                 </ListItem>
                 <Collapse in={open[i]} timeout="auto" unmountOnExit>
-                  <TableContainer component={Paper}>
-                    <Table size="small" aria-label="Trades table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Date</TableCell>
-                          <TableCell align="right">Price</TableCell>
-                          <TableCell align="right">Fee</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {h.trades.map((t, i) => (
-                          <TableRow key={i}>
-                            <TableCell component="th" scope="row">
-                              {t.date}
-                            </TableCell>
-                            <TableCell align="right">{t.price}</TableCell>
-                            <TableCell align="right">{t.fee}</TableCell>
+                  {Boolean(h.trades?.length) && (
+                    <TableContainer component={Paper}>
+                      <Table size="small" aria-label="Trades table">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Date</TableCell>
+                            <TableCell align="right">Quantity</TableCell>
+                            <TableCell align="right">Price</TableCell>
+                            <TableCell align="right">Fee</TableCell>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                          {h.trades.map((t, i) => (
+                            <TableRow key={i}>
+                              <TableCell component="th" scope="row">
+                                {t.date}
+                              </TableCell>
+                              <TableCell align="right">{t.quantity}</TableCell>
+                              <TableCell align="right">{t.price}</TableCell>
+                              <TableCell align="right">{t.fee}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )}
                   <List component="div">
                     <ListItem>
                       <AddTrade holding={h}></AddTrade>

@@ -15,6 +15,6 @@ class Trade(models.Model):
     holding = models.ForeignKey(
         Holding, related_name='trades', on_delete=models.CASCADE)
     date = models.DateField()
-    shares = models.FloatField()
+    quantity = models.FloatField()
     price = models.FloatField()
     fee = models.FloatField()

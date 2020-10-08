@@ -6,7 +6,7 @@ from tracker.models import Holding, Trade
 class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade
-        fields = ['holding', 'date', 'shares', 'price', 'fee']
+        fields = ['holding', 'date', 'quantity', 'price', 'fee']
 
     def create(self, validated_data):
         """
@@ -20,7 +20,7 @@ class TradeSerializer(serializers.ModelSerializer):
         """
         instance.holding = validated_data.get('holding', instance.holding)
         instance.date = validated_data.get('date', instance.date)
-        instance.shares = validated_data.get('shares', instance.shares)
+        instance.quantity = validated_data.get('quantity', instance.quantity)
         instance.price = validated_data.get('price', instance.price)
         instance.fee = validated_data.get('fee', instance.fee)
         instance.save()
