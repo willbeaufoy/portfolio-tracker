@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Auth} from 'aws-amplify';
 import {withAuthenticator} from '@aws-amplify/ui-react';
 import './App.css';
-import HoldingForm from './AddHolding';
-import Holdings from './Holdings';
+import HoldingForm from './holdings/AddHolding';
+import Holdings from './holdings/Holdings';
 import UserInfo from './UserInfo';
 import {applyPrices, listHoldings} from './api_utils';
 

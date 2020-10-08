@@ -1,8 +1,8 @@
 import {Field, Form, Formik} from 'formik';
 import DatePicker from 'react-datepicker';
 import React from 'react';
-import {HoldingData} from './App';
-import {createTrade} from './api_utils';
+import {HoldingData} from '../App';
+import {createTrade} from '../api_utils';
 import './AddTrade.css';
 import 'react-datepicker/dist/react-datepicker.css';
 

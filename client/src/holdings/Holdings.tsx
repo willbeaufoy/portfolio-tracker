@@ -1,7 +1,7 @@
 import './Holdings.css';
 import AddTrade from './AddTrade';
 import Collapse from '@material-ui/core/Collapse';
-import {HoldingData} from './App';
+import {HoldingData} from '../App';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';

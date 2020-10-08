@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from 'formik';
 import React from 'react';
-import {createHolding} from './api_utils';
+import {createHolding} from '../api_utils';
 import './AddHolding.css';
 
 type AddHoldingProps = {
