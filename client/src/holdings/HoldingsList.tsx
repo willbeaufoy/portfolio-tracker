@@ -3,7 +3,6 @@ import AddTrade from './AddTrade';
 import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Paper from '@material-ui/core/Paper';
 import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -27,8 +26,10 @@ interface Trade {
   holding: number;
   date: string;
   quantity: number;
-  price: number;
+  unitPrice: number;
   fee: number;
+  fxRate: number;
+  fxFee: number;
 }
 
 type HoldingsListProps = {
@@ -63,14 +64,15 @@ export default function HoldingsList(props: HoldingsListProps) {
                 </ListItem>
                 <Collapse in={open[i]} timeout="auto" unmountOnExit>
                   {Boolean(h.trades?.length) && (
-                    <TableContainer component={Paper}>
+                    <TableContainer>
                       <Table size="small" aria-label="Trades table">
                         <TableHead>
                           <TableRow>
                             <TableCell>Date</TableCell>
                             <TableCell align="right">Quantity</TableCell>
-                            <TableCell align="right">Price</TableCell>
+                            <TableCell align="right">Unit Price</TableCell>
                             <TableCell align="right">Fee</TableCell>
+                            <TableCell align="right">Total Price</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -80,8 +82,11 @@ export default function HoldingsList(props: HoldingsListProps) {
                                 {t.date}
                               </TableCell>
                               <TableCell align="right">{t.quantity}</TableCell>
-                              <TableCell align="right">{t.price}</TableCell>
+                              <TableCell align="right">{t.unitPrice}</TableCell>
                               <TableCell align="right">{t.fee}</TableCell>
+                              <TableCell align="right">
+                                {t.quantity * t.unitPrice + t.fee}
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

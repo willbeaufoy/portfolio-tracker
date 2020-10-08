@@ -16,7 +16,8 @@ class TestHoldingList(APITestCase):
             {'username': 'a', 'symbol': 'AMZN', 'name': 'Amazon', 'currency': 'USD'})
         self.holding = Holding.objects.create(**self.holdingDict)
         self.trade_dict = collections.OrderedDict(
-            {'holding': self.holding, 'date': '2020-09-08', 'quantity': 1, 'price': 1, 'fee': 1})
+            {'holding': self.holding, 'date': '2020-09-08', 'quantity': 1, 'unit_price': 1,
+             'fee': 1, 'fx_rate': 1.2, 'fx_fee': 0.45})
         Trade.objects.create(**self.trade_dict)
 
     def test_create_holding(self):
@@ -54,12 +55,13 @@ class TestTradeList(APITestCase):
         self.url = reverse('trade-list')
         self.holding = Holding.objects.create()
         self.trade_dict = collections.OrderedDict(
-            {'holding': self.holding, 'date': '2020-09-08', 'quantity': 1, 'price': 1, 'fee': 1})
+            {'holding': self.holding, 'date': '2020-09-08', 'quantity': 1, 'unit_price': 1,
+             'fee': 1, 'fx_rate': 1.2, 'fx_fee': 0.45})
         Trade.objects.create(**self.trade_dict)
 
     def test_create_trade(self):
         request_data = {'holding': 1, 'date': '2020-09-10',
-                        'quantity': 2, 'price': 1, 'fee': 1}
+                        'quantity': 2, 'unit_price': 1, 'fee': 1, 'fx_rate': 1.2, 'fx_fee': 0.45}
         response = self.client.post(self.url, request_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

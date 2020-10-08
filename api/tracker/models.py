@@ -16,5 +16,10 @@ class Trade(models.Model):
         Holding, related_name='trades', on_delete=models.CASCADE)
     date = models.DateField()
     quantity = models.FloatField()
-    price = models.FloatField()
+    unit_price = models.FloatField()
     fee = models.FloatField()
+    fx_rate = models.FloatField()
+    fx_fee = models.FloatField()
+
+    class Meta:
+        ordering = ['date']

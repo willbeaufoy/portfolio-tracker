@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {Auth} from 'aws-amplify';
-import {withAuthenticator} from '@aws-amplify/ui-react';
 import './App.css';
-import HoldingForm from './holdings/AddHolding';
 import HoldingsList, {Holding} from './holdings/HoldingsList';
-import UserInfo from './UserInfo';
+import React, {useEffect, useState} from 'react';
 import {applyPrices, listHoldings} from './api_utils';
+import {Auth} from 'aws-amplify';
+import DateFnsUtils from '@date-io/date-fns';
+import HoldingForm from './holdings/AddHolding';
+import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import UserInfo from './UserInfo';
+import {withAuthenticator} from '@aws-amplify/ui-react';
 
 interface UserData {
   username: string;
@@ -39,17 +41,19 @@ const App = () => {
     return <div>Loading...</div>;
   } else {
     return (
-      <div className="App">
-        <header className="App-header">
-          <div></div>
-          <h1 className="App-Title">Portfolio Tracker</h1>
-          <UserInfo attrs={userInfo.attributes}></UserInfo>
-        </header>
-        <div className="App-Content">
-          <HoldingsList holdings={holdings}></HoldingsList>
-          <HoldingForm username={userInfo.username}></HoldingForm>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <div className="App">
+          <header className="App-header">
+            <div></div>
+            <h1 className="App-Title">Portfolio Tracker</h1>
+            <UserInfo attrs={userInfo.attributes}></UserInfo>
+          </header>
+          <div className="App-Content">
+            <HoldingsList holdings={holdings}></HoldingsList>
+            <HoldingForm username={userInfo.username}></HoldingForm>
+          </div>
         </div>
-      </div>
+      </MuiPickersUtilsProvider>
     );
   }
 };

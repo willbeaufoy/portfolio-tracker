@@ -14,3 +14,7 @@
 .holding > div {
   width: 100px;
 }
+
+.MuiCollapse-container {
+  margin-left: 20px;
+}
