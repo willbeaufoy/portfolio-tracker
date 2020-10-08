@@ -1,3 +1,4 @@
 Web app for tracking the performance of a stocks portfolio.
 
-Built in React, running on AWS Amplify with GraphQL.
+Frontend: React running on AWS Amplify with Cognito auth
+Backend: Django REST framework running on AWS Elastic Beanstalk
