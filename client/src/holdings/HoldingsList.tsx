@@ -1,7 +1,6 @@
-import './Holdings.css';
+import './HoldingsList.css';
 import AddTrade from './AddTrade';
 import Collapse from '@material-ui/core/Collapse';
-import {HoldingData} from '../App';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
@@ -13,22 +12,41 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-type HoldingsProps = {
-  holdings: HoldingData[];
+/** A holding as returned from the API. */
+export interface Holding {
+  id: number;
+  username: string;
+  symbol: string;
+  price: number;
+  trades: Trade[];
+}
+
+/** A trade as returned from the API. */
+interface Trade {
+  id: number;
+  holding: number;
+  date: string;
+  quantity: number;
+  price: number;
+  fee: number;
+}
+
+type HoldingsListProps = {
+  holdings: Holding[];
 };
 
 /** Displays of all the user's holdings (and their trades) with option to add more. */
-export default function Holdings(props: HoldingsProps) {
+export default function HoldingsList(props: HoldingsListProps) {
   const [open, setOpen] = React.useState(props.holdings.map(() => false));
   const handleClick = (i: number) => {
     open[i] = !open[i];
     setOpen([...open]);
   };
   return (
-    <div className="Holdings">
+    <div className="HoldingsList">
       <h2>Holdings</h2>
       {Boolean(props.holdings.length) && (
-        <div className="Holdings-Holdings">
+        <div>
           <List>
             {props.holdings.map((h, i) => (
               <React.Fragment key={i}>

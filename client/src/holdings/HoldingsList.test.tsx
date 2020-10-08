@@ -1,5 +1,5 @@
 import {fireEvent, render} from '@testing-library/react';
-import Holdings from './Holdings';
+import HoldingsList from './HoldingsList';
 import React from 'react';
 
 test('displays a list of holdings', () => {
@@ -20,7 +20,7 @@ test('displays a list of holdings', () => {
     },
   ];
 
-  const {getByText} = render(<Holdings holdings={holdings} />);
+  const {getByText} = render(<HoldingsList holdings={holdings} />);
 
   expect(getByText('AMZN')).toBeInTheDocument();
   expect(getByText('TSLA')).toBeInTheDocument();
@@ -42,7 +42,7 @@ test(`displays a holding's trades on click`, () => {
       ],
     },
   ];
-  const {queryByText, getByText} = render(<Holdings holdings={holdings} />);
+  const {queryByText, getByText} = render(<HoldingsList holdings={holdings} />);
   expect(queryByText(tradeDate1)).toBeNull();
   expect(queryByText(tradeDate2)).toBeNull();
 

@@ -3,31 +3,14 @@ import {Auth} from 'aws-amplify';
 import {withAuthenticator} from '@aws-amplify/ui-react';
 import './App.css';
 import HoldingForm from './holdings/AddHolding';
-import Holdings from './holdings/Holdings';
+import HoldingsList, {Holding} from './holdings/HoldingsList';
 import UserInfo from './UserInfo';
 import {applyPrices, listHoldings} from './api_utils';
 
-type UserData = {
+interface UserData {
   username: string;
   attributes: {email: string};
-};
-
-export type HoldingData = {
-  id: number;
-  username: string;
-  symbol: string;
-  price: number;
-  trades: TradeData[];
-};
-
-type TradeData = {
-  id: number;
-  holding: number;
-  date: string;
-  quantity: number;
-  price: number;
-  fee: number;
-};
+}
 
 const App = () => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -36,7 +19,7 @@ const App = () => {
     attributes: {email: ''},
   });
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [holdings, setHoldings] = useState<HoldingData[]>([]);
+  const [holdings, setHoldings] = useState<Holding[]>([]);
 
   useEffect(() => {
     Auth.currentUserInfo().then((userInfo) => {
@@ -63,7 +46,7 @@ const App = () => {
           <UserInfo attrs={userInfo.attributes}></UserInfo>
         </header>
         <div className="App-Content">
-          <Holdings holdings={holdings}></Holdings>
+          <HoldingsList holdings={holdings}></HoldingsList>
           <HoldingForm username={userInfo.username}></HoldingForm>
         </div>
       </div>

@@ -1,9 +1,8 @@
-import {HoldingData} from './App';
 import {API_BASE, MS_EOD_LATEST_BASE_URL} from './settings';
+import {Holding} from './holdings/HoldingsList';
 
 /** Creates a holding on the API. */
 export function createHolding(data: any) {
-  console.log(JSON.stringify(data));
   fetch(`${API_BASE}holdings/`, {
     method: 'POST',
     headers: {
@@ -21,8 +20,6 @@ export function listHoldings(username: string) {
 
 /** Creates a trade on the API. */
 export function createTrade(data: any) {
-  console.log(data);
-  console.log(JSON.stringify(data));
   fetch(`${API_BASE}trades/`, {
     method: 'POST',
     headers: {
@@ -36,7 +33,7 @@ export function createTrade(data: any) {
  * Fetches the latest EOD prices for the given holdings from the API and
  * applies them to the holdings.
  */
-export async function applyPrices(holdings: HoldingData[]) {
+export async function applyPrices(holdings: Holding[]) {
   const symbols = holdings.map((h) => h.symbol);
   try {
     const res = await fetch(buildEodRequest(symbols));
@@ -50,7 +47,7 @@ export async function applyPrices(holdings: HoldingData[]) {
 }
 
 /** Builds a request to fetch the latest EOD prices for the provided symbols. */
-function buildEodRequest(symbols: string[]): string {
+export function buildEodRequest(symbols: string[]): string {
   return `${MS_EOD_LATEST_BASE_URL}?access_key=${
     process.env.REACT_APP_MARKETSTACK_KEY
   }&symbols=${symbols.join()}`;
