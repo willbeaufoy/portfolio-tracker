@@ -1,24 +1,10 @@
 import {fireEvent, render} from '@testing-library/react';
 import HoldingsList from './HoldingsList';
 import React from 'react';
+import {HOLDING_1, HOLDING_2, HOLDING_WITH_TRADES} from '../test_utils';
 
 test('displays a list of holdings', () => {
-  const holdings = [
-    {
-      id: 1,
-      username: 'xzy',
-      name: 'Amazon',
-      symbol: 'AMZN',
-      price: 3000,
-    },
-    {
-      id: 2,
-      username: 'xzy',
-      name: 'Tesla',
-      symbol: 'TSLA',
-      price: 400,
-    },
-  ];
+  const holdings = [HOLDING_1, HOLDING_2];
 
   const {getByText} = render(<HoldingsList holdings={holdings} />);
 
@@ -27,28 +13,17 @@ test('displays a list of holdings', () => {
 });
 
 test(`displays a holding's trades on click`, () => {
-  const tradeDate1 = '2018-03-04';
-  const tradeDate2 = '2020-09-08';
-  const holdings = [
-    {
-      id: 1,
-      username: 'xzy',
-      name: 'Amazon',
-      symbol: 'AMZN',
-      price: 3000,
-      trades: [
-        {holding: 1, date: tradeDate1, quantity: 5, price: 3, fee: 0.1},
-        {holding: 1, date: tradeDate2, quantity: 3, price: 2, fee: 0.1},
-      ],
-    },
-  ];
+  const trade1Date = '2018-03-04';
+  const trade2Date = '2020-09-08';
+  const holdings = [HOLDING_WITH_TRADES];
+
   const {queryByText, getByText} = render(<HoldingsList holdings={holdings} />);
-  expect(queryByText(tradeDate1)).toBeNull();
-  expect(queryByText(tradeDate2)).toBeNull();
+  expect(queryByText(trade1Date)).toBeNull();
+  expect(queryByText(trade2Date)).toBeNull();
 
   const holdingButton = getByText('AMZN');
   fireEvent.click(holdingButton);
 
-  expect(getByText(tradeDate1)).toBeInTheDocument();
-  expect(getByText(tradeDate2)).toBeInTheDocument();
+  expect(getByText(trade1Date)).toBeInTheDocument();
+  expect(getByText(trade2Date)).toBeInTheDocument();
 });

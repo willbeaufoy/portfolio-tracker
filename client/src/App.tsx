@@ -3,9 +3,7 @@ import HoldingsList, {Holding} from './holdings/HoldingsList';
 import React, {useEffect, useState} from 'react';
 import {applyPrices, listHoldings} from './api_utils';
 import {Auth} from 'aws-amplify';
-import DateFnsUtils from '@date-io/date-fns';
 import HoldingForm from './holdings/AddHolding';
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import UserInfo from './UserInfo';
 import {withAuthenticator} from '@aws-amplify/ui-react';
 
@@ -41,19 +39,17 @@ const App = () => {
     return <div>Loading...</div>;
   } else {
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <div className="App">
-          <header className="App-header">
-            <div></div>
-            <h1 className="App-Title">Portfolio Tracker</h1>
-            <UserInfo attrs={userInfo.attributes}></UserInfo>
-          </header>
-          <div className="App-Content">
-            <HoldingsList holdings={holdings}></HoldingsList>
-            <HoldingForm username={userInfo.username}></HoldingForm>
-          </div>
+      <div className="App">
+        <header className="App-header">
+          <div></div>
+          <h1 className="App-Title">Portfolio Tracker</h1>
+          <UserInfo attrs={userInfo.attributes}></UserInfo>
+        </header>
+        <div className="App-Content">
+          <HoldingsList holdings={holdings}></HoldingsList>
+          <HoldingForm username={userInfo.username}></HoldingForm>
         </div>
-      </MuiPickersUtilsProvider>
+      </div>
     );
   }
 };

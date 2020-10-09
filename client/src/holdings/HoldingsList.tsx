@@ -13,16 +13,16 @@ import TableRow from '@material-ui/core/TableRow';
 
 /** A holding as returned from the API. */
 export interface Holding {
-  id: number;
+  id?: number;
   username: string;
   symbol: string;
-  price: number;
-  trades: Trade[];
+  price?: number;
+  trades?: Trade[];
 }
 
 /** A trade as returned from the API. */
-interface Trade {
-  id: number;
+export interface Trade {
+  id?: number;
   holding: number;
   date: string;
   quantity: number;
@@ -76,7 +76,7 @@ export default function HoldingsList(props: HoldingsListProps) {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {h.trades.map((t, i) => (
+                          {h.trades!.map((t, i) => (
                             <TableRow key={i}>
                               <TableCell component="th" scope="row">
                                 {t.date}
