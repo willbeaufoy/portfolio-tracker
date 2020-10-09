@@ -1,5 +1,5 @@
 import {API_BASE, MS_EOD_LATEST_BASE_URL} from './settings';
-import {Holding, Trade} from './holdings/HoldingsList';
+import {Holding, AddTradeData} from './holdings/HoldingsList';
 
 /** Creates a holding on the API. */
 export function createHolding(data: Holding) {
@@ -19,13 +19,20 @@ export function listHoldings(username: string) {
 }
 
 /** Creates a trade on the API. */
-export function createTrade(data: Trade) {
+export function createTrade(data: AddTradeData) {
   return fetch(`${API_BASE}trades/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
+  });
+}
+
+/** Deletes a trade on the API. */
+export function deleteTrade(id: number) {
+  return fetch(`${API_BASE}trades/${id}`, {
+    method: 'DELETE',
   });
 }
 

@@ -1,3 +1,4 @@
+import * as apiUtils from '../api_utils';
 import {
   fireEvent,
   render,
@@ -8,7 +9,6 @@ import AddTrade from './AddTrade';
 import {HOLDING_1} from '../test_utils';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
-import * as apiUtils from '../api_utils';
 import {screen} from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 

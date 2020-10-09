@@ -18,7 +18,7 @@ class TestHoldingList(APITestCase):
         self.trade_dict = collections.OrderedDict(
             {'holding': self.holding, 'date': '2020-09-08', 'quantity': 1, 'unit_price': 1,
              'fee': 1, 'fx_rate': 1.2, 'fx_fee': 0.45})
-        Trade.objects.create(**self.trade_dict)
+        self.trade = Trade.objects.create(**self.trade_dict)
 
     def test_create_holding(self):
         request_data = {'username': 'a', 'symbol': 'TSLA',
@@ -38,6 +38,8 @@ class TestHoldingList(APITestCase):
         expect_holding_dict['id'] = self.holding.id
         expect_holding_dict.move_to_end('id', last=False)
         expect_trade_dict = collections.OrderedDict(self.trade_dict)
+        expect_trade_dict['id'] = self.trade.id
+        expect_trade_dict.move_to_end('id', last=False)
         expect_trade_dict['holding'] = self.holding.id
         expect_holding_dict['trades'] = [expect_trade_dict]
         self.assertEqual(response.data, [expect_holding_dict])
@@ -57,7 +59,7 @@ class TestTradeList(APITestCase):
         self.trade_dict = collections.OrderedDict(
             {'holding': self.holding, 'date': '2020-09-08', 'quantity': 1, 'unit_price': 1,
              'fee': 1, 'fx_rate': 1.2, 'fx_fee': 0.45})
-        Trade.objects.create(**self.trade_dict)
+        self.trade = Trade.objects.create(**self.trade_dict)
 
     def test_create_trade(self):
         request_data = {'holding': 1, 'date': '2020-09-10',
@@ -75,6 +77,8 @@ class TestTradeList(APITestCase):
         response = self.client.get(self.url, request_data, format='json')
 
         expect_trade_dict = collections.OrderedDict(self.trade_dict)
+        expect_trade_dict['id'] = self.trade.id
+        expect_trade_dict.move_to_end('id', last=False)
         expect_trade_dict['holding'] = self.holding.id
         self.assertEqual(response.data, [expect_trade_dict])
 
@@ -84,3 +88,19 @@ class TestTradeList(APITestCase):
         response = self.client.get(self.url, request_data, format='json')
 
         self.assertEqual(response.data, [])
+
+
+class TestTradeDetail(APITestCase):
+    def setUp(self):
+        self.url = reverse('trade-detail', args=['1'])
+        self.trade_1 = Trade.objects.create(
+            holding_id=1, date='2020-09-08', quantity=0.1, unit_price=200,
+            fee=4, fx_fee=0.5, fx_rate=1.2)
+        self.trade_2 = Trade.objects.create(
+            holding_id=1, date='2020-09-11', quantity=0.4, unit_price=201,
+            fee=4, fx_fee=0.5, fx_rate=1.1)
+
+    def test_delete_trade(self):
+        response = self.client.delete(self.url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(list(Trade.objects.all()), [self.trade_2])
