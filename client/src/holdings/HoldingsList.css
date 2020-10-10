@@ -7,12 +7,22 @@
 
 .holding {
   display: flex;
-  gap: 20px;
+  gap: 30px;
   min-width: 600px;
 }
 
 .holding > div {
+  display: flex;
+  align-items: center;
   width: 100px;
+}
+
+.holding > button {
+  margin-left: auto;
+}
+
+.AddTrade-button-container {
+  margin: 15px;
 }
 
 .MuiCollapse-container {

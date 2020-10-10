@@ -1,27 +1,26 @@
 import './HoldingsList.css';
-import AddTrade from './AddTrade';
+import React, {useEffect, useState} from 'react';
+import AddHoldingForm from './AddHoldingForm';
+import AddTrade from './AddTradeDialog';
+import API from '../api';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import {deleteTrade} from '../api_utils';
+import TradesList from './TradesList';
+import {User} from '../App';
 
 /** A holding as returned from the API. */
 export interface Holding {
-  id?: number;
+  id: number;
   username: string;
   symbol: string;
   price?: number;
   trades?: Trade[];
 }
+
+export type CreateHoldingData = Omit<Holding, 'id'>;
 
 /** A trade as returned from the API. */
 export interface Trade {
@@ -35,94 +34,118 @@ export interface Trade {
   fxFee: number;
 }
 
-export type AddTradeData = Omit<Trade, 'id'>;
+export type CreateTradeData = Omit<Trade, 'id'>;
 
-type HoldingsListProps = {
-  holdings: Holding[];
+export type HoldingsListProps = {
+  user: User;
 };
 
-/** Displays of all the user's holdings (and their trades) with option to add more. */
+/** Displays of all the user's holdings with the option to add more. */
 export default function HoldingsList(props: HoldingsListProps) {
-  const [open, setOpen] = React.useState(props.holdings.map(() => false));
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [holdings, setHoldings] = useState<Holding[]>([]);
+
+  useEffect(() => {
+    API.listHoldings(props.user.username).then(async (holdings) => {
+      if (holdings.length) {
+        await API.applyPrices(holdings);
+        setHoldings(holdings);
+      }
+      setIsDataLoaded(true);
+    });
+  }, [props.user.username]);
+
+  const [open, setOpen] = React.useState(holdings.map(() => false));
   const handleClick = (i: number) => {
     open[i] = !open[i];
     setOpen([...open]);
   };
-  const onDeleteTradeClicked = async (id: number) => {
-    await deleteTrade(id);
+
+  const addHolding = (holding: Holding) => {
+    holdings.push(holding);
+    setHoldings([...holdings]);
   };
+
+  const deleteHolding = async (id: number, holdingIndex: number) => {
+    try {
+      await API.deleteHolding(id);
+      holdings.splice(holdingIndex, 1);
+      setHoldings([...holdings]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const addTrade = (trade: Trade, holdingIndex: number) => {
+    if (!holdings[holdingIndex].trades) return;
+    holdings[holdingIndex].trades!.push(trade);
+    setHoldings([...holdings]);
+  };
+
+  const deleteTrade = async (
+    id: number,
+    holdingIndex: number,
+    tradeIndex: number,
+  ) => {
+    try {
+      await API.deleteTrade(id);
+      if (!holdings[holdingIndex].trades) return;
+      holdings[holdingIndex].trades!.splice(tradeIndex, 1);
+      setHoldings([...holdings]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (!isDataLoaded) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="HoldingsList">
       <h2>Holdings</h2>
-      {Boolean(props.holdings.length) && (
-        <div>
-          <List>
-            {props.holdings.map((h, i) => (
-              <React.Fragment key={i}>
-                <ListItem
-                  button
-                  onClick={() => {
-                    handleClick(i);
+      {Boolean(holdings.length) && (
+        <List>
+          {holdings.map((h, i) => (
+            <React.Fragment key={i}>
+              <ListItem
+                button
+                onClick={() => {
+                  handleClick(i);
+                }}
+              >
+                <div className="holding">
+                  <div>{h.symbol}</div>
+                  <div>{h.price}</div>
+                  <IconButton
+                    onClick={() => deleteHolding(h.id, i)}
+                    aria-label="delete"
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </div>
+              </ListItem>
+              <Collapse in={open[i]} timeout="auto" unmountOnExit>
+                <TradesList
+                  holding={h}
+                  onDeleteTradeClicked={(id: number, tradeIndex: number) => {
+                    deleteTrade(id, i, tradeIndex);
                   }}
-                >
-                  <div className="holding">
-                    <div>{h.symbol}</div>
-                    <div>{h.price}</div>
-                  </div>
-                </ListItem>
-                <Collapse in={open[i]} timeout="auto" unmountOnExit>
-                  {Boolean(h.trades?.length) && (
-                    <TableContainer>
-                      <Table size="small" aria-label="Trades table">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Date</TableCell>
-                            <TableCell align="right">Quantity</TableCell>
-                            <TableCell align="right">Unit Price</TableCell>
-                            <TableCell align="right">Fee</TableCell>
-                            <TableCell align="right">Total Price</TableCell>
-                            <TableCell> </TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {h.trades!.map((t, i) => (
-                            <TableRow key={i}>
-                              <TableCell component="th" scope="row">
-                                {t.date}
-                              </TableCell>
-                              <TableCell align="right">{t.quantity}</TableCell>
-                              <TableCell align="right">{t.unitPrice}</TableCell>
-                              <TableCell align="right">{t.fee}</TableCell>
-                              <TableCell align="right">
-                                {t.quantity * t.unitPrice + t.fee}
-                              </TableCell>
-                              <TableCell align="right">
-                                <IconButton
-                                  onClick={() => {
-                                    onDeleteTradeClicked(t.id);
-                                  }}
-                                  aria-label="delete"
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  )}
-                  <List component="div">
-                    <ListItem>
-                      <AddTrade holding={h}></AddTrade>
-                    </ListItem>
-                  </List>
-                </Collapse>
-              </React.Fragment>
-            ))}
-          </List>
-        </div>
+                ></TradesList>
+                <div className="AddTrade-button-container">
+                  <AddTrade
+                    holding={h}
+                    onTradeCreated={(trade: Trade) => addTrade(trade, i)}
+                  ></AddTrade>
+                </div>
+              </Collapse>
+            </React.Fragment>
+          ))}
+        </List>
       )}
+      <AddHoldingForm
+        username={props.user.username}
+        onHoldingCreated={(h: Holding) => addHolding(h)}
+      ></AddHoldingForm>
     </div>
   );
 }

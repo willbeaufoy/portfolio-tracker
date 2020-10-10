@@ -1,8 +1,0 @@
-.AddHolding-Form {
-  display: flex;
-  gap: 5px;
-}
-
-.AddHolding-Form > * {
-  max-width: 100px;
-}

@@ -45,3 +45,8 @@ export const HOLDING_WITH_TRADES = {
     },
   ],
 };
+
+export const USER = {
+  username: 'xyz',
+  attributes: {email: 'hello@site.com'},
+};

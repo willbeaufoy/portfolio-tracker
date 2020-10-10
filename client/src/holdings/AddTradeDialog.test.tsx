@@ -1,11 +1,11 @@
-import * as apiUtils from '../api_utils';
 import {
   fireEvent,
   render,
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-import AddTrade from './AddTrade';
+import API from '../api';
+import AddTradeDialog, {AddTradeDialogProps} from './AddTradeDialog';
 import {HOLDING_1} from '../test_utils';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
@@ -13,9 +13,19 @@ import {screen} from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 const DIALOG_TITLE = 'Add Trade';
+let props: AddTradeDialogProps;
+let addTrade: Function;
+
+beforeEach(() => {
+  addTrade = jest.fn();
+  props = {
+    holding: HOLDING_1,
+    onTradeCreated: addTrade,
+  };
+});
 
 test('opens and then cancels the dialog', async () => {
-  const {getByRole, queryByRole} = render(<AddTrade holding={HOLDING_1} />);
+  const {getByRole, queryByRole} = render(<AddTradeDialog {...props} />);
 
   expect(queryByRole('heading', {name: DIALOG_TITLE})).toBeNull();
 
@@ -34,10 +44,10 @@ test('opens and then cancels the dialog', async () => {
   );
 });
 
-test('adds a trade', async () => {
-  apiUtils.createTrade = jest.fn().mockReturnValue(Promise.resolve());
+test('creates a trade', async () => {
+  API.createTrade = jest.fn().mockReturnValue(Promise.resolve({id: 1}));
   await act(async () => {
-    const {getByRole, getAllByRole} = render(<AddTrade holding={HOLDING_1} />);
+    const {getByRole, getAllByRole} = render(<AddTradeDialog {...props} />);
     const openButton = getByRole('button', {name: 'Add Trade'});
     fireEvent.click(openButton);
     await waitFor(() => {
@@ -56,7 +66,7 @@ test('adds a trade', async () => {
     screen.queryByRole('heading', {name: DIALOG_TITLE}),
   );
   // TODO: Set date specifically.
-  expect(apiUtils.createTrade).toHaveBeenCalledWith({
+  expect(API.createTrade).toHaveBeenCalledWith({
     holding: 1,
     date: new Date().toISOString().split('T')[0],
     quantity: 0.003,
@@ -65,4 +75,5 @@ test('adds a trade', async () => {
     fxFee: 0,
     fxRate: 0,
   });
+  expect(addTrade).toHaveBeenCalledWith({id: 1});
 });

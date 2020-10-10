@@ -1,41 +1,30 @@
 import './App.css';
-import HoldingsList, {Holding} from './holdings/HoldingsList';
 import React, {useEffect, useState} from 'react';
-import {applyPrices, listHoldings} from './api_utils';
 import {Auth} from 'aws-amplify';
-import HoldingForm from './holdings/AddHolding';
+import HoldingsList from './holdings/HoldingsList';
 import UserInfo from './UserInfo';
 import {withAuthenticator} from '@aws-amplify/ui-react';
 
-interface UserData {
+export interface User {
   username: string;
   attributes: {email: string};
 }
 
 const App = () => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
-  const [userInfo, setUserInfo] = useState<UserData>({
+  const [user, setUser] = useState<User>({
     username: '',
     attributes: {email: ''},
   });
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [holdings, setHoldings] = useState<Holding[]>([]);
 
   useEffect(() => {
-    Auth.currentUserInfo().then((userInfo) => {
-      setUserInfo(userInfo);
+    Auth.currentUserInfo().then((user) => {
+      setUser(user);
       setIsUserLoaded(true);
-      listHoldings(userInfo.username).then(async (holdings) => {
-        if (holdings.length) {
-          await applyPrices(holdings);
-          setHoldings(holdings);
-        }
-        setIsDataLoaded(true);
-      });
     });
   }, []);
 
-  if (!isUserLoaded || !isDataLoaded) {
+  if (!isUserLoaded) {
     return <div>Loading...</div>;
   } else {
     return (
@@ -43,11 +32,10 @@ const App = () => {
         <header className="App-header">
           <div></div>
           <h1 className="App-Title">Portfolio Tracker</h1>
-          <UserInfo attrs={userInfo.attributes}></UserInfo>
+          <UserInfo attrs={user.attributes}></UserInfo>
         </header>
         <div className="App-Content">
-          <HoldingsList holdings={holdings}></HoldingsList>
-          <HoldingForm username={userInfo.username}></HoldingForm>
+          <HoldingsList user={user}></HoldingsList>
         </div>
       </div>
     );

@@ -1,4 +1,4 @@
-import './AddTrade.css';
+import './AddTradeDialog.css';
 import {Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
@@ -11,13 +11,14 @@ import {Holding} from './HoldingsList';
 import {KeyboardDatePicker} from 'formik-material-ui-pickers';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {TextField} from 'formik-material-ui';
-import {createTrade} from '../api_utils';
+import API from '../api';
 
-type AddTradeProps = {
+export type AddTradeDialogProps = {
   holding: Holding;
+  onTradeCreated: Function;
 };
 
-export default function AddTrade(props: AddTradeProps) {
+export default function AddTradeDialog(props: AddTradeDialogProps) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -57,13 +58,18 @@ export default function AddTrade(props: AddTradeProps) {
               fxRate: Number(values.fxRate ?? 0),
               fxFee: Number(values.fxFee ?? 0),
             };
-            await createTrade(input);
+            try {
+              const trade = await API.createTrade(input);
+              props.onTradeCreated(trade);
+              setOpen(false);
+            } catch (err) {
+              console.error(err);
+            }
             setSubmitting(false);
-            setOpen(false);
           }}
         >
           {({isSubmitting}) => (
-            <Form className="AddTrade-form">
+            <Form>
               <DialogTitle id="form-dialog-title">Add Trade</DialogTitle>
               <DialogContent className="DialogContent">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>

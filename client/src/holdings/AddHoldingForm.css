@@ -1,0 +1,8 @@
+.AddHoldingForm {
+  display: flex;
+  gap: 15px;
+}
+
+.AddHoldingForm > * {
+  max-width: 150px;
+}
