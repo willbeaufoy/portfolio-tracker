@@ -44,7 +44,7 @@ export default function TradesList(props: TradesListProps) {
                   <TableCell align="right">{t.unitPrice}</TableCell>
                   <TableCell align="right">{t.fee}</TableCell>
                   <TableCell align="right">
-                    {t.quantity * t.unitPrice + t.fee + t.fxFee}
+                    {(t.quantity * t.unitPrice + t.fee + t.fxFee).toFixed(2)}
                   </TableCell>
                   <TableCell align="right">
                     {calculatePerformance(t, props.holding)}%
