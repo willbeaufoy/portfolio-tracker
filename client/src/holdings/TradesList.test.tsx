@@ -21,5 +21,5 @@ test('notifies the parent when the delete button is clicked', () => {
   const deleteButtons = screen.getAllByRole('button', {name: 'delete'});
   fireEvent.click(deleteButtons[0]);
 
-  expect(removeTrade).toHaveBeenCalledWith(1, 0);
+  expect(removeTrade).toHaveBeenCalledWith(11, 0);
 });

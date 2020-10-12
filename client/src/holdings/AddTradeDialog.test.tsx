@@ -45,26 +45,26 @@ test('opens and then cancels the dialog', async () => {
 });
 
 test('creates a trade', async () => {
-  API.createTrade = jest.fn().mockReturnValue(Promise.resolve({id: 1}));
+  API.createTrade = jest.fn().mockReturnValue(Promise.resolve({id: 15}));
   await act(async () => {
-    const {getByRole, getAllByRole} = render(<AddTradeDialog {...props} />);
-    const openButton = getByRole('button', {name: 'Add Trade'});
+    render(<AddTradeDialog {...props} />);
+    const openButton = screen.getByRole('button', {name: 'Add Trade'});
     fireEvent.click(openButton);
     await waitFor(() => {
-      expect(getByRole('heading', {name: DIALOG_TITLE})).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', {name: DIALOG_TITLE}),
+      ).toBeInTheDocument();
     });
 
-    const numberInputs = getAllByRole('textbox');
+    const numberInputs = screen.getAllByRole('textbox');
     const [dateInput, quantityInput, unitPriceInput] = numberInputs;
-    const addButton = getByRole('button', {name: 'Add'});
+    const addButton = screen.getByRole('button', {name: 'Add'});
     userEvent.type(quantityInput, '0.003');
     userEvent.type(unitPriceInput, '200');
     fireEvent.click(addButton);
   });
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByRole('heading', {name: DIALOG_TITLE}),
-  );
+  expect(screen.queryByRole('heading', {name: DIALOG_TITLE})).toBeNull();
   // TODO: Set date specifically.
   expect(API.createTrade).toHaveBeenCalledWith({
     holding: 1,
@@ -75,5 +75,5 @@ test('creates a trade', async () => {
     fxFee: 0,
     fxRate: 0,
   });
-  expect(addTrade).toHaveBeenCalledWith({id: 1});
+  expect(addTrade).toHaveBeenCalledWith({id: 15});
 });

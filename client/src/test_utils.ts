@@ -24,7 +24,7 @@ export const HOLDING_WITH_TRADES = {
   price: 3000,
   trades: [
     {
-      id: 1,
+      id: 11,
       holding: 1,
       date: '2018-03-04',
       quantity: 5,
@@ -34,7 +34,7 @@ export const HOLDING_WITH_TRADES = {
       fxFee: 0,
     },
     {
-      id: 2,
+      id: 12,
       holding: 1,
       date: '2020-09-08',
       quantity: 3,
