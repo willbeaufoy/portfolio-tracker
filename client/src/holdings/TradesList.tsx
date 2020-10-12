@@ -9,6 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import {calculatePerformance} from './utils';
 
 export type TradesListProps = {
   holding: Holding;
@@ -29,6 +30,7 @@ export default function TradesList(props: TradesListProps) {
                 <TableCell align="right">Unit Price</TableCell>
                 <TableCell align="right">Fee</TableCell>
                 <TableCell align="right">Total Price</TableCell>
+                <TableCell align="right">Performance</TableCell>
                 <TableCell> </TableCell>
               </TableRow>
             </TableHead>
@@ -42,7 +44,10 @@ export default function TradesList(props: TradesListProps) {
                   <TableCell align="right">{t.unitPrice}</TableCell>
                   <TableCell align="right">{t.fee}</TableCell>
                   <TableCell align="right">
-                    {t.quantity * t.unitPrice + t.fee}
+                    {t.quantity * t.unitPrice + t.fee + t.fxFee}
+                  </TableCell>
+                  <TableCell align="right">
+                    {calculatePerformance(t, props.holding)}%
                   </TableCell>
                   <TableCell align="right">
                     <IconButton

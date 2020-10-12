@@ -11,16 +11,19 @@ import ListItem from '@material-ui/core/ListItem';
 import TradesList from './TradesList';
 import {User} from '../App';
 
-/** A holding as returned from the API. */
+/**
+ * A holding as displayed to the user.
+ * Made up of data from multiple APIs.
+ */
 export interface Holding {
   id: number;
   username: string;
   symbol: string;
-  price?: number;
+  price: number;
   trades?: Trade[];
 }
 
-export type CreateHoldingData = Omit<Holding, 'id'>;
+export type CreateHoldingData = Omit<Holding, 'id' | 'price'>;
 
 /** A trade as returned from the API. */
 export interface Trade {

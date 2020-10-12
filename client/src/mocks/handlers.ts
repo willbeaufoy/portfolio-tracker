@@ -5,15 +5,15 @@ const holdingsData = {
   data: [
     {
       symbol: 'AMZN',
-      close: 3000,
+      close: 3482.74,
     },
     {
       symbol: 'BOO.XLON',
-      close: 3.31,
+      close: 3.47,
     },
     {
       symbol: 'TSLA',
-      close: 400,
+      close: 52.68,
     },
   ],
 };
