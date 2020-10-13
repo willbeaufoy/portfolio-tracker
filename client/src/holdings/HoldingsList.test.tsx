@@ -28,8 +28,8 @@ test('displays a list of holdings', async () => {
 });
 
 describe('holdings with trades', () => {
-  const trade1Date = '2018-03-04';
-  const trade2Date = '2020-09-08';
+  const trade1Date = '04 Mar 2018';
+  const trade2Date = '08 Sep 2020';
 
   beforeEach(async () => {
     API.listHoldings = jest

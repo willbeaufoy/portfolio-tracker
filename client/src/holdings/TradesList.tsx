@@ -10,6 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {calculatePerformance} from './utils';
+import {format} from 'date-fns';
 
 export type TradesListProps = {
   holding: Holding;
@@ -39,7 +40,7 @@ export default function TradesList(props: TradesListProps) {
               {props.holding.trades!.map((t, i) => (
                 <TableRow key={i}>
                   <TableCell component="th" scope="row">
-                    {t.date}
+                    {format(new Date(t.date), 'dd MMM yyyy')}
                   </TableCell>
                   <TableCell align="right">{t.broker}</TableCell>
                   <TableCell align="right">{t.quantity}</TableCell>
