@@ -15,6 +15,7 @@ class Trade(models.Model):
     holding = models.ForeignKey(
         Holding, related_name='trades', on_delete=models.CASCADE)
     date = models.DateField()
+    broker = models.CharField(max_length=100)
     quantity = models.FloatField()
     unit_price = models.FloatField()
     fee = models.FloatField()

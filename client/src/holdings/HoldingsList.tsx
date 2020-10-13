@@ -30,6 +30,7 @@ export interface Trade {
   id: number;
   holding: number;
   date: string;
+  broker: string;
   quantity: number;
   unitPrice: number;
   fee: number;

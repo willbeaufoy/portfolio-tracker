@@ -56,19 +56,23 @@ test('creates a trade', async () => {
       ).toBeInTheDocument();
     });
 
-    const numberInputs = screen.getAllByRole('textbox');
-    const [dateInput, quantityInput, unitPriceInput] = numberInputs;
+    const inputs = screen.getAllByRole('textbox');
+    const [dateInput, brokerInput, quantityInput, unitPriceInput] = inputs;
     const addButton = screen.getByRole('button', {name: 'Add'});
+    userEvent.type(brokerInput, 'Freetrade');
     userEvent.type(quantityInput, '0.003');
     userEvent.type(unitPriceInput, '200');
     fireEvent.click(addButton);
   });
 
-  expect(screen.queryByRole('heading', {name: DIALOG_TITLE})).toBeNull();
+  await waitForElementToBeRemoved(() =>
+    screen.queryByRole('heading', {name: DIALOG_TITLE}),
+  );
   // TODO: Set date specifically.
   expect(API.createTrade).toHaveBeenCalledWith({
     holding: 1,
     date: new Date().toISOString().split('T')[0],
+    broker: 'Freetrade',
     quantity: 0.003,
     unitPrice: 200,
     fee: 0,

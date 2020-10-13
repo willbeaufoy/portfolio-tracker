@@ -26,6 +26,7 @@ export default function TradesList(props: TradesListProps) {
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>
+                <TableCell align="right">Broker</TableCell>
                 <TableCell align="right">Quantity</TableCell>
                 <TableCell align="right">Unit Price</TableCell>
                 <TableCell align="right">Fee</TableCell>
@@ -40,6 +41,7 @@ export default function TradesList(props: TradesListProps) {
                   <TableCell component="th" scope="row">
                     {t.date}
                   </TableCell>
+                  <TableCell align="right">{t.broker}</TableCell>
                   <TableCell align="right">{t.quantity}</TableCell>
                   <TableCell align="right">{t.unitPrice}</TableCell>
                   <TableCell align="right">{t.fee}</TableCell>
