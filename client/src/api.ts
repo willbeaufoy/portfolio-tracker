@@ -3,11 +3,37 @@ import {
   MS_EOD_LATEST_BASE_URL,
   MS_INTRADAY_LATEST_BASE_URL,
 } from './settings';
-import {
-  CreateHoldingData,
-  CreateTradeData,
-  Holding,
-} from './holdings/HoldingsList';
+
+/**
+ * A holding as displayed to the user.
+ * Made up of data from multiple APIs.
+ */
+export interface Holding {
+  id: number;
+  username: string;
+  name: string;
+  symbol: string;
+  price: number;
+  currency: string;
+  trades?: Trade[];
+}
+
+type CreateHoldingData = Omit<Holding, 'id' | 'price'>;
+
+/** A trade as returned from the API. */
+export interface Trade {
+  id: number;
+  holding: number;
+  date: string;
+  broker: string;
+  quantity: number;
+  unitPrice: number;
+  fee: number;
+  fxRate: number;
+  fxFee: number;
+}
+
+type CreateTradeData = Omit<Trade, 'id'>;
 
 /** Static methods for calling APIs. */
 export default class API {

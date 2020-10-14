@@ -1,4 +1,4 @@
-import {Holding, Trade} from './HoldingsList';
+import {Holding, Trade} from '../api';
 
 /** Calculates the % performance of a buy trade in the given holding. */
 export function calculatePerformance(t: Trade, h: Holding) {

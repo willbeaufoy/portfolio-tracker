@@ -1,7 +1,7 @@
 import './TradesList.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import {Holding} from './HoldingsList';
+import {Holding} from './../api';
 import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';

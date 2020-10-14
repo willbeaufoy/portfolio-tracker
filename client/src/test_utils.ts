@@ -1,4 +1,4 @@
-import {Holding} from './holdings/HoldingsList';
+import {Holding} from './api';
 import {User} from './App';
 
 export const HOLDING_1: Holding = {

@@ -2,7 +2,7 @@ import './HoldingsList.css';
 import React, {useEffect, useState} from 'react';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
-import API from '../api';
+import API, {Holding, Trade} from '../api';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,37 +10,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import TradesList from './TradesList';
 import {User} from '../App';
-
-/**
- * A holding as displayed to the user.
- * Made up of data from multiple APIs.
- */
-export interface Holding {
-  id: number;
-  username: string;
-  name: string;
-  symbol: string;
-  price: number;
-  currency: string;
-  trades?: Trade[];
-}
-
-export type CreateHoldingData = Omit<Holding, 'id' | 'price'>;
-
-/** A trade as returned from the API. */
-export interface Trade {
-  id: number;
-  holding: number;
-  date: string;
-  broker: string;
-  quantity: number;
-  unitPrice: number;
-  fee: number;
-  fxRate: number;
-  fxFee: number;
-}
-
-export type CreateTradeData = Omit<Trade, 'id'>;
 
 export type HoldingsListProps = {
   user: User;
