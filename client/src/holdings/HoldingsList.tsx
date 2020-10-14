@@ -18,8 +18,10 @@ import {User} from '../App';
 export interface Holding {
   id: number;
   username: string;
+  name: string;
   symbol: string;
   price: number;
+  currency: string;
   trades?: Trade[];
 }
 
@@ -119,7 +121,9 @@ export default function HoldingsList(props: HoldingsListProps) {
               >
                 <div className="holding">
                   <div>{h.symbol}</div>
-                  <div>{h.price}</div>
+                  <div>
+                    {h.currency} {h.price}
+                  </div>
                   <IconButton
                     onClick={() => deleteHolding(h.id, i)}
                     aria-label="delete"

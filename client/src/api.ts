@@ -1,4 +1,8 @@
-import {API_BASE, MS_EOD_LATEST_BASE_URL} from './settings';
+import {
+  API_BASE,
+  MS_EOD_LATEST_BASE_URL,
+  MS_INTRADAY_LATEST_BASE_URL,
+} from './settings';
 import {
   CreateHoldingData,
   CreateTradeData,
@@ -31,10 +35,17 @@ export default class API {
     });
   }
 
-  static listHoldings(username: string) {
-    return fetch(`${API_BASE}holdings/?username=${username}`).then((res) =>
-      res.json(),
-    );
+  /**
+   * Lists holdings for the given username on the API
+   * and converts them such that they satisfy the Holding interface.
+   */
+  static async listHoldings(username: string): Promise<Holding[]> {
+    const res = await fetch(`${API_BASE}holdings/?username=${username}`);
+    const data = await res.json();
+    for (const holding of data) {
+      holding.price = 0;
+    }
+    return data;
   }
 
   /** Creates a trade on the API. */
@@ -62,16 +73,24 @@ export default class API {
   }
 
   /**
-   * Fetches the latest EOD prices for the given holdings from the API and
-   * applies them to the holdings.
+   * Fetches the latest prices for the given holdings from the API and
+   * applies them to the holdings. For US holdings (i.e. those priced in USD)
+   * this is (almost) live data, for all other holdings it is EOD.
    */
   static async applyPrices(holdings: Holding[]) {
-    const symbols = holdings.map((h) => h.symbol);
+    const holdingsBySymbol = new Map(holdings.map((h) => [h.symbol, h]));
+    const urls = buildFetchPricesUrls(holdings);
     try {
-      const res = await fetch(buildEodRequest(symbols));
-      const resJson = await res.json();
-      for (const [i, stock] of resJson.data.entries()) {
-        holdings[i].price = stock.close;
+      const res = await Promise.all(
+        urls.map((url) => fetch(url).then((res) => res.json())),
+      );
+      for (const r of res) {
+        for (const d of r.data) {
+          const h = holdingsBySymbol.get(d.symbol);
+          if (!h) continue;
+          // Stocks on the LSE are priced in GBX (pence).
+          h.price = h.currency === 'GBP' ? d.close / 100 : d.close;
+        }
       }
     } catch (err) {
       console.error(err);
@@ -79,9 +98,37 @@ export default class API {
   }
 }
 
-/** Builds a request to fetch the latest EOD prices for the provided symbols. */
-export function buildEodRequest(symbols: string[]): string {
-  return `${MS_EOD_LATEST_BASE_URL}?access_key=${
+/**
+ * Builds URLs to get price data for holdings.
+ * Uses the intraday API for US stocks and the EOD API for others
+ * (as only US stocks have intraday data).
+ */
+function buildFetchPricesUrls(holdings: Holding[]): string[] {
+  const usSymbols = [];
+  const otherSymbols = [];
+  // TODO: Rely on exchange not currency to determine whether US or not.
+  for (const h of holdings) {
+    if (h.currency === 'USD') {
+      usSymbols.push(h.symbol);
+    } else {
+      otherSymbols.push(h.symbol);
+    }
+  }
+  const reqs = [];
+  if (usSymbols.length) {
+    reqs.push(
+      combineFetchPricesUrlParts(MS_INTRADAY_LATEST_BASE_URL, usSymbols),
+    );
+  }
+  if (otherSymbols.length) {
+    reqs.push(combineFetchPricesUrlParts(MS_EOD_LATEST_BASE_URL, otherSymbols));
+  }
+  return reqs;
+}
+
+/** Builds a URL to fetch prices for the provided symbols. */
+function combineFetchPricesUrlParts(url: string, symbols: string[]): string {
+  return `${url}?access_key=${
     process.env.REACT_APP_MARKETSTACK_KEY
   }&symbols=${symbols.join()}`;
 }

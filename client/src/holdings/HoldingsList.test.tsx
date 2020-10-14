@@ -23,7 +23,7 @@ test('displays a list of holdings', async () => {
 
   await waitFor(() => {
     expect(screen.getByText('AMZN')).toBeInTheDocument();
-    expect(screen.getByText('TSLA')).toBeInTheDocument();
+    expect(screen.getByText('BOO.XLON')).toBeInTheDocument();
   });
 });
 
