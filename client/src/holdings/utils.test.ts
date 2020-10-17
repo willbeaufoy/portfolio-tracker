@@ -1,5 +1,14 @@
-import {calculateTradePerformance, calculateTradePrice} from './utils';
+import {
+  calculateHoldingPerformance,
+  calculateTradePerformance,
+  calculateTradePrice,
+} from './utils';
 import {HOLDING_WITH_TRADES} from '../test_fixtures';
+
+test('calculates % performance of a holding', () => {
+  const perf = calculateHoldingPerformance(HOLDING_WITH_TRADES);
+  expect(perf).toBe(5.719187812339625);
+});
 
 test('calculates % performance of a trade', () => {
   const perf = calculateTradePerformance(

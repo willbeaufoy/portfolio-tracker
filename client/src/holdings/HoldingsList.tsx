@@ -1,8 +1,9 @@
 import './HoldingsList.css';
+import API, {Holding, Trade} from '../api';
 import React, {useEffect, useState} from 'react';
+import {calculateHoldingPerformance, getPerfClass} from './utils';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
-import API, {Holding, Trade} from '../api';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -80,44 +81,49 @@ export default function HoldingsList(props: HoldingsListProps) {
       <h2>Holdings</h2>
       {Boolean(holdings.length) && (
         <List>
-          {holdings.map((h, i) => (
-            <React.Fragment key={i}>
-              <ListItem
-                button
-                onClick={() => {
-                  handleClick(i);
-                }}
-              >
-                <div className="holding">
-                  <div>{h.symbol}</div>
-                  <div>{h.exchange}</div>
-                  <div>
-                    {h.currency} {h.price?.toFixed(2) ?? 0}
-                  </div>
-                  <IconButton
-                    onClick={() => deleteHolding(h.id, i)}
-                    aria-label="delete"
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </div>
-              </ListItem>
-              <Collapse in={open[i]} timeout="auto" unmountOnExit>
-                <TradesList
-                  holding={h}
-                  onDeleteTradeClicked={(id: number, tradeIndex: number) => {
-                    deleteTrade(id, i, tradeIndex);
+          {holdings.map((h, i) => {
+            const perf = calculateHoldingPerformance(h);
+            const perfClass = getPerfClass(perf);
+            return (
+              <React.Fragment key={i}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    handleClick(i);
                   }}
-                ></TradesList>
-                <div className="AddTrade-button-container">
-                  <AddTrade
+                >
+                  <div className="holding">
+                    <div>{h.symbol}</div>
+                    <div>{h.exchange}</div>
+                    <div>
+                      {h.currency} {h.price?.toFixed(2) ?? 0}
+                    </div>
+                    <div className={perfClass}>{perf.toFixed(2)}%</div>
+                    <IconButton
+                      onClick={() => deleteHolding(h.id, i)}
+                      aria-label="delete"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </div>
+                </ListItem>
+                <Collapse in={open[i]} timeout="auto" unmountOnExit>
+                  <TradesList
                     holding={h}
-                    onTradeCreated={(trade: Trade) => addTrade(trade, i)}
-                  ></AddTrade>
-                </div>
-              </Collapse>
-            </React.Fragment>
-          ))}
+                    onDeleteTradeClicked={(id: number, tradeIndex: number) => {
+                      deleteTrade(id, i, tradeIndex);
+                    }}
+                  ></TradesList>
+                  <div className="AddTrade-button-container">
+                    <AddTrade
+                      holding={h}
+                      onTradeCreated={(trade: Trade) => addTrade(trade, i)}
+                    ></AddTrade>
+                  </div>
+                </Collapse>
+              </React.Fragment>
+            );
+          })}
         </List>
       )}
       <AddHoldingForm
