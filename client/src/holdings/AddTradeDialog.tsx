@@ -45,6 +45,7 @@ export default function AddTradeDialog(props: AddTradeDialogProps) {
             quantity: '',
             unitPrice: '',
             fee: '',
+            tax: '',
             fxRate: '',
             fxFee: '',
           }}
@@ -56,6 +57,7 @@ export default function AddTradeDialog(props: AddTradeDialogProps) {
               quantity: Number(values.quantity ?? 0),
               unitPrice: Number(values.unitPrice ?? 0),
               fee: Number(values.fee ?? 0),
+              tax: Number(values.tax ?? 0),
               fxRate: Number(values.fxRate ?? 0),
               fxFee: Number(values.fxFee ?? 0),
             };
@@ -89,6 +91,7 @@ export default function AddTradeDialog(props: AddTradeDialogProps) {
                   name="unitPrice"
                 />
                 <Field component={TextField} label="Fee" name="fee" />
+                <Field component={TextField} label="Tax" name="tax" />
                 <Field component={TextField} label="FX Rate" name="fxRate" />
                 <Field component={TextField} label="FX Fee" name="fxFee" />
               </DialogContent>

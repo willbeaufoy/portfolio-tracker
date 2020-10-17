@@ -7,6 +7,7 @@ export const HOLDING_1: Holding = {
   name: 'Amazon',
   symbol: 'AMZN',
   currency: 'USD',
+  exchange: 'NASDAQ',
   price: 0,
   trades: [],
 };
@@ -17,6 +18,7 @@ export const HOLDING_2: Holding = {
   name: 'Boohoo',
   symbol: 'BOO.XLON',
   currency: 'GBP',
+  exchange: 'LSE',
   price: 0,
   trades: [],
 };
@@ -26,6 +28,7 @@ export const HOLDING_WITH_TRADES: Holding = {
   username: 'xzy',
   name: 'Amazon',
   symbol: 'AMZN',
+  exchange: 'NASDAQ',
   price: 3000,
   currency: 'USD',
   trades: [

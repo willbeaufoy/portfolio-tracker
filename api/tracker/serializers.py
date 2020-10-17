@@ -7,7 +7,7 @@ class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade
         fields = ['id', 'holding', 'date', 'broker', 'quantity',
-                  'unit_price', 'fee', 'fx_rate', 'fx_fee']
+                  'unit_price', 'fee', 'tax', 'fx_rate', 'fx_fee']
 
     def create(self, validated_data):
         """
@@ -26,6 +26,7 @@ class TradeSerializer(serializers.ModelSerializer):
         instance.unit_price = validated_data.get(
             'unit_price', instance.unit_price)
         instance.fee = validated_data.get('fee', instance.fee)
+        instance.tax = validated_data.get('tax', instance.tax)
         instance.fx_rate = validated_data.get('fx_rate', instance.fx_rate)
         instance.fx_fee = validated_data.get('fx_fee', instance.fx_fee)
         instance.save()
@@ -37,7 +38,8 @@ class HoldingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Holding
-        fields = ['id', 'username', 'symbol', 'name', 'currency', 'trades']
+        fields = ['id', 'username', 'symbol',
+                  'name', 'currency', 'exchange', 'trades']
 
     def create(self, validated_data):
         """
@@ -53,5 +55,6 @@ class HoldingSerializer(serializers.ModelSerializer):
         instance.symbol = validated_data.get('symbol', instance.symbol)
         instance.name = validated_data.get('name', instance.name)
         instance.currency = validated_data.get('currency', instance.currency)
+        instance.exchange = validated_data.get('exchange', instance.exchange)
         instance.save()
         return instance

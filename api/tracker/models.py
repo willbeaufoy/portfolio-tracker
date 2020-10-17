@@ -6,6 +6,7 @@ class Holding(models.Model):
     symbol = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
     currency = models.CharField(max_length=3)
+    exchange = models.CharField(max_length=50)
 
     class Meta:
         ordering = ['name']
@@ -19,6 +20,7 @@ class Trade(models.Model):
     quantity = models.FloatField()
     unit_price = models.FloatField()
     fee = models.FloatField()
+    tax = models.FloatField()
     fx_rate = models.FloatField()
     fx_fee = models.FloatField()
 

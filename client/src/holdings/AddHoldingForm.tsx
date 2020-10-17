@@ -15,13 +15,14 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
   return (
     <div>
       <Formik
-        initialValues={{symbol: '', currency: ''}}
+        initialValues={{symbol: '', currency: '', exchange: ''}}
         onSubmit={async (values, actions) => {
           const input = {
             username: props.username,
             symbol: values.symbol,
             name: values.symbol,
             currency: values.currency,
+            exchange: values.exchange,
           };
           try {
             const trade = await API.createHolding(input);
@@ -36,6 +37,7 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
         {({isSubmitting}) => (
           <Form className="AddHoldingForm">
             <Field component={TextField} name="symbol" label="Ticker Symbol" />
+            <Field component={TextField} name="exchange" label="Exchange" />
             <Field component={TextField} name="currency" label="Currency" />
             <Button
               variant="outlined"

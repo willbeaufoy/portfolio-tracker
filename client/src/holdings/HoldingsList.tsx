@@ -90,8 +90,9 @@ export default function HoldingsList(props: HoldingsListProps) {
               >
                 <div className="holding">
                   <div>{h.symbol}</div>
+                  <div>{h.exchange}</div>
                   <div>
-                    {h.currency} {h.price}
+                    {h.currency} {h.price?.toFixed(2) ?? 0}
                   </div>
                   <IconButton
                     onClick={() => deleteHolding(h.id, i)}

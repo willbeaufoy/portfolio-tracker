@@ -15,6 +15,7 @@ export interface Holding {
   symbol: string;
   price: number;
   currency: string;
+  exchange: string;
   trades?: Trade[];
 }
 
@@ -34,6 +35,8 @@ export interface Trade {
 }
 
 type CreateTradeData = Omit<Trade, 'id'>;
+
+const USA_EXCHANGES = ['NASDAQ'];
 
 /** Static methods for calling APIs. */
 export default class API {
@@ -115,7 +118,7 @@ export default class API {
           const h = holdingsBySymbol.get(d.symbol);
           if (!h) continue;
           // Stocks on the LSE are priced in GBX (pence).
-          h.price = h.currency === 'GBP' ? d.close / 100 : d.close;
+          h.price = h.exchange === 'LSE' ? d.close / 100 : d.close;
         }
       }
     } catch (err) {
@@ -132,9 +135,8 @@ export default class API {
 function buildFetchPricesUrls(holdings: Holding[]): string[] {
   const usSymbols = [];
   const otherSymbols = [];
-  // TODO: Rely on exchange not currency to determine whether US or not.
   for (const h of holdings) {
-    if (h.currency === 'USD') {
+    if (USA_EXCHANGES.includes(h.exchange)) {
       usSymbols.push(h.symbol);
     } else {
       otherSymbols.push(h.symbol);

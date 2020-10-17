@@ -4,7 +4,8 @@ import {MS_INTRADAY_LATEST_BASE_URL, MS_EOD_LATEST_BASE_URL} from '../settings';
 const holdingsBySymbol = new Map([
   ['AMZN', {symbol: 'AMZN', close: 3482.74}],
   ['ASC.XLON', {symbol: 'ASC.XLON', close: 5268}],
-  ['BOO.XLON', {symbol: 'BOO.XLON', close: 347}],
+  ['BOO.XLON', {symbol: 'BOO.XLON', close: 313.4}],
+  ['JDW.XLON', {symbol: 'JDW.XLON', close: 773.5}],
   ['TSLA', {symbol: 'TSLA', close: 442.3}],
 ]);
 

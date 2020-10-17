@@ -10,5 +10,5 @@ test('applies prices from external APIs to holdings', async () => {
   await API.applyPrices(holdings);
 
   expect(holdings[0].price).toBe(3482.74);
-  expect(holdings[1].price).toBe(3.47);
+  expect(holdings[1].price).toBe(3.134);
 });

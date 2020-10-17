@@ -76,6 +76,7 @@ test('creates a trade', async () => {
     quantity: 0.003,
     unitPrice: 200,
     fee: 0,
+    tax: 0,
     fxFee: 0,
     fxRate: 0,
   });
