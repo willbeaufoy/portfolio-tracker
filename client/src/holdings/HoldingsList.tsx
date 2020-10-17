@@ -73,7 +73,7 @@ export default function HoldingsList(props: HoldingsListProps) {
   };
 
   if (!isDataLoaded) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
   return (
     <div className="HoldingsList">

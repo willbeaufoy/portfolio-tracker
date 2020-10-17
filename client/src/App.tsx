@@ -25,7 +25,7 @@ const App = () => {
   }, []);
 
   if (!isUserLoaded) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   } else {
     return (
       <div className="App">
