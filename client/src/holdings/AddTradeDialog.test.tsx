@@ -6,7 +6,7 @@ import {
 } from '@testing-library/react';
 import API from '../api';
 import AddTradeDialog, {AddTradeDialogProps} from './AddTradeDialog';
-import {HOLDING_1} from '../test_utils';
+import {HOLDING_1} from '../test_fixtures';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 import {screen} from '@testing-library/dom';

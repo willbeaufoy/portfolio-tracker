@@ -1,4 +1,4 @@
-import {HOLDING_WITH_TRADES} from '../test_utils';
+import {HOLDING_WITH_TRADES} from '../test_fixtures';
 import {fireEvent, render} from '@testing-library/react';
 import TradesList, {TradesListProps} from './TradesList';
 import React from 'react';

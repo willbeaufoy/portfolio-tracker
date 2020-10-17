@@ -9,7 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {calculatePerformance} from './utils';
+import {calculateTradePerformance, calculateTradePrice} from './utils';
 import {format} from 'date-fns';
 
 export type TradesListProps = {
@@ -30,7 +30,6 @@ export default function TradesList(props: TradesListProps) {
                 <TableCell align="right">Broker</TableCell>
                 <TableCell align="right">Quantity</TableCell>
                 <TableCell align="right">Unit Price</TableCell>
-                <TableCell align="right">Fee</TableCell>
                 <TableCell align="right">Total Price</TableCell>
                 <TableCell align="right">Performance</TableCell>
                 <TableCell> </TableCell>
@@ -44,13 +43,12 @@ export default function TradesList(props: TradesListProps) {
                   </TableCell>
                   <TableCell align="right">{t.broker}</TableCell>
                   <TableCell align="right">{t.quantity}</TableCell>
-                  <TableCell align="right">{t.unitPrice}</TableCell>
-                  <TableCell align="right">{t.fee}</TableCell>
+                  <TableCell align="right">{t.unitPrice.toFixed(2)}</TableCell>
                   <TableCell align="right">
-                    {(t.quantity * t.unitPrice + t.fee + t.fxFee).toFixed(2)}
+                    {calculateTradePrice(t).toFixed(2)}
                   </TableCell>
                   <TableCell align="right">
-                    {calculatePerformance(t, props.holding)}%
+                    {calculateTradePerformance(t, props.holding).toFixed(2)}%
                   </TableCell>
                   <TableCell align="right">
                     <IconButton

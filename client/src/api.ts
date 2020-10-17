@@ -30,6 +30,7 @@ export interface Trade {
   quantity: number;
   unitPrice: number;
   fee: number;
+  tax: number;
   fxRate: number;
   fxFee: number;
 }

@@ -1,5 +1,10 @@
 import API from '../api';
-import {HOLDING_1, HOLDING_2, HOLDING_WITH_TRADES, USER} from '../test_utils';
+import {
+  HOLDING_1,
+  HOLDING_2,
+  HOLDING_WITH_TRADES,
+  USER,
+} from '../test_fixtures';
 import {fireEvent, render, waitFor} from '@testing-library/react';
 import HoldingsList, {HoldingsListProps} from './HoldingsList';
 import React from 'react';

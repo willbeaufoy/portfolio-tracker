@@ -1,5 +1,5 @@
+import {HOLDING_1, HOLDING_2} from './test_fixtures';
 import API from './api';
-import {HOLDING_1, HOLDING_2} from './test_utils';
 
 test('applies prices from external APIs to holdings', async () => {
   // Test one US and one non-US holding as they are treated differently.
