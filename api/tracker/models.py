@@ -2,11 +2,21 @@ from django.db import models
 
 
 class Holding(models.Model):
+
+    class DataSource(models.TextChoices):
+        FINKI = 'FI'
+        MARKETSTACK = 'MS'
+
     username = models.CharField(max_length=100)
     symbol = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
     currency = models.CharField(max_length=3)
     exchange = models.CharField(max_length=50)
+    data_source = models.CharField(
+        max_length=2, choices=DataSource.choices, default=DataSource.FINKI)
+    isin = models.CharField(max_length=12)
+    latest_price = models.FloatField(null=True)
+    latest_price_update_time = models.DateField(null=True)
 
     class Meta:
         ordering = ['name']
