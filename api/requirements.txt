@@ -1,7 +1,8 @@
 asgiref==3.2.10
-Django==2.1
-django-cors-headers==3.1.0
-djangorestframework==3.11.0
+Django==3.1.2
+django-cors-headers==3.5.0
+djangorestframework==3.12.1
 djangorestframework-camel-case==1.2.0
+pysqlite3-binary==0.4.3
 pytz==2020.1
-sqlparse==0.3.1
+sqlparse==0.4.1

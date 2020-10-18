@@ -93,6 +93,7 @@ class TestTradeList(APITestCase):
 class TestTradeDetail(APITestCase):
     def setUp(self):
         self.url = reverse('trade-detail', args=['1'])
+        Holding.objects.create()
         self.trade_1 = Trade.objects.create(
             holding_id=1, date='2020-09-08', quantity=0.1, unit_price=200,
             fee=4, fx_fee=0.5, tax=1.5, fx_rate=1.2)
