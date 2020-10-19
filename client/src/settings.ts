@@ -1,7 +1,7 @@
 export const API_BASE =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:8000/'
-    : 'https://portfolio-api.eba-ef93xgpm.us-west-2.elasticbeanstalk.com/';
+    : 'http://api.portfoliotracker.willbeaufoy.opalstacked.com/';
 
 const MS_BASE_URL = 'https://api.marketstack.com/v1/';
 
