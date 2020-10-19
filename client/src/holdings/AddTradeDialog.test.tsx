@@ -39,9 +39,9 @@ test('opens and then cancels the dialog', async () => {
   const cancelButton = getByRole('button', {name: 'Cancel'});
   fireEvent.click(cancelButton);
 
-  await waitForElementToBeRemoved(() =>
-    queryByRole('heading', {name: DIALOG_TITLE}),
-  );
+  await waitFor(() => {
+    expect(queryByRole('heading', {name: DIALOG_TITLE})).toBeNull();
+  });
 });
 
 test('creates a trade', async () => {
