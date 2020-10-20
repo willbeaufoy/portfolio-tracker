@@ -6,7 +6,7 @@ import {
 
 /**
  * A holding as displayed to the user.
- * Made up of data from multiple APIs.
+ * Made up of data from multiple API calls.
  */
 export interface Holding {
   id: number;
@@ -19,7 +19,19 @@ export interface Holding {
   trades?: Trade[];
 }
 
-type CreateHoldingData = Omit<Holding, 'id' | 'price'>;
+type CreateHoldingData = {
+  instrument: number;
+  username: string;
+};
+
+type CreateInstrumentData = {
+  name: string;
+  symbol: string;
+  currency: string;
+  exchange: string;
+  dataSource: string;
+  isin: string;
+};
 
 /** A trade as returned from the API. */
 export interface Trade {
@@ -72,10 +84,34 @@ export default class API {
   static async listHoldings(username: string): Promise<Holding[]> {
     const res = await fetch(`${API_BASE}holdings/?username=${username}`);
     const data = await res.json();
-    for (const holding of data) {
-      holding.price = 0;
+    const holdings: Holding[] = [];
+    for (const d of data) {
+      holdings.push({
+        id: d.id,
+        username: d.username,
+        name: d.instrument.name,
+        symbol: d.instrument.symbol,
+        currency: d.instrument.currency,
+        exchange: d.instrument.exchange,
+        price: 0,
+        trades: d.trades,
+      });
     }
-    return data;
+    return holdings;
+  }
+
+  /** Creates an instrument on the API. */
+  static createInstrument(data: CreateInstrumentData) {
+    return fetch(`${API_BASE}instruments/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    });
   }
 
   /** Creates a trade on the API. */

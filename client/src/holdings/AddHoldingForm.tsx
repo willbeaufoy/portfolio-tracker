@@ -17,17 +17,21 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
       <Formik
         initialValues={{symbol: '', currency: '', exchange: ''}}
         onSubmit={async (values, actions) => {
-          const input = {
-            username: props.username,
-            symbol: values.symbol,
-            name: values.symbol,
-            currency: values.currency,
-            exchange: values.exchange,
-          };
           try {
-            const trade = await API.createHolding(input);
+            const instrument = await API.createInstrument({
+              symbol: values.symbol,
+              name: values.symbol,
+              currency: values.currency,
+              exchange: values.exchange,
+              dataSource: 'FI',
+              isin: 'placeholder',
+            });
+            const holding = await API.createHolding({
+              username: props.username,
+              instrument: instrument.id,
+            });
             actions.resetForm();
-            props.onHoldingCreated(trade);
+            props.onHoldingCreated(holding);
           } catch (err) {
             console.error(err);
           }

@@ -6,42 +6,61 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from tracker.models import Holding, Trade
+from tracker.models import Holding, Instrument, Trade
+
+
+class TestInstrumentList(APITestCase):
+    def setUp(self):
+        self.url = reverse('instrument-list')
+
+    def test_create_instrument(self):
+        request_data = {'symbol': 'TSLA', 'name': 'Tesla', 'currency': 'USD',
+                        'exchange': 'NASDAQ', 'data_source': 'FI', 'isin': 'US12'}
+        response = self.client.post(self.url, request_data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Instrument.objects.count(), 1)
+        self.assertEqual(Instrument.objects.get(id=1).symbol, 'TSLA')
 
 
 class TestHoldingList(APITestCase):
     def setUp(self):
         self.url = reverse('holding-list')
-        self.holdingDict = collections.OrderedDict(
-            {'username': 'a', 'symbol': 'AMZN', 'name': 'Amazon', 'currency': 'USD', 'exchange': 'NASDAQ'})
-        self.holding = Holding.objects.create(**self.holdingDict)
+        self.instrument_dict = collections.OrderedDict(
+            {'symbol': 'AMZN', 'name': 'Amazon', 'currency': 'USD', 'exchange': 'NASDAQ', 'data_source': 'FI', 'isin': 'US12'})
+        self.instrument = Instrument.objects.create(**self.instrument_dict)
+        self.holding_dict = collections.OrderedDict(
+            {'instrument': self.instrument, 'username': 'a'})
+        self.holding = Holding.objects.create(**self.holding_dict)
         self.trade_dict = collections.OrderedDict(
             {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'quantity': 1, 'unit_price': 1,
              'fee': 1, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45})
         self.trade = Trade.objects.create(**self.trade_dict)
 
     def test_create_holding(self):
-        request_data = {'username': 'a', 'symbol': 'TSLA',
-                        'name': 'Tesla', 'currency': 'USD', 'exchange': 'NASDAQ'}
+        request_data = {'instrument': 1, 'username': 'b'}
+
         response = self.client.post(self.url, request_data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Holding.objects.count(), 2)
-        self.assertEqual(Holding.objects.get(id=2).symbol, 'TSLA')
+        self.assertEqual(Holding.objects.get(id=2).username, 'b')
 
     def test_list_valid_username_returns_holdings(self):
         request_data = {'username': 'a'}
 
         response = self.client.get(self.url, request_data, format='json')
 
-        expect_holding_dict = collections.OrderedDict(self.holdingDict)
-        expect_holding_dict['id'] = self.holding.id
-        expect_holding_dict.move_to_end('id', last=False)
+        expect_instrument_dict = dict(self.instrument_dict)
+        expect_instrument_dict['id'] = self.instrument.id
+        expect_instrument_dict['latest_price'] = None
+        expect_instrument_dict['latest_price_update_time'] = None
         expect_trade_dict = collections.OrderedDict(self.trade_dict)
         expect_trade_dict['id'] = self.trade.id
         expect_trade_dict.move_to_end('id', last=False)
         expect_trade_dict['holding'] = self.holding.id
-        expect_holding_dict['trades'] = [expect_trade_dict]
+        expect_holding_dict = collections.OrderedDict(
+            id=self.holding.id, instrument=expect_instrument_dict, username=self.holding.username, trades=[expect_trade_dict])
         self.assertEqual(response.data, [expect_holding_dict])
 
     def test_list_invalid_username_returns_empty_list(self):
@@ -55,7 +74,8 @@ class TestHoldingList(APITestCase):
 class TestTradeList(APITestCase):
     def setUp(self):
         self.url = reverse('trade-list')
-        self.holding = Holding.objects.create()
+        Instrument.objects.create()
+        self.holding = Holding.objects.create(instrument_id=1)
         self.trade_dict = collections.OrderedDict(
             {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'quantity': 1, 'unit_price': 1,
              'fee': 1, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45})
@@ -93,7 +113,8 @@ class TestTradeList(APITestCase):
 class TestTradeDetail(APITestCase):
     def setUp(self):
         self.url = reverse('trade-detail', args=['1'])
-        Holding.objects.create()
+        Instrument.objects.create()
+        Holding.objects.create(instrument_id=1)
         self.trade_1 = Trade.objects.create(
             holding_id=1, date='2020-09-08', quantity=0.1, unit_price=200,
             fee=4, fx_fee=0.5, tax=1.5, fx_rate=1.2)

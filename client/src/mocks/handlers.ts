@@ -7,6 +7,8 @@ const holdingsBySymbol = new Map([
   ['BOO.XLON', {symbol: 'BOO.XLON', close: 313.4}],
   ['JDW.XLON', {symbol: 'JDW.XLON', close: 773.5}],
   ['TSLA', {symbol: 'TSLA', close: 442.3}],
+  ['YOU.XLON', {symbol: 'YOU.XLON', close: 950}],
+  ['BYND', {symbol: 'BYND', close: 183.58}],
 ]);
 
 export const handlers = [

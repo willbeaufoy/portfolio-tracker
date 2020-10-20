@@ -1,7 +1,17 @@
 from rest_framework import generics
 
-from tracker.models import Holding, Trade
-from tracker.serializers import HoldingSerializer, TradeSerializer
+from tracker.models import Holding, Instrument, Trade
+from tracker.serializers import HoldingSerializer, InstrumentSerializer, TradeSerializer
+
+
+class InstrumentList(generics.ListCreateAPIView):
+    queryset = Instrument.objects.all()
+    serializer_class = InstrumentSerializer
+
+
+class InstrumentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Instrument.objects.all()
+    serializer_class = InstrumentSerializer
 
 
 class HoldingList(generics.ListCreateAPIView):

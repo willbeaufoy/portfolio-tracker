@@ -1,13 +1,12 @@
 from django.db import models
 
 
-class Holding(models.Model):
+class Instrument(models.Model):
 
     class DataSource(models.TextChoices):
         FINKI = 'FI'
         MARKETSTACK = 'MS'
 
-    username = models.CharField(max_length=100)
     symbol = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
     currency = models.CharField(max_length=3)
@@ -20,6 +19,11 @@ class Holding(models.Model):
 
     class Meta:
         ordering = ['name']
+
+
+class Holding(models.Model):
+    instrument = models.ForeignKey(Instrument, on_delete=models.PROTECT)
+    username = models.CharField(max_length=100)
 
 
 class Trade(models.Model):
