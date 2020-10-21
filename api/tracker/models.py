@@ -15,7 +15,7 @@ class Instrument(models.Model):
         max_length=2, choices=DataSource.choices, default=DataSource.FINKI)
     isin = models.CharField(max_length=12)
     latest_price = models.FloatField(null=True)
-    latest_price_update_time = models.DateField(null=True)
+    latest_price_update_time = models.DateTimeField(null=True)
 
     class Meta:
         ordering = ['name']

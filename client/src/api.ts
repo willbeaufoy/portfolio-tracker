@@ -1,8 +1,4 @@
-import {
-  API_BASE,
-  MS_EOD_LATEST_BASE_URL,
-  MS_INTRADAY_LATEST_BASE_URL,
-} from './settings';
+import {API_BASE} from './settings';
 
 /**
  * A holding as displayed to the user.
@@ -49,8 +45,6 @@ export interface Trade {
 
 type CreateTradeData = Omit<Trade, 'id'>;
 
-const USA_EXCHANGES = ['NASDAQ'];
-
 /** Static methods for calling APIs. */
 export default class API {
   /** Creates a holding on the API. */
@@ -93,7 +87,7 @@ export default class API {
         symbol: d.instrument.symbol,
         currency: d.instrument.currency,
         exchange: d.instrument.exchange,
-        price: 0,
+        price: d.instrument.latestPrice,
         trades: d.trades,
       });
     }
@@ -137,63 +131,4 @@ export default class API {
       return res;
     });
   }
-
-  /**
-   * Fetches the latest prices for the given holdings from the API and
-   * applies them to the holdings. For US holdings (i.e. those priced in USD)
-   * this is (almost) live data, for all other holdings it is EOD.
-   */
-  static async applyPrices(holdings: Holding[]) {
-    const holdingsBySymbol = new Map(holdings.map((h) => [h.symbol, h]));
-    const urls = buildFetchPricesUrls(holdings);
-    try {
-      const res = await Promise.all(
-        urls.map((url) => fetch(url).then((res) => res.json())),
-      );
-      for (const r of res) {
-        for (const d of r.data) {
-          const h = holdingsBySymbol.get(d.symbol);
-          if (!h) continue;
-          // Stocks on the LSE are priced in GBX (pence).
-          h.price = h.exchange === 'LSE' ? d.close / 100 : d.close;
-        }
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
-}
-
-/**
- * Builds URLs to get price data for holdings.
- * Uses the intraday API for US stocks and the EOD API for others
- * (as only US stocks have intraday data).
- */
-function buildFetchPricesUrls(holdings: Holding[]): string[] {
-  const usSymbols = [];
-  const otherSymbols = [];
-  for (const h of holdings) {
-    if (USA_EXCHANGES.includes(h.exchange)) {
-      usSymbols.push(h.symbol);
-    } else {
-      otherSymbols.push(h.symbol);
-    }
-  }
-  const reqs = [];
-  if (usSymbols.length) {
-    reqs.push(
-      combineFetchPricesUrlParts(MS_INTRADAY_LATEST_BASE_URL, usSymbols),
-    );
-  }
-  if (otherSymbols.length) {
-    reqs.push(combineFetchPricesUrlParts(MS_EOD_LATEST_BASE_URL, otherSymbols));
-  }
-  return reqs;
-}
-
-/** Builds a URL to fetch prices for the provided symbols. */
-function combineFetchPricesUrlParts(url: string, symbols: string[]): string {
-  return `${url}?access_key=${
-    process.env.REACT_APP_MARKETSTACK_KEY
-  }&symbols=${symbols.join()}`;
 }

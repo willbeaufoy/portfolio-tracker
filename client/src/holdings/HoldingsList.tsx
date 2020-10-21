@@ -24,7 +24,6 @@ export default function HoldingsList(props: HoldingsListProps) {
   useEffect(() => {
     API.listHoldings(props.user.username).then(async (holdings) => {
       if (holdings.length) {
-        await API.applyPrices(holdings);
         setHoldings(holdings);
       }
       setIsDataLoaded(true);

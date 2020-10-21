@@ -18,6 +18,12 @@ Backend: Django REST framework running on AWS Elastic Beanstalk
 1. `./manage.py migrate`
 1. `./manage.py runserver`
 
+### Sync
+
+This populates price data in the backend. To run:
+
+`./manage.py runjob sync_prices`
+
 ## Frontend
 
 1. Install `npm` if you haven't already
