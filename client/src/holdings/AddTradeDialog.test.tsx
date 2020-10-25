@@ -65,9 +65,9 @@ test('creates a trade', async () => {
     fireEvent.click(addButton);
   });
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByRole('heading', {name: DIALOG_TITLE}),
-  );
+  await waitFor(() => {
+    expect(screen.queryByRole('heading', {name: DIALOG_TITLE})).toBeNull();
+  });
   // TODO: Set date specifically.
   expect(API.createTrade).toHaveBeenCalledWith({
     holding: 1,
