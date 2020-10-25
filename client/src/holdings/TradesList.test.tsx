@@ -15,6 +15,19 @@ beforeEach(() => {
   };
 });
 
+test('displays the calculated total price and performance of the trades', () => {
+  render(<TradesList {...props} />);
+
+  const cells = screen.getAllByRole('cell');
+  // First row should have both splits applied as the first split took place on
+  // the day of the trade, and the second one subsequently.
+  expect(cells[4].textContent).toBe('10500.60');
+  expect(cells[5].textContent).toBe('-14.29% (£1500.60)');
+  // Second row should have no splits applied.
+  expect(cells[11].textContent).toBe('8701.05');
+  expect(cells[12].textContent).toBe('+3.44% (£298.95)');
+});
+
 test('notifies the parent when the delete button is clicked', () => {
   render(<TradesList {...props} />);
 

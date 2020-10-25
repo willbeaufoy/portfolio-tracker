@@ -12,7 +12,8 @@ export interface Holding {
   price: number;
   currency: string;
   exchange: string;
-  trades?: Trade[];
+  trades: Trade[];
+  splits: InstrumentSplit[];
 }
 
 type CreateHoldingData = {
@@ -28,6 +29,11 @@ type CreateInstrumentData = {
   dataSource: string;
   isin: string;
 };
+
+interface InstrumentSplit {
+  date: string;
+  ratio: number;
+}
 
 /** A trade as returned from the API. */
 export interface Trade {
@@ -88,6 +94,7 @@ export default class API {
         currency: d.instrument.currency,
         exchange: d.instrument.exchange,
         price: d.instrument.latestPrice,
+        splits: d.instrument.splits,
         trades: d.trades,
       });
     }

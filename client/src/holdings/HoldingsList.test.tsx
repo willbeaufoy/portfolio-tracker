@@ -1,8 +1,7 @@
 import API from '../api';
 import {
-  HOLDING_1,
-  HOLDING_2,
   HOLDING_WITH_TRADES,
+  HOLDING_WITHOUT_TRADES,
   USER,
 } from '../test_fixtures';
 import {fireEvent, render, waitFor} from '@testing-library/react';
@@ -16,20 +15,6 @@ beforeEach(() => {
   props = {
     user: USER,
   };
-  API.applyPrices = jest.fn();
-});
-
-test('displays a list of holdings', async () => {
-  API.listHoldings = jest
-    .fn()
-    .mockReturnValue(Promise.resolve([HOLDING_1, HOLDING_2]));
-
-  render(<HoldingsList {...props} />);
-
-  await waitFor(() => {
-    expect(screen.getByText('AMZN')).toBeInTheDocument();
-    expect(screen.getByText('BOO.XLON')).toBeInTheDocument();
-  });
 });
 
 describe('holdings with trades', () => {
@@ -39,7 +24,19 @@ describe('holdings with trades', () => {
   beforeEach(async () => {
     API.listHoldings = jest
       .fn()
-      .mockReturnValue(Promise.resolve([HOLDING_WITH_TRADES]));
+      .mockReturnValue(
+        Promise.resolve([HOLDING_WITH_TRADES, HOLDING_WITHOUT_TRADES]),
+      );
+  });
+
+  test('displays a list of holdings with their performance figures', async () => {
+    render(<HoldingsList {...props} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('AMZN')).toBeInTheDocument();
+      expect(screen.getByText('-6.26% (£1201.65)')).toBeInTheDocument();
+      expect(screen.getByText('BOO.XLON')).toBeInTheDocument();
+    });
   });
 
   test(`displays a holding's trades on click`, async () => {

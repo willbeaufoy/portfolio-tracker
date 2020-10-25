@@ -1,12 +1,7 @@
-import {
-  fireEvent,
-  render,
-  waitFor,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import {fireEvent, render, waitFor} from '@testing-library/react';
 import API from '../api';
 import AddTradeDialog, {AddTradeDialogProps} from './AddTradeDialog';
-import {HOLDING_1} from '../test_fixtures';
+import {HOLDING_WITHOUT_TRADES} from '../test_fixtures';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 import {screen} from '@testing-library/dom';
@@ -19,7 +14,7 @@ let addTrade: Function;
 beforeEach(() => {
   addTrade = jest.fn();
   props = {
-    holding: HOLDING_1,
+    holding: HOLDING_WITHOUT_TRADES,
     onTradeCreated: addTrade,
   };
 });
@@ -70,7 +65,7 @@ test('creates a trade', async () => {
   });
   // TODO: Set date specifically.
   expect(API.createTrade).toHaveBeenCalledWith({
-    holding: 1,
+    holding: 2,
     date: new Date().toISOString().split('T')[0],
     broker: 'Freetrade',
     quantity: 0.003,

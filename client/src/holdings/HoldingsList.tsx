@@ -1,7 +1,7 @@
 import './HoldingsList.css';
 import API, {Holding, Trade} from '../api';
 import React, {useEffect, useState} from 'react';
-import {calculateHoldingPerformance, getPerfClass} from './utils';
+import {calculateHoldingPerformance, getPerfSign, getPerfClass} from './utils';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
 import Collapse from '@material-ui/core/Collapse';
@@ -82,7 +82,12 @@ export default function HoldingsList(props: HoldingsListProps) {
         <List>
           {holdings.map((h, i) => {
             const perf = calculateHoldingPerformance(h);
-            const perfClass = getPerfClass(perf);
+            let perfValue = 0;
+            let perfPercent = 0;
+            if (perf) {
+              perfValue = perf.value;
+              perfPercent = perf.percent;
+            }
             return (
               <React.Fragment key={i}>
                 <ListItem
@@ -97,7 +102,13 @@ export default function HoldingsList(props: HoldingsListProps) {
                     <div>
                       {h.currency} {h.price?.toFixed(2) ?? 0}
                     </div>
-                    <div className={perfClass}>{perf.toFixed(2)}%</div>
+                    {perf && (
+                      <div className={getPerfClass(perfValue)}>
+                        {getPerfSign(perfValue)}
+                        {Math.abs(perfPercent).toFixed(2)}% (£
+                        {Math.abs(perfValue).toFixed(2)})
+                      </div>
+                    )}
                     <IconButton
                       onClick={() => deleteHolding(h.id, i)}
                       aria-label="delete"

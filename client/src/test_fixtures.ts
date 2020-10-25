@@ -1,28 +1,6 @@
 import {Holding} from './api';
 import {User} from './App';
 
-export const HOLDING_1: Holding = {
-  id: 1,
-  username: 'xzy',
-  name: 'Amazon',
-  symbol: 'AMZN',
-  currency: 'USD',
-  exchange: 'NASDAQ',
-  price: 0,
-  trades: [],
-};
-
-export const HOLDING_2: Holding = {
-  id: 2,
-  username: 'xzy',
-  name: 'Boohoo',
-  symbol: 'BOO.XLON',
-  currency: 'GBP',
-  exchange: 'LSE',
-  price: 0,
-  trades: [],
-};
-
 export const HOLDING_WITH_TRADES: Holding = {
   id: 1,
   username: 'xzy',
@@ -38,7 +16,7 @@ export const HOLDING_WITH_TRADES: Holding = {
       date: '2018-03-04',
       broker: 'Freetrade',
       quantity: 5,
-      unitPrice: 2800,
+      unitPrice: 2100,
       fee: 0.1,
       tax: 0.5,
       fxRate: 0,
@@ -57,6 +35,22 @@ export const HOLDING_WITH_TRADES: Holding = {
       fxFee: 0.45,
     },
   ],
+  splits: [
+    {ratio: 3, date: '2019-01-02'},
+    {ratio: 0.2, date: '2018-03-04'},
+  ],
+};
+
+export const HOLDING_WITHOUT_TRADES: Holding = {
+  id: 2,
+  username: 'xzy',
+  name: 'Boohoo',
+  symbol: 'BOO.XLON',
+  currency: 'GBP',
+  exchange: 'LSE',
+  price: 0,
+  trades: [],
+  splits: [],
 };
 
 export const USER: User = {

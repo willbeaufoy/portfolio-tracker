@@ -33,8 +33,8 @@ class TestHoldingList(APITestCase):
             {'instrument': self.instrument, 'username': 'a'})
         self.holding = Holding.objects.create(**self.holding_dict)
         self.trade_dict = collections.OrderedDict(
-            {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'quantity': 1, 'unit_price': 1,
-             'fee': 1, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45})
+            {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'quantity': 1.0, 'unit_price': 1.0,
+             'fee': 1.0, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45})
         self.trade = Trade.objects.create(**self.trade_dict)
 
     def test_create_holding(self):
@@ -55,12 +55,13 @@ class TestHoldingList(APITestCase):
         expect_instrument_dict['id'] = self.instrument.id
         expect_instrument_dict['latest_price'] = None
         expect_instrument_dict['latest_price_update_time'] = None
+        expect_instrument_dict['splits'] = []
         expect_trade_dict = collections.OrderedDict(self.trade_dict)
         expect_trade_dict['id'] = self.trade.id
         expect_trade_dict.move_to_end('id', last=False)
         expect_trade_dict['holding'] = self.holding.id
         expect_holding_dict = collections.OrderedDict(
-            id=self.holding.id, instrument=expect_instrument_dict, username=self.holding.username, trades=[expect_trade_dict])
+            id=self.holding.id, username=self.holding.username, instrument=expect_instrument_dict, trades=[expect_trade_dict])
         self.assertEqual(response.data, [expect_holding_dict])
 
     def test_list_invalid_username_returns_empty_list(self):

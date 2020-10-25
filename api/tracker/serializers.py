@@ -1,14 +1,22 @@
 from drf_extra_fields.relations import PresentablePrimaryKeyRelatedField
 from rest_framework import serializers
 
-from tracker.models import Holding, Instrument, Trade
+from tracker.models import Holding, Instrument, InstrumentSplit, Trade
+
+
+class InstrumentSplitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InstrumentSplit
+        fields = ['ratio', 'date']
 
 
 class InstrumentSerializer(serializers.ModelSerializer):
+    splits = InstrumentSplitSerializer(many=True, read_only=True)
+
     class Meta:
         model = Instrument
         fields = ['id', 'symbol', 'name', 'currency', 'exchange',
-                  'data_source', 'isin', 'latest_price', 'latest_price_update_time']
+                  'data_source', 'isin', 'latest_price', 'latest_price_update_time', 'splits']
 
     def create(self, validated_data):
         """
@@ -72,7 +80,7 @@ class HoldingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Holding
-        fields = ['id', 'instrument', 'username', 'trades']
+        fields = ['id', 'username', 'instrument', 'trades']
 
     def create(self, validated_data):
         """

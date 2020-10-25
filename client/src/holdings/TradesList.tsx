@@ -3,6 +3,7 @@ import {
   calculateTradePerformance,
   calculateTradePrice,
   getPerfClass,
+  getPerfSign,
 } from './utils';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -41,8 +42,10 @@ export default function TradesList(props: TradesListProps) {
             </TableHead>
             <TableBody>
               {props.holding.trades!.map((t, i) => {
-                const perf = calculateTradePerformance(t, props.holding);
-                const perfClass = getPerfClass(perf);
+                const {
+                  value: perfValue,
+                  percent: perfPercent,
+                } = calculateTradePerformance(t, props.holding);
                 return (
                   <TableRow key={i}>
                     <TableCell component="th" scope="row">
@@ -56,8 +59,13 @@ export default function TradesList(props: TradesListProps) {
                     <TableCell align="right">
                       {calculateTradePrice(t).toFixed(2)}
                     </TableCell>
-                    <TableCell align="right" className={perfClass}>
-                      {perf.toFixed(2)}%
+                    <TableCell
+                      align="right"
+                      className={getPerfClass(perfValue)}
+                    >
+                      {getPerfSign(perfValue)}
+                      {Math.abs(perfPercent).toFixed(2)}% (£
+                      {Math.abs(perfValue).toFixed(2)})
                     </TableCell>
                     <TableCell align="right">
                       <IconButton
