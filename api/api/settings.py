@@ -28,8 +28,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'portfolio-api.eba-ef93xgpm.us-west-2.elasticbeanstalk.com',
-    'api.portfoliotracker.willbeaufoy.opalstacked.com',
+    'api.portfolio.isidel.com',
 ]
 
 
