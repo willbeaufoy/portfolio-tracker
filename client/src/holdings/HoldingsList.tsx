@@ -7,8 +7,12 @@ import AddTrade from './AddTradeDialog';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import TradesList from './TradesList';
 import {User} from '../App';
 
@@ -79,62 +83,92 @@ export default function HoldingsList(props: HoldingsListProps) {
     <div className="HoldingsList">
       <h2>Holdings</h2>
       {Boolean(holdings.length) && (
-        <List>
-          {holdings.map((h, i) => {
-            const perf = calculateHoldingPerformance(h);
-            let perfValue = 0;
-            let perfPercent = 0;
-            if (perf) {
-              perfValue = perf.value;
-              perfPercent = perf.percent;
-            }
-            return (
-              <React.Fragment key={i}>
-                <ListItem
-                  button
-                  onClick={() => {
-                    handleClick(i);
-                  }}
-                >
-                  <div className="holding">
-                    <div>{h.symbol}</div>
-                    <div>{h.exchange}</div>
-                    <div>
-                      {h.currency} {h.price?.toFixed(2) ?? 0}
-                    </div>
-                    {perf && (
-                      <div className={getPerfClass(perfValue)}>
-                        {getPerfSign(perfValue)}
-                        {Math.abs(perfPercent).toFixed(2)}% (£
-                        {Math.abs(perfValue).toFixed(2)})
-                      </div>
-                    )}
-                    <IconButton
-                      onClick={() => deleteHolding(h.id, i)}
-                      aria-label="delete"
+        <TableContainer>
+          <Table size="small" aria-label="Holdings table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Symbol</TableCell>
+                <TableCell>Exchange</TableCell>
+                <TableCell>Current Price</TableCell>
+                <TableCell>Value</TableCell>
+                <TableCell>Performance</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {holdings.map((h, i) => {
+                const perf = calculateHoldingPerformance(h);
+                let currentValue = 0;
+                let valueChange = 0;
+                let percentChange = 0;
+                if (perf) {
+                  currentValue = perf.currentValue;
+                  valueChange = perf.valueChange;
+                  percentChange = perf.percentChange;
+                }
+                return (
+                  <React.Fragment key={i}>
+                    <TableRow
+                      onClick={() => {
+                        handleClick(i);
+                      }}
                     >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </div>
-                </ListItem>
-                <Collapse in={open[i]} timeout="auto" unmountOnExit>
-                  <TradesList
-                    holding={h}
-                    onDeleteTradeClicked={(id: number, tradeIndex: number) => {
-                      deleteTrade(id, i, tradeIndex);
-                    }}
-                  ></TradesList>
-                  <div className="AddTrade-button-container">
-                    <AddTrade
-                      holding={h}
-                      onTradeCreated={(trade: Trade) => addTrade(trade, i)}
-                    ></AddTrade>
-                  </div>
-                </Collapse>
-              </React.Fragment>
-            );
-          })}
-        </List>
+                      <TableCell>{h.symbol}</TableCell>
+                      <TableCell>{h.exchange}</TableCell>
+                      <TableCell>
+                        {h.currency} {h.price?.toFixed(2) ?? 0}
+                      </TableCell>
+                      <TableCell>{currentValue.toFixed(2)}</TableCell>
+                      <TableCell>
+                        {perf && (
+                          <div className={getPerfClass(valueChange)}>
+                            {getPerfSign(valueChange)}
+                            {Math.abs(percentChange).toFixed(2)}% (£
+                            {Math.abs(valueChange).toFixed(2)})
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() => deleteHolding(h.id, i)}
+                          aria-label="delete"
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        style={{paddingBottom: 0, paddingTop: 0}}
+                        colSpan={5}
+                      >
+                        <Collapse in={open[i]} timeout="auto" unmountOnExit>
+                          <TradesList
+                            holding={h}
+                            onDeleteTradeClicked={(
+                              id: number,
+                              tradeIndex: number,
+                            ) => {
+                              deleteTrade(id, i, tradeIndex);
+                            }}
+                          ></TradesList>
+                          <div className="AddTrade-button-container">
+                            <AddTrade
+                              holding={h}
+                              onTradeCreated={(trade: Trade) =>
+                                addTrade(trade, i)
+                              }
+                            ></AddTrade>
+                          </div>
+                        </Collapse>
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
       <AddHoldingForm
         username={props.user.username}

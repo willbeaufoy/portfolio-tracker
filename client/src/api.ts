@@ -14,6 +14,9 @@ export interface Holding {
   exchange: string;
   trades: Trade[];
   splits: InstrumentSplit[];
+  currentValue?: number;
+  valueChange?: number;
+  percentChange?: number;
 }
 
 type CreateHoldingData = {

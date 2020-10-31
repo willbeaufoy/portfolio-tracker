@@ -42,10 +42,10 @@ export default function TradesList(props: TradesListProps) {
             </TableHead>
             <TableBody>
               {props.holding.trades!.map((t, i) => {
-                const {
-                  value: perfValue,
-                  percent: perfPercent,
-                } = calculateTradePerformance(t, props.holding);
+                const {valueChange, percentChange} = calculateTradePerformance(
+                  t,
+                  props.holding,
+                );
                 return (
                   <TableRow key={i}>
                     <TableCell component="th" scope="row">
@@ -61,11 +61,11 @@ export default function TradesList(props: TradesListProps) {
                     </TableCell>
                     <TableCell
                       align="right"
-                      className={getPerfClass(perfValue)}
+                      className={getPerfClass(valueChange)}
                     >
-                      {getPerfSign(perfValue)}
-                      {Math.abs(perfPercent).toFixed(2)}% (£
-                      {Math.abs(perfValue).toFixed(2)})
+                      {getPerfSign(valueChange)}
+                      {Math.abs(percentChange).toFixed(2)}% (£
+                      {Math.abs(valueChange).toFixed(2)})
                     </TableCell>
                     <TableCell align="right">
                       <IconButton

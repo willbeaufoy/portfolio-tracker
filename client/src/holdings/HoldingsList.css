@@ -1,32 +1,9 @@
-.HoldingsList {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
-.holding {
-  display: flex;
-  gap: 30px;
-  min-width: 600px;
-}
-
-.holding > div {
-  display: flex;
-  align-items: center;
-  width: 100px;
-}
-
 .holding > button {
   margin-left: auto;
 }
 
 .AddTrade-button-container {
   margin: 15px;
-}
-
-.MuiCollapse-container {
-  margin-left: 20px;
 }
 
 .loading {

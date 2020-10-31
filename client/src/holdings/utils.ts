@@ -5,8 +5,9 @@ import {Holding, Trade} from '../api';
  * and in percentage terms.
  */
 interface Performance {
-  value: number;
-  percent: number;
+  currentValue: number;
+  valueChange: number;
+  percentChange: number;
 }
 
 /** Calculates the performance of a holding from all its trades. */
@@ -20,18 +21,18 @@ export function calculateHoldingPerformance(h: Holding): Performance | null {
     (acc, t) => acc + calculateTradePrice(t),
     0,
   );
-  const valueDiff = currentValue - totalPaid;
-  const percentDiff = (valueDiff / totalPaid) * 100;
-  return {value: valueDiff, percent: percentDiff};
+  const valueChange = currentValue - totalPaid;
+  const percentChange = (valueChange / totalPaid) * 100;
+  return {currentValue, valueChange, percentChange};
 }
 
 /** Calculates the performance of a buy trade in the given holding. */
 export function calculateTradePerformance(t: Trade, h: Holding): Performance {
   const currentValue = calculateTradeCurrentValue(t, h);
   const totalPaid = calculateTradePrice(t);
-  const valueDiff = currentValue - totalPaid;
-  const percentDiff = (valueDiff / totalPaid) * 100;
-  return {value: valueDiff, percent: percentDiff};
+  const valueChange = currentValue - totalPaid;
+  const percentChange = (valueChange / totalPaid) * 100;
+  return {currentValue, valueChange, percentChange};
 }
 
 /**
