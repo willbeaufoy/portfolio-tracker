@@ -1,38 +1,45 @@
-import {Holding, Trade} from '../api';
+import {Holding, Performance, Trade} from '../api';
 
 /**
- * Performance of a holding/trade in absolute value (in user's currency)
- * and in percentage terms.
+ * Sets the current performance data for the given holding and its trades
+ * from its existing data.
  */
-interface Performance {
-  currentValue: number;
-  valueChange: number;
-  percentChange: number;
+export function setHoldingPerformance(holding: Holding) {
+  let pricePaid = 0;
+  let currentValue = 0;
+  for (const trade of holding.trades) {
+    setTradePerformance(trade, holding);
+    pricePaid += trade.performance?.pricePaid ?? 0;
+    currentValue += trade.performance?.currentValue ?? 0;
+  }
+  const valueChange = currentValue - pricePaid;
+  const percentChange = (valueChange / pricePaid) * 100;
+  holding.performance = {pricePaid, currentValue, valueChange, percentChange};
 }
 
-/** Calculates the performance of a holding from all its trades. */
-export function calculateHoldingPerformance(h: Holding): Performance | null {
-  if (!h.trades?.length) return null;
-  const currentValue = h.trades.reduce(
-    (acc, t) => acc + calculateTradeCurrentValue(t, h),
-    0,
-  );
-  const totalPaid = h.trades.reduce(
-    (acc, t) => acc + calculateTradePrice(t),
-    0,
-  );
-  const valueChange = currentValue - totalPaid;
-  const percentChange = (valueChange / totalPaid) * 100;
-  return {currentValue, valueChange, percentChange};
+/**
+ * Sets the current performance data for the given trade from
+ * the data of itself and its parent holding.
+ */
+function setTradePerformance(trade: Trade, holding: Holding) {
+  const currentValue = calculateTradeCurrentValue(trade, holding);
+  const pricePaid = calculateTradePrice(trade);
+  const valueChange = currentValue - pricePaid;
+  const percentChange = (valueChange / pricePaid) * 100;
+  trade.performance = {pricePaid, currentValue, valueChange, percentChange};
 }
 
-/** Calculates the performance of a buy trade in the given holding. */
-export function calculateTradePerformance(t: Trade, h: Holding): Performance {
-  const currentValue = calculateTradeCurrentValue(t, h);
-  const totalPaid = calculateTradePrice(t);
-  const valueChange = currentValue - totalPaid;
-  const percentChange = (valueChange / totalPaid) * 100;
-  return {currentValue, valueChange, percentChange};
+/** Gets the total performance from all the given holdings. */
+export function getTotalPerformance(holdings: Holding[]): Performance {
+  let pricePaid = 0;
+  let currentValue = 0;
+  for (const holding of holdings) {
+    pricePaid += holding.performance?.pricePaid ?? 0;
+    currentValue += holding.performance?.currentValue ?? 0;
+  }
+  const valueChange = currentValue - pricePaid;
+  const percentChange = (valueChange / pricePaid) * 100;
+  return {pricePaid, currentValue, valueChange, percentChange};
 }
 
 /**
@@ -41,7 +48,6 @@ export function calculateTradePerformance(t: Trade, h: Holding): Performance {
  */
 function calculateTradeCurrentValue(t: Trade, h: Holding) {
   let value = t.quantity * h.price;
-  const split = h.splits.find((s) => t.date <= s.date);
   for (const s of h.splits) {
     if (t.date <= s.date) value *= s.ratio;
   }
@@ -51,18 +57,4 @@ function calculateTradeCurrentValue(t: Trade, h: Holding) {
 /** Calculates the total price of a trade including fees and tax */
 export function calculateTradePrice(t: Trade): number {
   return t.quantity * t.unitPrice + t.fee + t.tax + t.fxFee;
-}
-
-/** Gets the sign (+/-) for a performance number. */
-export function getPerfSign(perf: number) {
-  if (perf > 0) return '+';
-  if (perf < 0) return '-';
-  return '';
-}
-
-/** Gets the class name for a performance number. */
-export function getPerfClass(perf: number) {
-  if (perf > 0) return 'positive';
-  if (perf < 0) return 'negative';
-  return '';
 }

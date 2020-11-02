@@ -1,6 +1,17 @@
 import {API_BASE} from './settings';
 
 /**
+ * Performance of a holding/trade in absolute value (in user's currency)
+ * and in percentage terms.
+ */
+export interface Performance {
+  pricePaid: number;
+  currentValue: number;
+  valueChange: number;
+  percentChange: number;
+}
+
+/**
  * A holding as displayed to the user.
  * Made up of data from multiple API calls.
  */
@@ -14,9 +25,7 @@ export interface Holding {
   exchange: string;
   trades: Trade[];
   splits: InstrumentSplit[];
-  currentValue?: number;
-  valueChange?: number;
-  percentChange?: number;
+  performance?: Performance;
 }
 
 type CreateHoldingData = {
@@ -50,6 +59,7 @@ export interface Trade {
   tax: number;
   fxRate: number;
   fxFee: number;
+  performance?: Performance;
 }
 
 type CreateTradeData = Omit<Trade, 'id'>;

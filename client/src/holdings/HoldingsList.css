@@ -1,9 +1,37 @@
+.HoldingsList {
+  text-align: center;
+}
+
+.totalPerf {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 25px 0;
+}
+
+.totalPerf > div {
+  display: flex;
+  gap: 5px;
+}
+
+.Holding-row {
+  cursor: pointer;
+}
+
+.Holding-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
 .holding > button {
   margin-left: auto;
 }
 
 .AddTrade-button-container {
   margin: 15px;
+}
+
+.AddHoldingForm {
+  margin-top: 10px;
 }
 
 .loading {

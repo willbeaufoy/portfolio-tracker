@@ -1,9 +1,5 @@
 import API from '../api';
-import {
-  HOLDING_WITH_TRADES,
-  HOLDING_WITHOUT_TRADES,
-  USER,
-} from '../test_fixtures';
+import {HOLDING_1, HOLDING_2, USER} from '../test_fixtures';
 import {fireEvent, render, waitFor} from '@testing-library/react';
 import HoldingsList, {HoldingsListProps} from './HoldingsList';
 import React from 'react';
@@ -24,18 +20,21 @@ describe('holdings with trades', () => {
   beforeEach(async () => {
     API.listHoldings = jest
       .fn()
-      .mockReturnValue(
-        Promise.resolve([HOLDING_WITH_TRADES, HOLDING_WITHOUT_TRADES]),
-      );
+      .mockReturnValue(Promise.resolve([HOLDING_1, HOLDING_2]));
   });
 
-  test('displays a list of holdings with their performance figures', async () => {
+  test('displays a list of holdings with their individual and combined performance figures', async () => {
     render(<HoldingsList {...props} />);
 
     await waitFor(() => {
+      // Total performance.
+      expect(screen.getByText('-6.45% (£1406.25)')).toBeInTheDocument();
+      // Amazon performance.
       expect(screen.getByText('AMZN')).toBeInTheDocument();
       expect(screen.getByText('-6.26% (£1201.65)')).toBeInTheDocument();
+      // Boohoo performance.
       expect(screen.getByText('BOO.XLON')).toBeInTheDocument();
+      expect(screen.getByText('-7.89% (£204.60)')).toBeInTheDocument();
     });
   });
 

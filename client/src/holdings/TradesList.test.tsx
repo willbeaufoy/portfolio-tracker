@@ -1,16 +1,18 @@
-import {HOLDING_WITH_TRADES} from '../test_fixtures';
+import {HOLDING_1} from '../test_fixtures';
 import {fireEvent, render} from '@testing-library/react';
 import TradesList, {TradesListProps} from './TradesList';
 import React from 'react';
 import {screen} from '@testing-library/dom';
+import {setHoldingPerformance} from './utils';
 
 let props: TradesListProps;
 let removeTrade: Function;
 
 beforeEach(() => {
   removeTrade = jest.fn();
+  setHoldingPerformance(HOLDING_1);
   props = {
-    holding: HOLDING_WITH_TRADES,
+    holding: HOLDING_1,
     onDeleteTradeClicked: removeTrade,
   };
 });

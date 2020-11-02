@@ -1,7 +1,7 @@
 import {fireEvent, render, waitFor} from '@testing-library/react';
 import API from '../api';
 import AddTradeDialog, {AddTradeDialogProps} from './AddTradeDialog';
-import {HOLDING_WITHOUT_TRADES} from '../test_fixtures';
+import {HOLDING_2} from '../test_fixtures';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 import {screen} from '@testing-library/dom';
@@ -14,7 +14,7 @@ let addTrade: Function;
 beforeEach(() => {
   addTrade = jest.fn();
   props = {
-    holding: HOLDING_WITHOUT_TRADES,
+    holding: HOLDING_2,
     onTradeCreated: addTrade,
   };
 });

@@ -1,12 +1,13 @@
 import './HoldingsList.css';
-import API, {Holding, Trade} from '../api';
+import API, {Holding, Trade, Performance} from '../api';
 import React, {useEffect, useState} from 'react';
-import {calculateHoldingPerformance, getPerfSign, getPerfClass} from './utils';
+import {getTotalPerformance, setHoldingPerformance} from './utils';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
+import PerformanceDisplay from './PerformanceDisplay';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -24,11 +25,21 @@ export type HoldingsListProps = {
 export default function HoldingsList(props: HoldingsListProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
+  const [totalPerf, setTotalPerf] = useState<Performance>({
+    pricePaid: 0,
+    currentValue: 0,
+    valueChange: 0,
+    percentChange: 0,
+  });
 
   useEffect(() => {
     API.listHoldings(props.user.username).then(async (holdings) => {
       if (holdings.length) {
+        for (const holding of holdings) {
+          setHoldingPerformance(holding);
+        }
         setHoldings(holdings);
+        setTotalPerf(getTotalPerformance(holdings));
       }
       setIsDataLoaded(true);
     });
@@ -82,6 +93,17 @@ export default function HoldingsList(props: HoldingsListProps) {
   return (
     <div className="HoldingsList">
       <h2>Holdings</h2>
+      {totalPerf && (
+        <div className="totalPerf">
+          <div>
+            Current value: <strong>£{totalPerf.currentValue.toFixed(2)}</strong>
+          </div>
+          <div>
+            <div>Total Performance:</div>
+            <PerformanceDisplay performance={totalPerf} />
+          </div>
+        </div>
+      )}
       {Boolean(holdings.length) && (
         <TableContainer>
           <Table size="small" aria-label="Holdings table">
@@ -97,18 +119,10 @@ export default function HoldingsList(props: HoldingsListProps) {
             </TableHead>
             <TableBody>
               {holdings.map((h, i) => {
-                const perf = calculateHoldingPerformance(h);
-                let currentValue = 0;
-                let valueChange = 0;
-                let percentChange = 0;
-                if (perf) {
-                  currentValue = perf.currentValue;
-                  valueChange = perf.valueChange;
-                  percentChange = perf.percentChange;
-                }
                 return (
                   <React.Fragment key={i}>
                     <TableRow
+                      className="Holding-row"
                       onClick={() => {
                         handleClick(i);
                       }}
@@ -118,14 +132,12 @@ export default function HoldingsList(props: HoldingsListProps) {
                       <TableCell>
                         {h.currency} {h.price?.toFixed(2) ?? 0}
                       </TableCell>
-                      <TableCell>{currentValue.toFixed(2)}</TableCell>
                       <TableCell>
-                        {perf && (
-                          <div className={getPerfClass(valueChange)}>
-                            {getPerfSign(valueChange)}
-                            {Math.abs(percentChange).toFixed(2)}% (£
-                            {Math.abs(valueChange).toFixed(2)})
-                          </div>
+                        {h.performance && h.performance.currentValue.toFixed(2)}
+                      </TableCell>
+                      <TableCell>
+                        {h.performance && (
+                          <PerformanceDisplay performance={h.performance} />
                         )}
                       </TableCell>
                       <TableCell>
@@ -139,7 +151,11 @@ export default function HoldingsList(props: HoldingsListProps) {
                     </TableRow>
                     <TableRow>
                       <TableCell
-                        style={{paddingBottom: 0, paddingTop: 0}}
+                        style={{
+                          borderBottom: 0,
+                          paddingBottom: 0,
+                          paddingTop: 0,
+                        }}
                         colSpan={5}
                       >
                         <Collapse in={open[i]} timeout="auto" unmountOnExit>

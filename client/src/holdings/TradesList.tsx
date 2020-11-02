@@ -1,13 +1,8 @@
 import './TradesList.css';
-import {
-  calculateTradePerformance,
-  calculateTradePrice,
-  getPerfClass,
-  getPerfSign,
-} from './utils';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import {Holding} from './../api';
+import PerformanceDisplay from './PerformanceDisplay';
 import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -42,10 +37,6 @@ export default function TradesList(props: TradesListProps) {
             </TableHead>
             <TableBody>
               {props.holding.trades!.map((t, i) => {
-                const {valueChange, percentChange} = calculateTradePerformance(
-                  t,
-                  props.holding,
-                );
                 return (
                   <TableRow key={i}>
                     <TableCell component="th" scope="row">
@@ -57,15 +48,12 @@ export default function TradesList(props: TradesListProps) {
                       {t.unitPrice.toFixed(2)}
                     </TableCell>
                     <TableCell align="right">
-                      {calculateTradePrice(t).toFixed(2)}
+                      {t.performance && t.performance.pricePaid.toFixed(2)}
                     </TableCell>
-                    <TableCell
-                      align="right"
-                      className={getPerfClass(valueChange)}
-                    >
-                      {getPerfSign(valueChange)}
-                      {Math.abs(percentChange).toFixed(2)}% (£
-                      {Math.abs(valueChange).toFixed(2)})
+                    <TableCell align="right">
+                      {t.performance && (
+                        <PerformanceDisplay performance={t.performance} />
+                      )}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton

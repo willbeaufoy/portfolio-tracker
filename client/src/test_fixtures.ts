@@ -1,7 +1,7 @@
 import {Holding} from './api';
 import {User} from './App';
 
-export const HOLDING_WITH_TRADES: Holding = {
+export const HOLDING_1: Holding = {
   id: 1,
   username: 'xzy',
   name: 'Amazon',
@@ -41,15 +41,28 @@ export const HOLDING_WITH_TRADES: Holding = {
   ],
 };
 
-export const HOLDING_WITHOUT_TRADES: Holding = {
+export const HOLDING_2: Holding = {
   id: 2,
   username: 'xzy',
   name: 'Boohoo',
   symbol: 'BOO.XLON',
   currency: 'GBP',
   exchange: 'LSE',
-  price: 0,
-  trades: [],
+  price: 398,
+  trades: [
+    {
+      id: 5,
+      holding: 2,
+      date: '2019-03-04',
+      broker: 'Trading 212',
+      quantity: 6,
+      unitPrice: 432,
+      fee: 0.1,
+      tax: 0.5,
+      fxRate: 0,
+      fxFee: 0,
+    },
+  ],
   splits: [],
 };
 
