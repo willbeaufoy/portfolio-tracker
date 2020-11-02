@@ -109,7 +109,7 @@ export default function HoldingsList(props: HoldingsListProps) {
           <Table size="small" aria-label="Holdings table">
             <TableHead>
               <TableRow>
-                <TableCell>Symbol</TableCell>
+                <TableCell>Name</TableCell>
                 <TableCell>Exchange</TableCell>
                 <TableCell>Current Price</TableCell>
                 <TableCell>Value</TableCell>
@@ -127,7 +127,9 @@ export default function HoldingsList(props: HoldingsListProps) {
                         handleClick(i);
                       }}
                     >
-                      <TableCell>{h.symbol}</TableCell>
+                      <TableCell>
+                        {h.name} ({h.symbol})
+                      </TableCell>
                       <TableCell>{h.exchange}</TableCell>
                       <TableCell>
                         {h.currency} {h.price?.toFixed(2) ?? 0}

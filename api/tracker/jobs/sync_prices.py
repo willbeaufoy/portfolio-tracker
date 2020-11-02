@@ -19,12 +19,16 @@ def sync_prices_from_finki():
     instruments = Instrument.objects.all()
     api_key = os.environ.get('FINKI_API_KEY')
     for inst in instruments:
-        req = 'https://finki.io/callAPI.php?isin={isin}&function=ukAsk&key={key}'.format(
-            isin=inst.isin, key=api_key)
+        is_uk_instrument = inst.isin.startswith(
+            'GB') or inst.isin.startswith('JE')
+        is_ie_instrument = inst.isin.startswith('IE')
+        finki_function = 'ukAsk' if is_uk_instrument or is_ie_instrument else 'usLatest'
+        req = 'https://finki.io/callAPI.php?isin={isin}&function={function}&key={key}'.format(
+            isin=inst.isin, function=finki_function, key=api_key)
         res = requests.get(req)
         price = float(res.text)
-        if inst.exchange == 'LSE':
-            # LSE prices are quoted in GBX (pence) but we save them as GBP.
+        if is_uk_instrument:
+            # UK prices are quoted in GBX (pence) but we save them as GBP.
             price /= 100
         inst.latest_price = price
         inst.latest_price_update_time = timezone.now()

@@ -30,10 +30,10 @@ describe('holdings with trades', () => {
       // Total performance.
       expect(screen.getByText('-6.45% (£1406.25)')).toBeInTheDocument();
       // Amazon performance.
-      expect(screen.getByText('AMZN')).toBeInTheDocument();
+      expect(screen.getByText('Amazon (AMZN)')).toBeInTheDocument();
       expect(screen.getByText('-6.26% (£1201.65)')).toBeInTheDocument();
       // Boohoo performance.
-      expect(screen.getByText('BOO.XLON')).toBeInTheDocument();
+      expect(screen.getByText('Boohoo (BOO.XLON)')).toBeInTheDocument();
       expect(screen.getByText('-7.89% (£204.60)')).toBeInTheDocument();
     });
   });
@@ -44,7 +44,7 @@ describe('holdings with trades', () => {
     await waitFor(() => {
       expect(screen.queryByText(trade1Date)).toBeNull();
       expect(screen.queryByText(trade2Date)).toBeNull();
-      holdingEl = screen.getByText('AMZN');
+      holdingEl = screen.getByText('Amazon (AMZN)');
     });
 
     fireEvent.click(holdingEl!);
@@ -59,7 +59,7 @@ describe('holdings with trades', () => {
     API.deleteTrade = jest.fn().mockReturnValue(Promise.resolve());
     // Replicate previous test to get to the state where we can delete.
     render(<HoldingsList {...props} />);
-    const holdingEl = await waitFor(() => screen.getByText('AMZN'));
+    const holdingEl = await waitFor(() => screen.getByText('Amazon (AMZN)'));
     fireEvent.click(holdingEl!);
     let deleteButtons: HTMLElement[];
     await waitFor(() => {
