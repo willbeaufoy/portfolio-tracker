@@ -33,7 +33,7 @@ class TestHoldingList(APITestCase):
             {'instrument': self.instrument, 'username': 'a'})
         self.holding = Holding.objects.create(**self.holding_dict)
         self.trade_dict = collections.OrderedDict(
-            {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'quantity': 1.0, 'unit_price': 1.0,
+            {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'currency': 'GBP', 'quantity': 1.0, 'unit_price': 1.0,
              'fee': 1.0, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45})
         self.trade = Trade.objects.create(**self.trade_dict)
 
@@ -78,12 +78,12 @@ class TestTradeList(APITestCase):
         Instrument.objects.create()
         self.holding = Holding.objects.create(instrument_id=1)
         self.trade_dict = collections.OrderedDict(
-            {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'quantity': 1, 'unit_price': 1,
+            {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'currency': 'GBP', 'quantity': 1, 'unit_price': 1,
              'fee': 1, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45})
         self.trade = Trade.objects.create(**self.trade_dict)
 
     def test_create_trade(self):
-        request_data = {'holding': 1, 'date': '2020-09-10', 'broker': 'Freetrade',
+        request_data = {'holding': 1, 'date': '2020-09-10', 'broker': 'Freetrade', 'currency': 'GBP',
                         'quantity': 2, 'unit_price': 1, 'fee': 1, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45}
         response = self.client.post(self.url, request_data, format='json')
 
