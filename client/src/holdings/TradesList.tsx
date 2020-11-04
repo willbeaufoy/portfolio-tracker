@@ -30,7 +30,7 @@ export default function TradesList(props: TradesListProps) {
                 <TableCell align="right">Broker</TableCell>
                 <TableCell align="right">Quantity</TableCell>
                 <TableCell align="right">Unit Price</TableCell>
-                <TableCell align="right">Total Price</TableCell>
+                <TableCell align="right">Price Paid</TableCell>
                 <TableCell align="right">Performance</TableCell>
                 <TableCell> </TableCell>
               </TableRow>
