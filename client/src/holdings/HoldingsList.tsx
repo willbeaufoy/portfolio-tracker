@@ -111,7 +111,7 @@ export default function HoldingsList(props: HoldingsListProps) {
               <TableRow>
                 <TableCell>Name</TableCell>
                 <TableCell>Exchange</TableCell>
-                <TableCell>Current Price</TableCell>
+                <TableCell>Current Bid Price</TableCell>
                 <TableCell>Value</TableCell>
                 <TableCell>Performance</TableCell>
                 <TableCell></TableCell>

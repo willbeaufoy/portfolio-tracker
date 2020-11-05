@@ -16,13 +16,14 @@ class Job(QuarterHourlyJob):
 
 
 def sync_prices_from_finki():
+    """Sets the latest bid price of all instruments in the database"""
     instruments = Instrument.objects.all()
     api_key = os.environ.get('FINKI_API_KEY')
     for inst in instruments:
         is_uk_instrument = inst.isin.startswith(
             'GB') or inst.isin.startswith('JE')
         is_ie_instrument = inst.isin.startswith('IE')
-        finki_function = 'ukAsk' if is_uk_instrument or is_ie_instrument else 'usLatest'
+        finki_function = 'ukBid' if is_uk_instrument or is_ie_instrument else 'usBid'
         req = 'https://finki.io/callAPI.php?isin={isin}&function={function}&key={key}'.format(
             isin=inst.isin, function=finki_function, key=api_key)
         res = requests.get(req)
