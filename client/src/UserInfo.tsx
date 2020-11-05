@@ -1,12 +1,12 @@
-import React from 'react';
-
 import './UserInfo.css';
+import React from 'react';
+import {User} from './api';
 
 interface UserInfoProps {
-  attrs: {email: string};
+  user: User;
 }
-const UserInfo = (props: UserInfoProps) => (
-  <div className="email">{props.attrs.email}</div>
+const UserInfo = ({user}: UserInfoProps) => (
+  <div className="email">{user.email}</div>
 );
 
 export default UserInfo;

@@ -1,7 +1,7 @@
 import './HoldingsList.css';
-import API, {Holding, Trade, Performance} from '../api';
+import API, {Holding, Trade, Performance, User} from '../api';
 import React, {useEffect, useState} from 'react';
-import {getTotalPerformance, setHoldingPerformance} from './utils';
+import {formatValue, getTotalPerformance, setHoldingPerformance} from './utils';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
 import Collapse from '@material-ui/core/Collapse';
@@ -15,14 +15,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TradesList from './TradesList';
-import {User} from '../App';
 
 export type HoldingsListProps = {
   user: User;
 };
 
 /** Displays of all the user's holdings with the option to add more. */
-export default function HoldingsList(props: HoldingsListProps) {
+export default function HoldingsList({user}: HoldingsListProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [totalPerf, setTotalPerf] = useState<Performance>({
@@ -33,7 +32,7 @@ export default function HoldingsList(props: HoldingsListProps) {
   });
 
   useEffect(() => {
-    API.listHoldings(props.user.username).then(async (holdings) => {
+    API.listHoldings(user.username).then(async (holdings) => {
       if (holdings.length) {
         for (const holding of holdings) {
           setHoldingPerformance(holding);
@@ -43,7 +42,7 @@ export default function HoldingsList(props: HoldingsListProps) {
       }
       setIsDataLoaded(true);
     });
-  }, [props.user.username]);
+  }, [user.username]);
 
   const [open, setOpen] = React.useState(holdings.map(() => false));
   const handleClick = (i: number) => {
@@ -96,11 +95,14 @@ export default function HoldingsList(props: HoldingsListProps) {
       {totalPerf && (
         <div className="totalPerf">
           <div>
-            Current value: <strong>£{totalPerf.currentValue.toFixed(2)}</strong>
+            Current value:{' '}
+            <strong>
+              {formatValue(totalPerf.currentValue, user.currency)}
+            </strong>
           </div>
           <div>
             <div>Total Performance:</div>
-            <PerformanceDisplay performance={totalPerf} />
+            <PerformanceDisplay performance={totalPerf} user={user} />
           </div>
         </div>
       )}
@@ -131,15 +133,21 @@ export default function HoldingsList(props: HoldingsListProps) {
                         {h.name} ({h.symbol})
                       </TableCell>
                       <TableCell>{h.exchange}</TableCell>
+                      <TableCell>{formatValue(h.price, h.currency)}</TableCell>
                       <TableCell>
-                        {h.currency} {h.price?.toFixed(2) ?? 0}
+                        {formatValue(
+                          h.performance?.currentValue ?? 0,
+                          user.currency,
+                        )}
                       </TableCell>
                       <TableCell>
-                        {h.performance && h.performance.currentValue.toFixed(2)}
-                      </TableCell>
-                      <TableCell>
-                        {h.performance && (
-                          <PerformanceDisplay performance={h.performance} />
+                        {h.performance ? (
+                          <PerformanceDisplay
+                            performance={h.performance}
+                            user={user}
+                          />
+                        ) : (
+                          'N/A'
                         )}
                       </TableCell>
                       <TableCell>
@@ -163,6 +171,7 @@ export default function HoldingsList(props: HoldingsListProps) {
                         <Collapse in={open[i]} timeout="auto" unmountOnExit>
                           <TradesList
                             holding={h}
+                            user={user}
                             onDeleteTradeClicked={(
                               id: number,
                               tradeIndex: number,
@@ -189,7 +198,7 @@ export default function HoldingsList(props: HoldingsListProps) {
         </TableContainer>
       )}
       <AddHoldingForm
-        username={props.user.username}
+        username={user.username}
         onHoldingCreated={(h: Holding) => addHolding(h)}
       ></AddHoldingForm>
     </div>

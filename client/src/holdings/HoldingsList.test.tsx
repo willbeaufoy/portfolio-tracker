@@ -28,13 +28,13 @@ describe('holdings with trades', () => {
 
     await waitFor(() => {
       // Total performance.
-      expect(screen.getByText('-8.93% (£1594.03)')).toBeInTheDocument();
+      expect(screen.getByText('-9.94% (-£1,774.03)')).toBeInTheDocument();
       // Amazon performance.
       expect(screen.getByText('Amazon (AMZN)')).toBeInTheDocument();
-      expect(screen.getByText('-9.11% (£1389.43)')).toBeInTheDocument();
+      expect(screen.getByText('-10.29% (-£1,569.43)')).toBeInTheDocument();
       // Boohoo performance.
       expect(screen.getByText('Boohoo (BOO.XLON)')).toBeInTheDocument();
-      expect(screen.getByText('-7.89% (£204.60)')).toBeInTheDocument();
+      expect(screen.getByText('-7.89% (-£204.60)')).toBeInTheDocument();
     });
   });
 

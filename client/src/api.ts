@@ -65,6 +65,12 @@ export interface Trade {
 
 type CreateTradeData = Omit<Trade, 'id'>;
 
+export interface User {
+  username: string;
+  email: string;
+  currency: string;
+}
+
 /** Static methods for calling APIs. */
 export default class API {
   /** Creates a holding on the API. */

@@ -3,23 +3,24 @@ import React, {useEffect, useState} from 'react';
 import {Auth} from 'aws-amplify';
 import HoldingsList from './holdings/HoldingsList';
 import UserInfo from './UserInfo';
+import {User} from './api';
 import {withAuthenticator} from '@aws-amplify/ui-react';
-
-export interface User {
-  username: string;
-  attributes: {email: string};
-}
 
 const App = () => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [user, setUser] = useState<User>({
     username: '',
-    attributes: {email: ''},
+    email: '',
+    currency: '',
   });
 
   useEffect(() => {
-    Auth.currentUserInfo().then((user) => {
-      setUser(user);
+    Auth.currentUserInfo().then((cognitoUser) => {
+      setUser({
+        username: cognitoUser.username,
+        email: cognitoUser.attributes.email,
+        currency: 'GBP', // Only support GBP for now.
+      });
       setIsUserLoaded(true);
     });
   }, []);
@@ -32,7 +33,7 @@ const App = () => {
         <header className="App-header">
           <div></div>
           <h1 className="App-Title">Portfolio Tracker</h1>
-          <UserInfo attrs={user.attributes}></UserInfo>
+          <UserInfo user={user}></UserInfo>
         </header>
         <div className="App-Content">
           <HoldingsList user={user}></HoldingsList>

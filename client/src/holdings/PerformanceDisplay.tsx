@@ -1,18 +1,23 @@
 import React from 'react';
-import {Performance} from '../api';
+import {Performance, User} from '../api';
+import {formatValue} from './utils';
 
 interface PerformanceDisplayProps {
   performance: Performance;
+  user: User;
 }
 
 /** Displays of all the user's holdings with the option to add more. */
-export default function PerformanceDisplay(props: PerformanceDisplayProps) {
-  const {valueChange, percentChange} = props.performance;
+export default function PerformanceDisplay({
+  performance,
+  user,
+}: PerformanceDisplayProps) {
+  const {valueChange, percentChange} = performance;
   return (
     <div className={getPerfClass(valueChange)}>
       {getPerfSign(valueChange)}
-      {Math.abs(percentChange).toFixed(2)}% (£
-      {Math.abs(valueChange).toFixed(2)})
+      {Math.abs(percentChange).toFixed(2)}% (
+      {formatValue(valueChange, user.currency)})
     </div>
   );
 }

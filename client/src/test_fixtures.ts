@@ -1,5 +1,4 @@
-import {Holding} from './api';
-import {User} from './App';
+import {Holding, User} from './api';
 
 export const HOLDING_1: Holding = {
   id: 1,
@@ -71,5 +70,6 @@ export const HOLDING_2: Holding = {
 
 export const USER: User = {
   username: 'xyz',
-  attributes: {email: 'hello@site.com'},
+  email: 'hello@site.com',
+  currency: 'GBP',
 };

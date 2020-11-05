@@ -5,6 +5,7 @@ import {Holding, Performance, Trade} from '../api';
  * from its existing data.
  */
 export function setHoldingPerformance(holding: Holding) {
+  if (!holding.trades.length || !holding.price) return;
   let pricePaid = 0;
   let currentValue = 0;
   for (const trade of holding.trades) {
@@ -71,6 +72,19 @@ function calculateTradeCurrentValue(t: Trade, h: Holding) {
 function getPriceInUsersCurrency(h: Holding) {
   // For now assume user's currency is always GBP and the only other option is USD.
   // Provide dummy USD/GBP exchange rate.
-  if (h.currency === 'USD') return h.price * 0.77;
+  if (h.currency === 'USD') return h.price * 0.76;
   return h.price;
+}
+
+/**
+ * Formats a monetary value in the given currency in the current
+ * user's locale format.
+ *
+ * Currently only supports the GB locale.
+ */
+export function formatValue(value: number, currency: string) {
+  if (!currency) return '';
+  return new Intl.NumberFormat('gb-GB', {style: 'currency', currency}).format(
+    value,
+  );
 }

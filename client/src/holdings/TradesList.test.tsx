@@ -1,4 +1,4 @@
-import {HOLDING_1} from '../test_fixtures';
+import {HOLDING_1, USER} from '../test_fixtures';
 import {fireEvent, render} from '@testing-library/react';
 import TradesList, {TradesListProps} from './TradesList';
 import React from 'react';
@@ -13,6 +13,7 @@ beforeEach(() => {
   setHoldingPerformance(HOLDING_1);
   props = {
     holding: HOLDING_1,
+    user: USER,
     onDeleteTradeClicked: removeTrade,
   };
 });
@@ -23,11 +24,11 @@ test('displays the calculated total price and performance of the trades', () => 
   const cells = screen.getAllByRole('cell');
   // First row should have both splits applied as the first split took place on
   // the day of the trade, and the second one subsequently.
-  expect(cells[4].textContent).toBe('8607.16');
-  expect(cells[5].textContent).toBe('-19.49% (£1677.16)');
+  expect(cells[4].textContent).toBe('£8,607.16');
+  expect(cells[5].textContent).toBe('-20.53% (-£1,767.16)');
   // Second row should have no splits applied.
-  expect(cells[11].textContent).toBe('6642.27');
-  expect(cells[12].textContent).toBe('+4.33% (£287.73)');
+  expect(cells[11].textContent).toBe('£6,642.27');
+  expect(cells[12].textContent).toBe('+2.98% (£197.73)');
 });
 
 test('notifies the parent when the delete button is clicked', () => {
