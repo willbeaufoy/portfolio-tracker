@@ -1,6 +1,36 @@
 import {Holding, Performance, Trade} from '../api';
 
 /**
+ * Gets the total performance from all the given holdings.
+ * Assumes performance for the holdings and their trades has already been
+ * calculated.
+ */
+export function getTotalPerformance(holdings: Holding[]): Performance {
+  let pricePaid = 0;
+  let currentValue = 0;
+  for (const holding of holdings) {
+    pricePaid += holding.performance?.pricePaid ?? 0;
+    currentValue += holding.performance?.currentValue ?? 0;
+  }
+  const valueChange = currentValue - pricePaid;
+  const percentChange = (valueChange / pricePaid) * 100;
+  return {pricePaid, currentValue, valueChange, percentChange};
+}
+
+/**
+ * Formats a monetary value in the given currency in the current
+ * user's locale format.
+ *
+ * Currently only supports the GB locale.
+ */
+export function formatValue(value: number, currency: string) {
+  if (!currency) return '';
+  return new Intl.NumberFormat('gb-GB', {style: 'currency', currency}).format(
+    value,
+  );
+}
+
+/**
  * Sets the current performance data for the given holding and its trades
  * from its existing data.
  */
@@ -31,28 +61,11 @@ function setTradePerformance(trade: Trade, holding: Holding) {
 }
 
 /**
- * Gets the total performance from all the given holdings.
- * Assumes performance for the holdings and their trades has already been
- * calculated.
- */
-export function getTotalPerformance(holdings: Holding[]): Performance {
-  let pricePaid = 0;
-  let currentValue = 0;
-  for (const holding of holdings) {
-    pricePaid += holding.performance?.pricePaid ?? 0;
-    currentValue += holding.performance?.currentValue ?? 0;
-  }
-  const valueChange = currentValue - pricePaid;
-  const percentChange = (valueChange / pricePaid) * 100;
-  return {pricePaid, currentValue, valueChange, percentChange};
-}
-
-/**
  * Calculates the total price of a trade in the user's currency
  * including fees and tax.
  */
 function calculateTradePrice(t: Trade): number {
-  const unitPriceInUsersCurrency = t.unitPrice * (1 / (t.fxRate || 1));
+  const unitPriceInUsersCurrency = t.unitPrice * (1 / t.fxRate);
   return t.quantity * unitPriceInUsersCurrency + t.fee + t.tax + t.fxFee;
 }
 
@@ -70,21 +83,11 @@ function calculateTradeCurrentValue(t: Trade, h: Holding) {
 
 /** Gets the price of a holding in the user's currency. */
 function getPriceInUsersCurrency(h: Holding) {
-  // For now assume user's currency is always GBP and the only other option is USD.
+  // For now assume user's currency is always GBP and the only other holding
+  // currencies are GBX or USD.
+  let multiplier = 1;
   // Provide dummy USD/GBP exchange rate.
-  if (h.currency === 'USD') return h.price * 0.76;
-  return h.price;
-}
-
-/**
- * Formats a monetary value in the given currency in the current
- * user's locale format.
- *
- * Currently only supports the GB locale.
- */
-export function formatValue(value: number, currency: string) {
-  if (!currency) return '';
-  return new Intl.NumberFormat('gb-GB', {style: 'currency', currency}).format(
-    value,
-  );
+  if (h.currency === 'USD') multiplier = 0.76;
+  if (h.currency === 'GBX') multiplier = 0.01;
+  return h.price * multiplier;
 }

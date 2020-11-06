@@ -112,10 +112,10 @@ export default function HoldingsList({user}: HoldingsListProps) {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Exchange</TableCell>
-                <TableCell>Current Bid Price</TableCell>
                 <TableCell>Value</TableCell>
                 <TableCell>Performance</TableCell>
+                <TableCell>Current Bid Price</TableCell>
+                <TableCell>Exchange</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -132,8 +132,6 @@ export default function HoldingsList({user}: HoldingsListProps) {
                       <TableCell>
                         {h.name} ({h.symbol})
                       </TableCell>
-                      <TableCell>{h.exchange}</TableCell>
-                      <TableCell>{formatValue(h.price, h.currency)}</TableCell>
                       <TableCell>
                         {formatValue(
                           h.performance?.currentValue ?? 0,
@@ -150,6 +148,8 @@ export default function HoldingsList({user}: HoldingsListProps) {
                           'N/A'
                         )}
                       </TableCell>
+                      <TableCell>{formatValue(h.price, h.currency)}</TableCell>
+                      <TableCell>{h.exchange}</TableCell>
                       <TableCell>
                         <IconButton
                           onClick={() => deleteHolding(h.id, i)}

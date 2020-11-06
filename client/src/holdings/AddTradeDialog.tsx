@@ -17,7 +17,10 @@ export type AddTradeDialogProps = {
   onTradeCreated: Function;
 };
 
-export default function AddTradeDialog(props: AddTradeDialogProps) {
+export default function AddTradeDialog({
+  holding,
+  onTradeCreated,
+}: AddTradeDialogProps) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -51,21 +54,27 @@ export default function AddTradeDialog(props: AddTradeDialogProps) {
             fxFee: '',
           }}
           onSubmit={async (values, {setSubmitting}) => {
+            let fxRate = Number(values.fxRate ?? 0);
+            if (!fxRate) {
+              // An FX rate must always be provided even if the trade was made
+              // in the user's currency.
+              fxRate = holding.currency === 'GBX' ? 100 : 1;
+            }
             const input = {
-              holding: props.holding.id!,
+              holding: holding.id!,
               date: values.date.toISOString().split('T')[0],
               broker: values.broker ?? '',
-              currency: values.currency ?? '',
+              currency: 'GBP', // Assume trade was always made in GBP for now.
               quantity: Number(values.quantity ?? 0),
               unitPrice: Number(values.unitPrice ?? 0),
               fee: Number(values.fee ?? 0),
               tax: Number(values.tax ?? 0),
-              fxRate: Number(values.fxRate ?? 0),
-              fxFee: Number(values.fxFee ?? 0),
+              fxRate,
+              fxFee: 0, // Field not used currenctly.
             };
             try {
               const trade = await API.createTrade(input);
-              props.onTradeCreated(trade);
+              onTradeCreated(trade);
               setOpen(false);
             } catch (err) {
               console.error(err);
@@ -86,17 +95,15 @@ export default function AddTradeDialog(props: AddTradeDialogProps) {
                   />
                 </MuiPickersUtilsProvider>
                 <Field component={TextField} label="Broker" name="broker" />
-                <Field component={TextField} label="Currency" name="currency" />
                 <Field component={TextField} label="Quantity" name="quantity" />
                 <Field
                   component={TextField}
-                  label="Unit Price"
+                  label={`Unit Price (${holding.currency})`}
                   name="unitPrice"
                 />
                 <Field component={TextField} label="Fee" name="fee" />
                 <Field component={TextField} label="Tax" name="tax" />
                 <Field component={TextField} label="FX Rate" name="fxRate" />
-                <Field component={TextField} label="FX Fee" name="fxFee" />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleCancel} color="primary">

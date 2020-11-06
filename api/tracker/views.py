@@ -1,7 +1,8 @@
 from rest_framework import generics
 
 from tracker.models import Holding, Instrument, Trade
-from tracker.serializers import HoldingSerializer, InstrumentSerializer, TradeSerializer
+from tracker.serializers import (HoldingSerializer, InstrumentSerializer,
+                                 TradeSerializer)
 
 
 class InstrumentList(generics.ListCreateAPIView):

@@ -50,7 +50,11 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
             <Field component={TextField} name="symbol" label="Ticker Symbol" />
             <Field component={TextField} name="isin" label="ISIN" />
             <Field component={TextField} name="exchange" label="Exchange" />
-            <Field component={TextField} name="currency" label="Currency" />
+            <Field
+              component={TextField}
+              name="currency"
+              label="Currency (FinKi)"
+            />
             <Button
               variant="outlined"
               color="primary"

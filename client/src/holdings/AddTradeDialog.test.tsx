@@ -52,16 +52,9 @@ test('creates a trade', async () => {
     });
 
     const inputs = screen.getAllByRole('textbox');
-    const [
-      dateInput,
-      brokerInput,
-      currencyInput,
-      quantityInput,
-      unitPriceInput,
-    ] = inputs;
+    const [dateInput, brokerInput, quantityInput, unitPriceInput] = inputs;
     const addButton = screen.getByRole('button', {name: 'Add'});
     userEvent.type(brokerInput, 'Freetrade');
-    userEvent.type(currencyInput, 'GBP');
     userEvent.type(quantityInput, '0.003');
     userEvent.type(unitPriceInput, '200');
     fireEvent.click(addButton);
@@ -80,8 +73,8 @@ test('creates a trade', async () => {
     unitPrice: 200,
     fee: 0,
     tax: 0,
+    fxRate: 100,
     fxFee: 0,
-    fxRate: 0,
   });
   expect(addTrade).toHaveBeenCalledWith({id: 15});
 });
