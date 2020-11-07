@@ -1,7 +1,11 @@
 import './HoldingsList.css';
 import API, {Holding, Trade, Performance, User} from '../api';
 import React, {useEffect, useState} from 'react';
-import {formatValue, getTotalPerformance, setHoldingPerformance} from './utils';
+import {
+  formatValue,
+  getTotalPerformance,
+  setHoldingPerformance,
+} from './performance_utils';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
 import Collapse from '@material-ui/core/Collapse';
@@ -148,7 +152,9 @@ export default function HoldingsList({user}: HoldingsListProps) {
                           'N/A'
                         )}
                       </TableCell>
-                      <TableCell>{formatValue(h.price, h.currency)}</TableCell>
+                      <TableCell>
+                        {formatValue(h.bidPrice, h.currency)}
+                      </TableCell>
                       <TableCell>{h.exchange}</TableCell>
                       <TableCell>
                         <IconButton
@@ -197,10 +203,12 @@ export default function HoldingsList({user}: HoldingsListProps) {
           </Table>
         </TableContainer>
       )}
-      <AddHoldingForm
-        username={user.username}
-        onHoldingCreated={(h: Holding) => addHolding(h)}
-      ></AddHoldingForm>
+      <div style={{margin: '20px 0'}}>
+        <AddHoldingForm
+          username={user.username}
+          onHoldingCreated={(h: Holding) => addHolding(h)}
+        ></AddHoldingForm>
+      </div>
     </div>
   );
 }

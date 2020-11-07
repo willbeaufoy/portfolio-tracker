@@ -1,33 +1,25 @@
 import {API_BASE} from './settings';
 
 /**
- * Performance of a holding/trade in absolute value (in user's currency)
- * and in percentage terms.
- */
-export interface Performance {
-  pricePaid: number;
-  currentValue: number;
-  valueChange: number;
-  percentChange: number;
-}
-
-/**
- * A holding as displayed to the user.
- * Made up of data from multiple API calls.
+ * A holding as returned from the API and displayed to the user.
+ * Made up of data from a holding, its trades and its instrument.
  */
 export interface Holding {
   id: number;
   username: string;
   name: string;
   symbol: string;
-  price: number;
+  bidPrice: number;
+  bidPriceUpdateTime: string;
   currency: string;
   exchange: string;
+  isin: string;
   trades: Trade[];
   splits: InstrumentSplit[];
   performance?: Performance;
 }
 
+/** Object passed the the API to create a holding. */
 type CreateHoldingData = {
   instrument: number;
   username: string;
@@ -47,6 +39,17 @@ interface InstrumentSplit {
   ratio: number;
 }
 
+/**
+ * Performance of a holding/trade in absolute value (in user's currency)
+ * and in percentage terms.
+ */
+export interface Performance {
+  pricePaid: number;
+  currentValue: number;
+  valueChange: number;
+  percentChange: number;
+}
+
 /** A trade as returned from the API. */
 export interface Trade {
   id: number;
@@ -63,7 +66,7 @@ export interface Trade {
   performance?: Performance;
 }
 
-type CreateTradeData = Omit<Trade, 'id'>;
+type CreateTradeData = Omit<Trade, 'id' | 'performance'>;
 
 export interface User {
   username: string;
@@ -74,17 +77,14 @@ export interface User {
 /** Static methods for calling APIs. */
 export default class API {
   /** Creates a holding on the API. */
-  static createHolding(data: CreateHoldingData) {
+  static createHolding(data: CreateHoldingData): Promise<Holding> {
     return fetch(`${API_BASE}holdings/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).then((res) => {
-      if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    });
+    }).then((res) => res.json());
   }
 
   /** Deletes a holding on the API. */
@@ -97,28 +97,11 @@ export default class API {
     });
   }
 
-  /**
-   * Lists holdings for the given username on the API
-   * and converts them such that they satisfy the Holding interface.
-   */
-  static async listHoldings(username: string): Promise<Holding[]> {
-    const res = await fetch(`${API_BASE}holdings/?username=${username}`);
-    const data = await res.json();
-    const holdings: Holding[] = [];
-    for (const d of data) {
-      holdings.push({
-        id: d.id,
-        username: d.username,
-        name: d.instrument.name,
-        symbol: d.instrument.symbol,
-        currency: d.instrument.currency,
-        exchange: d.instrument.exchange,
-        price: d.instrument.latestPrice,
-        splits: d.instrument.splits,
-        trades: d.trades,
-      });
-    }
-    return holdings;
+  /** Lists holdings for the given username on the API. */
+  static listHoldings(username: string): Promise<Holding[]> {
+    return fetch(`${API_BASE}holdings/?username=${username}`).then((res) =>
+      res.json(),
+    );
   }
 
   /** Creates an instrument on the API. */

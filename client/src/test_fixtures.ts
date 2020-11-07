@@ -6,7 +6,9 @@ export const HOLDING_1: Holding = {
   name: 'Amazon',
   symbol: 'AMZN',
   exchange: 'NASDAQ',
-  price: 3000,
+  bidPrice: 3000,
+  bidPriceUpdateTime: '2020-11-07 12:45:50.93222',
+  isin: 'US0231351067',
   currency: 'USD',
   trades: [
     {
@@ -49,7 +51,9 @@ export const HOLDING_2: Holding = {
   symbol: 'BOO.XLON',
   currency: 'GBX',
   exchange: 'LSE',
-  price: 398,
+  bidPrice: 398,
+  bidPriceUpdateTime: '2020-11-07 10:24:50.487137',
+  isin: 'JE00BG6L7297',
   trades: [
     {
       id: 5,

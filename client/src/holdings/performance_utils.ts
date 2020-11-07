@@ -35,7 +35,7 @@ export function formatValue(value: number, currency: string) {
  * from its existing data.
  */
 export function setHoldingPerformance(holding: Holding) {
-  if (!holding.trades.length || !holding.price) return;
+  if (!holding.trades.length || !holding.bidPrice) return;
   let pricePaid = 0;
   let currentValue = 0;
   for (const trade of holding.trades) {
@@ -89,5 +89,5 @@ function getPriceInUsersCurrency(h: Holding) {
   // Provide dummy USD/GBP exchange rate.
   if (h.currency === 'USD') multiplier = 0.76;
   if (h.currency === 'GBX') multiplier = 0.01;
-  return h.price * multiplier;
+  return h.bidPrice * multiplier;
 }

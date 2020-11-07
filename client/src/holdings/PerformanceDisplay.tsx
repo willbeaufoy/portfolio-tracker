@@ -1,6 +1,6 @@
 import React from 'react';
 import {Performance, User} from '../api';
-import {formatValue} from './utils';
+import {formatValue} from './performance_utils';
 
 interface PerformanceDisplayProps {
   performance: Performance;
@@ -14,7 +14,7 @@ export default function PerformanceDisplay({
 }: PerformanceDisplayProps) {
   const {valueChange, percentChange} = performance;
   return (
-    <div className={getPerfClass(valueChange)}>
+    <div style={getPerfStyle(valueChange)}>
       {getPerfSign(valueChange)}
       {Math.abs(percentChange).toFixed(2)}% (
       {formatValue(valueChange, user.currency)})
@@ -22,11 +22,11 @@ export default function PerformanceDisplay({
   );
 }
 
-/** Gets the class name for a performance number. */
-function getPerfClass(perf: number) {
-  if (perf > 0) return 'positive';
-  if (perf < 0) return 'negative';
-  return '';
+/** Gets the styles for a performance number. */
+function getPerfStyle(perf: number) {
+  if (perf > 0) return {color: '#04ae49'}; // Green.
+  if (perf < 0) return {color: '#de422a'}; // Red.
+  return {};
 }
 
 /** Gets the sign (+/-) for a performance number. */

@@ -3,11 +3,17 @@ from rest_framework import generics
 from tracker.models import Holding, Instrument, Trade
 from tracker.serializers import (HoldingSerializer, InstrumentSerializer,
                                  TradeSerializer)
+from tracker.sync import sync_prices
 
 
 class InstrumentList(generics.ListCreateAPIView):
     queryset = Instrument.objects.all()
     serializer_class = InstrumentSerializer
+
+    def post(self, request, *args, **kwargs):
+        res = self.create(request, *args, **kwargs)
+        sync_prices([request.data['symbol']])
+        return res
 
 
 class InstrumentDetail(generics.RetrieveUpdateDestroyAPIView):

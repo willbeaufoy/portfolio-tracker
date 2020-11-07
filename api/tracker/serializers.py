@@ -1,4 +1,3 @@
-from drf_extra_fields.relations import PresentablePrimaryKeyRelatedField
 from rest_framework import serializers
 
 from tracker.models import Holding, Instrument, InstrumentSplit, Trade
@@ -16,7 +15,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
         fields = ['id', 'symbol', 'name', 'currency', 'exchange',
-                  'data_source', 'isin', 'latest_price', 'latest_price_update_time', 'splits']
+                  'data_source', 'isin', 'bid_price', 'bid_price_update_time', 'splits']
 
     def create(self, validated_data):
         """
@@ -35,10 +34,10 @@ class InstrumentSerializer(serializers.ModelSerializer):
         instance.data_source = validated_data.get(
             'data_source', instance.data_source)
         instance.isin = validated_data.get('isin', instance.isin)
-        instance.latest_price = validated_data.get(
-            'latest_price', instance.latest_price)
-        instance.latest_price_update_time = validated_data.get(
-            'latest_price_update_time', instance.latest_price_update_time)
+        instance.bid_price = validated_data.get(
+            'bid_price', instance.bid_price)
+        instance.bid_price_update_time = validated_data.get(
+            'bid_price_update_time', instance.bid_price_update_time)
         instance.save()
         return instance
 
@@ -75,13 +74,26 @@ class TradeSerializer(serializers.ModelSerializer):
 
 
 class HoldingSerializer(serializers.ModelSerializer):
-    instrument = PresentablePrimaryKeyRelatedField(
-        queryset=Instrument.objects.all(), presentation_serializer=InstrumentSerializer)
+    name = serializers.CharField(read_only=True, source="instrument.name")
+    symbol = serializers.CharField(read_only=True, source="instrument.symbol")
+    currency = serializers.CharField(
+        read_only=True, source="instrument.currency")
+    exchange = serializers.CharField(
+        read_only=True, source="instrument.exchange")
+    isin = serializers.CharField(
+        read_only=True, source="instrument.isin")
+    bid_price = serializers.FloatField(
+        read_only=True, source="instrument.bid_price")
+    bid_price_update_time = serializers.DateTimeField(
+        read_only=True, source="instrument.bid_price_update_time")
+    splits = InstrumentSplitSerializer(
+        many=True, read_only=True, source="instrument.splits")
     trades = TradeSerializer(many=True, read_only=True)
 
     class Meta:
         model = Holding
-        fields = ['id', 'username', 'instrument', 'trades']
+        fields = ['id', 'instrument', 'username', 'name', 'symbol', 'currency', 'exchange',
+                  'isin', 'bid_price', 'bid_price_update_time', 'splits', 'trades']
 
     def create(self, validated_data):
         """

@@ -30,18 +30,6 @@
   margin: 15px;
 }
 
-.AddHoldingForm {
-  margin-top: 10px;
-}
-
 .loading {
   margin: 15px;
-}
-
-.positive {
-  color: #04ae49 !important;
-}
-
-.negative {
-  color: #de422a !important;
 }

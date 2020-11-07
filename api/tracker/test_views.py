@@ -26,9 +26,8 @@ class TestInstrumentList(APITestCase):
 class TestHoldingList(APITestCase):
     def setUp(self):
         self.url = reverse('holding-list')
-        self.instrument_dict = collections.OrderedDict(
-            {'symbol': 'AMZN', 'name': 'Amazon', 'currency': 'USD', 'exchange': 'NASDAQ', 'data_source': 'FI', 'isin': 'US12'})
-        self.instrument = Instrument.objects.create(**self.instrument_dict)
+        self.instrument = Instrument.objects.create(
+            symbol='AMZN', name='Amazon', currency='USD', exchange='NASDAQ', data_source='FI', isin='US12')
         self.holding_dict = collections.OrderedDict(
             {'instrument': self.instrument, 'username': 'a'})
         self.holding = Holding.objects.create(**self.holding_dict)
@@ -51,17 +50,24 @@ class TestHoldingList(APITestCase):
 
         response = self.client.get(self.url, request_data, format='json')
 
-        expect_instrument_dict = dict(self.instrument_dict)
-        expect_instrument_dict['id'] = self.instrument.id
-        expect_instrument_dict['latest_price'] = None
-        expect_instrument_dict['latest_price_update_time'] = None
-        expect_instrument_dict['splits'] = []
         expect_trade_dict = collections.OrderedDict(self.trade_dict)
         expect_trade_dict['id'] = self.trade.id
         expect_trade_dict.move_to_end('id', last=False)
         expect_trade_dict['holding'] = self.holding.id
         expect_holding_dict = collections.OrderedDict(
-            id=self.holding.id, username=self.holding.username, instrument=expect_instrument_dict, trades=[expect_trade_dict])
+            id=self.holding.id,
+            instrument=self.instrument.id,
+            username=self.holding.username,
+            name=self.instrument.name,
+            symbol=self.instrument.symbol,
+            currency=self.instrument.currency,
+            exchange=self.instrument.exchange,
+            isin=self.instrument.isin,
+            bid_price=None,
+            bid_price_update_time=None,
+            splits=[],
+            trades=[expect_trade_dict],
+        )
         self.assertEqual(response.data, [expect_holding_dict])
 
     def test_list_invalid_username_returns_empty_list(self):

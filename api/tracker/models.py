@@ -18,8 +18,8 @@ class Instrument(models.Model):
     data_source = models.CharField(
         max_length=2, choices=DataSource.choices, default=DataSource.FINKI)
     isin = models.CharField(max_length=12)
-    latest_price = models.FloatField(null=True)
-    latest_price_update_time = models.DateTimeField(null=True)
+    bid_price = models.FloatField(null=True)
+    bid_price_update_time = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.name
