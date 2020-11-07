@@ -1,7 +1,7 @@
 Web app for tracking the performance of a stocks portfolio.
 
 Frontend: React running on AWS Amplify with Cognito auth
-Backend: Django REST framework running on AWS Elastic Beanstalk
+Backend: Django REST framework
 
 # Dev environment setup
 
@@ -20,9 +20,9 @@ Backend: Django REST framework running on AWS Elastic Beanstalk
 
 ### Sync
 
-This populates price data in the backend. To run:
+This populates price data in the backend from [FinKi](https://finki.io/). To run:
 
-`./manage.py runjob sync_prices`
+`./manage.py sync_prices`
 
 ## Frontend
 
@@ -41,9 +41,3 @@ Backend:
 
 Frontend:
 `npm test`
-
-# Current limitations
-
-Ticker symbols inputted by the user must exactly match those found on the [marketstack API](https://marketstack.com/search),
-e.g. AAPL for Apple, or TSCO.XLON for Tesco, otherwise we cannot fetch prices. In future we want to convert this input to
-an autocomplete to prevent user error.
