@@ -35,7 +35,9 @@ export function formatValue(value: number, currency: string) {
  * from its existing data.
  */
 export function setHoldingPerformance(holding: Holding) {
-  if (!holding.trades.length || !holding.bidPrice) return;
+  if (!holding.trades.length || !holding.bidPrice) {
+    holding.performance = undefined;
+  }
   let pricePaid = 0;
   let currentValue = 0;
   for (const trade of holding.trades) {

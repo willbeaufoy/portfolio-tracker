@@ -2,14 +2,14 @@
   text-align: center;
 }
 
-.totalPerf {
+.totalPerformance {
   display: flex;
   gap: 20px;
   justify-content: center;
   margin: 25px 0;
 }
 
-.totalPerf > div {
+.totalPerformance > div {
   display: flex;
   gap: 5px;
 }

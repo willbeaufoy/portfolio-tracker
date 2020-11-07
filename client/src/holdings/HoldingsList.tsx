@@ -28,7 +28,7 @@ export type HoldingsListProps = {
 export default function HoldingsList({user}: HoldingsListProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
-  const [totalPerf, setTotalPerf] = useState<Performance>({
+  const [totalPerformance, setTotalPerformance] = useState<Performance>({
     pricePaid: 0,
     currentValue: 0,
     valueChange: 0,
@@ -42,7 +42,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
           setHoldingPerformance(holding);
         }
         setHoldings(holdings);
-        setTotalPerf(getTotalPerformance(holdings));
+        setTotalPerformance(getTotalPerformance(holdings));
       }
       setIsDataLoaded(true);
     });
@@ -63,15 +63,19 @@ export default function HoldingsList({user}: HoldingsListProps) {
     try {
       await API.deleteHolding(id);
       holdings.splice(holdingIndex, 1);
+      setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
       console.error(err);
     }
   };
 
+  // Adds a trade that has just been created on the API to the display.
   const addTrade = (trade: Trade, holdingIndex: number) => {
-    if (!holdings[holdingIndex].trades) return;
-    holdings[holdingIndex].trades!.push(trade);
+    const holding = holdings[holdingIndex];
+    holding.trades.push(trade);
+    setHoldingPerformance(holding);
+    setTotalPerformance(getTotalPerformance(holdings));
     setHoldings([...holdings]);
   };
 
@@ -82,8 +86,10 @@ export default function HoldingsList({user}: HoldingsListProps) {
   ) => {
     try {
       await API.deleteTrade(id);
-      if (!holdings[holdingIndex].trades) return;
-      holdings[holdingIndex].trades!.splice(tradeIndex, 1);
+      const holding = holdings[holdingIndex];
+      holding.trades.splice(tradeIndex, 1);
+      setHoldingPerformance(holding);
+      setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
       console.error(err);
@@ -96,17 +102,17 @@ export default function HoldingsList({user}: HoldingsListProps) {
   return (
     <div className="HoldingsList">
       <h2>Holdings</h2>
-      {totalPerf && (
-        <div className="totalPerf">
+      {totalPerformance && (
+        <div className="totalPerformance">
           <div>
             Current value:{' '}
             <strong>
-              {formatValue(totalPerf.currentValue, user.currency)}
+              {formatValue(totalPerformance.currentValue, user.currency)}
             </strong>
           </div>
           <div>
             <div>Total Performance:</div>
-            <PerformanceDisplay performance={totalPerf} user={user} />
+            <PerformanceDisplay performance={totalPerformance} user={user} />
           </div>
         </div>
       )}
