@@ -56,9 +56,10 @@ export interface Trade {
   holding: number;
   date: string;
   broker: string;
-  currency: string;
+  priceCurrency: string;
   quantity: number;
   unitPrice: number;
+  paymentCurrency: string;
   fee: number;
   tax: number;
   fxRate: number;

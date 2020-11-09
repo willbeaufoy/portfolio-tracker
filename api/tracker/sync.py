@@ -26,7 +26,8 @@ def sync_prices_from_finki(symbols: Optional[List[str]] = None):
         instruments = Instrument.objects.all()
     api_key = os.environ.get('FINKI_API_KEY')
     finki_function = 'bid'
-    print('\nSyncing prices from FinKi')
+    print('\nSyncing prices from FinKi ({})'.format(
+        ', '.join(symbols) if symbols else 'all'))
     for instrument in instruments:
         print()
         try:

@@ -52,10 +52,17 @@ test('creates a trade', async () => {
     });
 
     const inputs = screen.getAllByRole('textbox');
-    const [dateInput, brokerInput, quantityInput, unitPriceInput] = inputs;
+    const [
+      dateInput,
+      brokerInput,
+      quantityInput,
+      priceCurrencyInput,
+      unitPriceInput,
+    ] = inputs;
     const addButton = screen.getByRole('button', {name: 'Add'});
-    userEvent.type(brokerInput, 'Freetrade');
+    userEvent.type(brokerInput, 'Trading 212');
     userEvent.type(quantityInput, '0.003');
+    userEvent.type(priceCurrencyInput, 'GBX');
     userEvent.type(unitPriceInput, '200');
     fireEvent.click(addButton);
   });
@@ -67,10 +74,11 @@ test('creates a trade', async () => {
   expect(API.createTrade).toHaveBeenCalledWith({
     holding: 2,
     date: new Date().toISOString().split('T')[0],
-    broker: 'Freetrade',
-    currency: 'GBP',
+    broker: 'Trading 212',
+    priceCurrency: 'GBX',
     quantity: 0.003,
     unitPrice: 200,
+    paymentCurrency: 'GBP',
     fee: 0,
     tax: 0,
     fxRate: 100,

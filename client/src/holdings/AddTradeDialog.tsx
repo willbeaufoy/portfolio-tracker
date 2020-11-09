@@ -45,7 +45,7 @@ export default function AddTradeDialog({
           initialValues={{
             date: new Date(),
             broker: '',
-            currency: '',
+            priceCurrency: '',
             quantity: '',
             unitPrice: '',
             fee: '',
@@ -61,12 +61,13 @@ export default function AddTradeDialog({
               fxRate = holding.currency === 'GBX' ? 100 : 1;
             }
             const input = {
-              holding: holding.id!,
+              holding: holding.id,
               date: values.date.toISOString().split('T')[0],
               broker: values.broker ?? '',
-              currency: 'GBP', // Assume trade was always made in GBP for now.
               quantity: Number(values.quantity ?? 0),
+              priceCurrency: values.priceCurrency,
               unitPrice: Number(values.unitPrice ?? 0),
+              paymentCurrency: 'GBP', // Assume trade was always paid for in GBP for now.
               fee: Number(values.fee ?? 0),
               tax: Number(values.tax ?? 0),
               fxRate,
@@ -98,7 +99,12 @@ export default function AddTradeDialog({
                 <Field component={TextField} label="Quantity" name="quantity" />
                 <Field
                   component={TextField}
-                  label={`Unit Price (${holding.currency})`}
+                  label="Price Currency"
+                  name="priceCurrency"
+                />
+                <Field
+                  component={TextField}
+                  label={`Unit Price`}
                   name="unitPrice"
                 />
                 <Field component={TextField} label="Fee" name="fee" />

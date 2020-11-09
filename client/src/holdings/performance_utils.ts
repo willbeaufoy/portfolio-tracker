@@ -76,7 +76,7 @@ function calculateTradePrice(t: Trade): number {
  * Takes into account any stock splits since the trade was made.
  */
 function calculateTradeCurrentValue(t: Trade, h: Holding) {
-  let value = t.quantity * getPriceInUsersCurrency(h);
+  let value = t.quantity * getHoldingPriceInUsersCurrency(h);
   for (const s of h.splits) {
     if (t.date <= s.date) value *= s.ratio;
   }
@@ -84,12 +84,21 @@ function calculateTradeCurrentValue(t: Trade, h: Holding) {
 }
 
 /** Gets the price of a holding in the user's currency. */
-function getPriceInUsersCurrency(h: Holding) {
+function getHoldingPriceInUsersCurrency(h: Holding) {
   // For now assume user's currency is always GBP and the only other holding
-  // currencies are GBX or USD.
+  // currencies are CAD, GBX or USD.
   let multiplier = 1;
-  // Provide dummy USD/GBP exchange rate.
-  if (h.currency === 'USD') multiplier = 0.76;
-  if (h.currency === 'GBX') multiplier = 0.01;
+  // Provide dummy exchange rates.
+  switch (h.currency) {
+    case 'CAD':
+      multiplier = 0.58;
+      break;
+    case 'GBX':
+      multiplier = 0.01;
+      break;
+    case 'USD':
+      multiplier = 0.76;
+      break;
+  }
   return h.bidPrice * multiplier;
 }

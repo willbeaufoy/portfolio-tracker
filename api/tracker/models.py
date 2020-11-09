@@ -54,11 +54,14 @@ class Trade(models.Model):
         Holding, related_name='trades', on_delete=models.CASCADE)
     date = models.DateField()
     broker = models.CharField(max_length=100)
-    currency = models.CharField(max_length=3)
     quantity = models.FloatField()
+    price_currency = models.CharField(max_length=3)
     unit_price = models.FloatField()
+    payment_currency = models.CharField(max_length=3)
     fee = models.FloatField()
     tax = models.FloatField()
+    # FX rate between payment_currency and price_currency.
+    # E.g. 1.31 if payment_currency is GBP and price_currency is USD.
     fx_rate = models.FloatField()
     fx_fee = models.FloatField()
 

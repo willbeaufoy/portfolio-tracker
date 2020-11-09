@@ -21,13 +21,13 @@ export type TradesListProps = {
 
 /** Displays a holding's trades with the option to delete them. */
 export default function TradesList({
-  holding,
+  holding: h,
   user,
   onDeleteTradeClicked,
 }: TradesListProps) {
   return (
     <div>
-      {Boolean(holding.trades.length) && (
+      {Boolean(h.trades.length) && (
         <TableContainer>
           <Table size="small" aria-label="Trades table">
             <TableHead>
@@ -42,17 +42,21 @@ export default function TradesList({
               </TableRow>
             </TableHead>
             <TableBody>
-              {holding.trades.map((t, i) => {
+              {h.trades.map((t, i) => {
                 return (
                   <TableRow key={i}>
                     <TableCell component="th" scope="row">
                       {format(new Date(t.date), 'dd MMM yyyy')}
                     </TableCell>
+                    {/* Broker */}
                     <TableCell align="right">{t.broker}</TableCell>
+                    {/* Quantity */}
                     <TableCell align="right">{t.quantity}</TableCell>
+                    {/* Unit Price */}
                     <TableCell align="right">
-                      {formatValue(t.unitPrice, holding.currency)}
+                      {formatValue(t.unitPrice, t.priceCurrency)}
                     </TableCell>
+                    {/* Price Paid */}
                     {/* Assumes the trade was made in the user's primary currency.
                     This may not always be the case. */}
                     <TableCell align="right">
@@ -61,6 +65,7 @@ export default function TradesList({
                         user.currency,
                       )}
                     </TableCell>
+                    {/* Performance */}
                     <TableCell align="right">
                       {t.performance && (
                         <PerformanceDisplay
