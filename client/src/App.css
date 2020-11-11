@@ -1,5 +1,6 @@
 .App-header {
-  background-color: #282c34;
+  /* Theme primary color */
+  background-color: #303f9f;
   color: white;
   display: grid;
   grid-template-columns: [first] 20% auto [last] 20%;
