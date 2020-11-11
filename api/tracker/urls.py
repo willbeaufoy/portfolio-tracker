@@ -9,6 +9,8 @@ urlpatterns = [
     path('instruments/', views.InstrumentList.as_view(), name='instrument-list'),
     path('instruments/<int:pk>/', views.InstrumentDetail.as_view(),
          name='instrument-detail'),
+    path('instruments/sync/',
+         views.InstrumentViewSet.as_view({'get': 'sync'}), name='instrument-sync'),
     path('trades/', views.TradeList.as_view(), name='trade-list'),
     path('trades/<int:pk>/', views.TradeDetail.as_view(), name='trade-detail'),
 ]

@@ -142,4 +142,9 @@ export default class API {
       return res;
     });
   }
+
+  /** Refreshes the latest prices on the API. */
+  static refreshPrices() {
+    return fetch(`${API_BASE}instruments/sync/`);
+  }
 }

@@ -1,9 +1,11 @@
-import API from '../api';
+import API, {Holding} from '../api';
 import {HOLDING_1, HOLDING_2, USER} from '../test_fixtures';
 import {fireEvent, render, waitFor} from '@testing-library/react';
 import HoldingsList, {HoldingsListProps} from './HoldingsList';
 import React from 'react';
+import cloneDeep from 'lodash.clonedeep';
 import {screen} from '@testing-library/dom';
+import {act} from 'react-dom/test-utils';
 
 let props: HoldingsListProps;
 
@@ -20,7 +22,9 @@ describe('holdings with trades', () => {
   beforeEach(async () => {
     API.listHoldings = jest
       .fn()
-      .mockReturnValue(Promise.resolve([HOLDING_1, HOLDING_2]));
+      .mockReturnValue(
+        Promise.resolve([cloneDeep(HOLDING_1), cloneDeep(HOLDING_2)]),
+      );
   });
 
   test('displays a list of holdings with their individual and combined performance figures', async () => {
@@ -75,5 +79,34 @@ describe('holdings with trades', () => {
       expect(screen.getByText(trade2Date)).toBeInTheDocument();
     });
     expect(API.deleteTrade).toHaveBeenCalledWith(11);
+  });
+
+  test(`click 'refresh' button refreshes prices`, async () => {
+    API.refreshPrices = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({status: 'ok'}));
+    render(<HoldingsList {...props} />);
+    // Check the total performance, as we expect this to change in the test.
+    await waitFor(() => {
+      expect(screen.getByText('-10.26% (-£1,587.03)')).toBeInTheDocument();
+    });
+    // Now change what listHoldings returns to mock the data having changed on the API.
+    const holding1New: Holding = cloneDeep(HOLDING_1);
+    holding1New.bidPrice += 100;
+    API.listHoldings.mockReturnValue(
+      Promise.resolve([holding1New, cloneDeep(HOLDING_2)]),
+    );
+
+    act(() => {
+      const refreshButton = screen.getByText('Refresh Prices');
+      fireEvent.click(refreshButton);
+    });
+
+    await waitFor(() => {
+      expect(API.refreshPrices).toHaveBeenCalled();
+      expect(API.listHoldings).toHaveBeenCalledTimes(2);
+      // Check new total performance value.
+      expect(screen.getByText('-7.31% (-£1,131.03)')).toBeInTheDocument();
+    });
   });
 });

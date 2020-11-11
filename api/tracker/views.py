@@ -1,4 +1,6 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from tracker.models import Holding, Instrument, Trade
 from tracker.serializers import (HoldingSerializer, InstrumentSerializer,
@@ -19,6 +21,16 @@ class InstrumentList(generics.ListCreateAPIView):
 class InstrumentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Instrument.objects.all()
     serializer_class = InstrumentSerializer
+
+
+class InstrumentViewSet(viewsets.ModelViewSet):
+    """
+    Instrument viewset to provide custom actions
+    """
+    @action(detail=False)
+    def sync(self, request):
+        sync_prices([])
+        return Response({'status': 'OK'})
 
 
 class HoldingList(generics.ListCreateAPIView):

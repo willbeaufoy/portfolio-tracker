@@ -8,6 +8,7 @@ import {
 } from './performance_utils';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
+import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -34,19 +35,23 @@ export default function HoldingsList({user}: HoldingsListProps) {
     valueChange: 0,
     percentChange: 0,
   });
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    API.listHoldings(user.username).then(async (holdings) => {
-      if (holdings.length) {
-        for (const holding of holdings) {
-          setHoldingPerformance(holding);
-        }
-        setHoldings(holdings);
-        setTotalPerformance(getTotalPerformance(holdings));
-      }
-      setIsDataLoaded(true);
-    });
-  }, [user.username]);
+    fetchHoldings(user);
+  }, [user]);
+
+  /** Fetches holdings from the API and sets their performance. */
+  const fetchHoldings = async (user: User) => {
+    const holdings = await API.listHoldings(user.username);
+    if (!holdings.length) return;
+    for (const holding of holdings) {
+      setHoldingPerformance(holding);
+    }
+    setHoldings(holdings);
+    setTotalPerformance(getTotalPerformance(holdings));
+    setIsDataLoaded(true);
+  };
 
   const [open, setOpen] = React.useState(holdings.map(() => false));
   const handleClick = (i: number) => {
@@ -70,7 +75,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
     }
   };
 
-  // Adds a trade that has just been created on the API to the display.
+  /** Adds a trade that has just been created on the API to the display. */
   const addTrade = (trade: Trade, holdingIndex: number) => {
     const holding = holdings[holdingIndex];
     holding.trades.push(trade);
@@ -96,6 +101,13 @@ export default function HoldingsList({user}: HoldingsListProps) {
     }
   };
 
+  const refreshPrices = async () => {
+    setIsRefreshing(true);
+    await API.refreshPrices();
+    await fetchHoldings(user);
+    setIsRefreshing(false);
+  };
+
   if (!isDataLoaded) {
     return <div className="loading">Loading...</div>;
   }
@@ -114,6 +126,15 @@ export default function HoldingsList({user}: HoldingsListProps) {
             <div>Total Performance:</div>
             <PerformanceDisplay performance={totalPerformance} user={user} />
           </div>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={isRefreshing}
+            onClick={() => refreshPrices()}
+            aria-label="Refresh prices"
+          >
+            Refresh Prices
+          </Button>
         </div>
       )}
       {Boolean(holdings.length) && (

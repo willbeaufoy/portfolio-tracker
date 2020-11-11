@@ -17,6 +17,7 @@
     "formik": "^2.2.0",
     "formik-material-ui": "^3.0.0",
     "formik-material-ui-pickers": "0.0.11",
+    "lodash.clonedeep": "^4.5.0",
     "msw": "^0.21.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

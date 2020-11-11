@@ -56,7 +56,7 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
               label="Currency (FinKi)"
             />
             <Button
-              variant="outlined"
+              variant="contained"
               color="primary"
               type="submit"
               disabled={isSubmitting}
