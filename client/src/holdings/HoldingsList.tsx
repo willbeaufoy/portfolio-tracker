@@ -13,6 +13,7 @@ import Collapse from '@material-ui/core/Collapse';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import PerformanceDisplay from './PerformanceDisplay';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -148,6 +149,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
                 <TableCell>Current Bid Price</TableCell>
                 <TableCell>Exchange</TableCell>
                 <TableCell></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -160,15 +162,18 @@ export default function HoldingsList({user}: HoldingsListProps) {
                         handleClick(i);
                       }}
                     >
+                      {/* Name and Symbol */}
                       <TableCell>
                         {h.name} ({h.symbol})
                       </TableCell>
+                      {/* Value */}
                       <TableCell>
                         {formatValue(
                           h.performance?.currentValue ?? 0,
                           user.currency,
                         )}
                       </TableCell>
+                      {/* Performance */}
                       <TableCell>
                         {h.performance ? (
                           <PerformanceDisplay
@@ -179,10 +184,25 @@ export default function HoldingsList({user}: HoldingsListProps) {
                           'N/A'
                         )}
                       </TableCell>
+                      {/* Current Bid Price */}
                       <TableCell>
                         {formatValue(h.bidPrice, h.currency)}
                       </TableCell>
+                      {/* Exchange */}
                       <TableCell>{h.exchange}</TableCell>
+                      {/* Chart button */}
+                      <TableCell>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          href={chartUrl(h)}
+                          target="_blank"
+                        >
+                          <ShowChartIcon fontSize="small" />
+                        </IconButton>
+                      </TableCell>
+                      {/* Delete button */}
                       <TableCell>
                         <IconButton
                           onClick={() => deleteHolding(h.id, i)}
@@ -238,4 +258,14 @@ export default function HoldingsList({user}: HoldingsListProps) {
       </div>
     </div>
   );
+}
+
+/**
+ * Returns a URL for a chart of the given holding.
+ * Currently uses Google finance.
+ */
+function chartUrl(h: Holding) {
+  let exchange = h.exchange;
+  if (exchange === 'LSE') exchange = 'LON';
+  return `https://www.google.com/search?q=${exchange}:+${h.symbol}&tbm=fin`;
 }

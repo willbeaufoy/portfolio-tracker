@@ -51,7 +51,7 @@ class Trade(models.Model):
         ordering = ['date']
 
     holding = models.ForeignKey(
-        Holding, related_name='trades', on_delete=models.CASCADE)
+        Holding, related_name='trades', on_delete=models.PROTECT)
     date = models.DateField()
     broker = models.CharField(max_length=100)
     quantity = models.FloatField()

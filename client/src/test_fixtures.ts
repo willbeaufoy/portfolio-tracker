@@ -50,7 +50,7 @@ export const HOLDING_2: Holding = {
   id: 2,
   username: 'xzy',
   name: 'Boohoo',
-  symbol: 'BOO.XLON',
+  symbol: 'BOO',
   currency: 'GBX',
   exchange: 'LSE',
   bidPrice: 398,

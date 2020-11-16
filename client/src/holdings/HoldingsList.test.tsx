@@ -27,18 +27,25 @@ describe('holdings with trades', () => {
       );
   });
 
-  test('displays a list of holdings with their individual and combined performance figures', async () => {
+  test('displays a list of holdings and their performance', async () => {
     render(<HoldingsList {...props} />);
 
     await waitFor(() => {
+      const links = screen.getAllByRole('link');
       // Total performance.
       expect(screen.getByText('-£1,587.03 (10.26%)')).toBeInTheDocument();
-      // Amazon performance.
+      // Amazon.
       expect(screen.getByText('Amazon (AMZN)')).toBeInTheDocument();
       expect(screen.getByText('-£1,569.43 (10.29%)')).toBeInTheDocument();
-      // Boohoo performance.
-      expect(screen.getByText('Boohoo (BOO.XLON)')).toBeInTheDocument();
+      expect(links[0].href).toBe(
+        'https://www.google.com/search?q=NASDAQ:+AMZN&tbm=fin',
+      );
+      // Boohoo.
+      expect(screen.getByText('Boohoo (BOO)')).toBeInTheDocument();
       expect(screen.getByText('-£17.60 (8.13%)')).toBeInTheDocument();
+      expect(links[1].href).toBe(
+        'https://www.google.com/search?q=LON:+BOO&tbm=fin',
+      );
     });
   });
 
