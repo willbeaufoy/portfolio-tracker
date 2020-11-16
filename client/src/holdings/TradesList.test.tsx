@@ -25,10 +25,10 @@ test('displays the calculated total price and performance of the trades', () => 
   // First row should have both splits applied as the first split took place on
   // the day of the trade, and the second one subsequently.
   expect(cells[4].textContent).toBe('£8,607.16');
-  expect(cells[5].textContent).toBe('-20.53% (-£1,767.16)');
+  expect(cells[5].textContent).toBe('-£1,767.16 (20.53%)');
   // Second row should have no splits applied.
   expect(cells[11].textContent).toBe('£6,642.27');
-  expect(cells[12].textContent).toBe('+2.98% (£197.73)');
+  expect(cells[12].textContent).toBe('+£197.73 (2.98%)');
 });
 
 test('notifies the parent when the delete button is clicked', () => {

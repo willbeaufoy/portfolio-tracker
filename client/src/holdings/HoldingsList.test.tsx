@@ -32,13 +32,13 @@ describe('holdings with trades', () => {
 
     await waitFor(() => {
       // Total performance.
-      expect(screen.getByText('-10.26% (-£1,587.03)')).toBeInTheDocument();
+      expect(screen.getByText('-£1,587.03 (10.26%)')).toBeInTheDocument();
       // Amazon performance.
       expect(screen.getByText('Amazon (AMZN)')).toBeInTheDocument();
-      expect(screen.getByText('-10.29% (-£1,569.43)')).toBeInTheDocument();
+      expect(screen.getByText('-£1,569.43 (10.29%)')).toBeInTheDocument();
       // Boohoo performance.
       expect(screen.getByText('Boohoo (BOO.XLON)')).toBeInTheDocument();
-      expect(screen.getByText('-8.13% (-£17.60)')).toBeInTheDocument();
+      expect(screen.getByText('-£17.60 (8.13%)')).toBeInTheDocument();
     });
   });
 
@@ -88,7 +88,7 @@ describe('holdings with trades', () => {
     render(<HoldingsList {...props} />);
     // Check the total performance, as we expect this to change in the test.
     await waitFor(() => {
-      expect(screen.getByText('-10.26% (-£1,587.03)')).toBeInTheDocument();
+      expect(screen.getByText('-£1,587.03 (10.26%)')).toBeInTheDocument();
     });
     // Now change what listHoldings returns to mock the data having changed on the API.
     const holding1New: Holding = cloneDeep(HOLDING_1);
@@ -106,7 +106,7 @@ describe('holdings with trades', () => {
       expect(API.refreshPrices).toHaveBeenCalled();
       expect(API.listHoldings).toHaveBeenCalledTimes(2);
       // Check new total performance value.
-      expect(screen.getByText('-7.31% (-£1,131.03)')).toBeInTheDocument();
+      expect(screen.getByText('-£1,131.03 (7.31%)')).toBeInTheDocument();
     });
   });
 });

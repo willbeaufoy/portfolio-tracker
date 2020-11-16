@@ -15,9 +15,9 @@ export default function PerformanceDisplay({
   const {valueChange, percentChange} = performance;
   return (
     <div style={getPerfStyle(valueChange)}>
-      {getPerfSign(valueChange)}
-      {Math.abs(percentChange).toFixed(2)}% (
-      {formatValue(valueChange, user.currency)})
+      {valueChange > 0 ? '+' : ''}
+      {formatValue(valueChange, user.currency)} (
+      {Math.abs(percentChange).toFixed(2)}%)
     </div>
   );
 }
@@ -27,11 +27,4 @@ function getPerfStyle(perf: number) {
   if (perf > 0) return {color: '#04ae49'}; // Green.
   if (perf < 0) return {color: '#de422a'}; // Red.
   return {};
-}
-
-/** Gets the sign (+/-) for a performance number. */
-export function getPerfSign(perf: number) {
-  if (perf > 0) return '+';
-  if (perf < 0) return '-';
-  return '';
 }
