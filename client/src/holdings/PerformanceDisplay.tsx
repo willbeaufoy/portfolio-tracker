@@ -13,6 +13,7 @@ export default function PerformanceDisplay({
   user,
 }: PerformanceDisplayProps) {
   const {valueChange, percentChange} = performance;
+  if (isNaN(performance.percentChange)) return <div></div>;
   return (
     <div style={getPerfStyle(valueChange)}>
       {valueChange > 0 ? '+' : ''}
