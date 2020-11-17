@@ -14,7 +14,7 @@ class TestInstrumentList(APITestCase):
         self.url = reverse('instrument-list')
 
     def test_create_instrument(self):
-        request_data = {'symbol': 'TSLA', 'name': 'Tesla', 'currency': 'USD',
+        request_data = {'symbol': 'TSLA', 'name': 'Tesla', 'category': 'STOCK', 'currency': 'USD',
                         'exchange': 'NASDAQ', 'data_source': 'FI', 'isin': 'US12'}
         response = self.client.post(self.url, request_data, format='json')
 
@@ -27,7 +27,7 @@ class TestHoldingList(APITestCase):
     def setUp(self):
         self.url = reverse('holding-list')
         self.instrument = Instrument.objects.create(
-            symbol='AMZN', name='Amazon', currency='USD', exchange='NASDAQ', data_source='FI', isin='US12')
+            symbol='AMZN', name='Amazon', category='STOCK', currency='USD', exchange='NASDAQ', data_source='FI', isin='US12')
         self.holding_dict = collections.OrderedDict(
             {'instrument': self.instrument, 'username': 'a'})
         self.holding = Holding.objects.create(**self.holding_dict)
@@ -60,6 +60,7 @@ class TestHoldingList(APITestCase):
             username=self.holding.username,
             name=self.instrument.name,
             symbol=self.instrument.symbol,
+            category=self.instrument.category,
             currency=self.instrument.currency,
             exchange=self.instrument.exchange,
             isin=self.instrument.isin,

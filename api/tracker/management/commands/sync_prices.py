@@ -8,7 +8,8 @@ class Command(BaseCommand):
     help = "Fetches and saves latest prices for instruments from external APIs."
 
     def add_arguments(self, parser):
+        parser.add_argument('-i', '--isins', nargs='+')
         parser.add_argument('-s', '--symbols', nargs='+')
 
     def handle(self, *args, **options):
-        sync_prices(options['symbols'])
+        sync_prices(isins=options['isins'], symbols=options['symbols'])

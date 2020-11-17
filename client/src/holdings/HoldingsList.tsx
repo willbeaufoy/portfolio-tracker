@@ -163,9 +163,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
                       }}
                     >
                       {/* Name and Symbol */}
-                      <TableCell>
-                        {h.name} ({h.symbol})
-                      </TableCell>
+                      <TableCell>{holdingTitle(h)}</TableCell>
                       {/* Value */}
                       <TableCell>
                         {formatValue(
@@ -258,6 +256,13 @@ export default function HoldingsList({user}: HoldingsListProps) {
       </div>
     </div>
   );
+}
+
+/** Gets a display title for the holding. */
+function holdingTitle(h: Holding) {
+  let title = h.name;
+  if (h.symbol) title += ` (${h.symbol})`;
+  return title;
 }
 
 /**

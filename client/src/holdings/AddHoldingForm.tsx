@@ -18,6 +18,7 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
         initialValues={{
           name: '',
           symbol: '',
+          category: 'STOCK',
           isin: '',
           currency: '',
           exchange: '',
@@ -27,6 +28,7 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
             const instrument = await API.createInstrument({
               name: values.name,
               symbol: values.symbol,
+              category: values.category,
               isin: values.isin,
               currency: values.currency,
               exchange: values.exchange,
@@ -49,6 +51,11 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
             <Field component={TextField} name="name" label="Name" />
             <Field component={TextField} name="symbol" label="Ticker Symbol" />
             <Field component={TextField} name="isin" label="ISIN" />
+            <Field as="select" name="category">
+              <option value="STOCK">Stock</option>
+              <option value="ETF">ETF</option>
+              <option value="FUND">Fund</option>
+            </Field>
             <Field component={TextField} name="exchange" label="Exchange" />
             <Field
               component={TextField}

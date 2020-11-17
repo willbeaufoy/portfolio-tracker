@@ -11,6 +11,7 @@ export interface Holding {
   symbol: string;
   bidPrice: number;
   bidPriceUpdateTime: string;
+  category: string;
   currency: string;
   exchange: string;
   isin: string;
@@ -28,6 +29,7 @@ type CreateHoldingData = {
 type CreateInstrumentData = {
   name: string;
   symbol: string;
+  category: string;
   currency: string;
   exchange: string;
   dataSource: string;

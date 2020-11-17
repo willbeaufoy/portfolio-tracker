@@ -8,29 +8,33 @@ from django.utils import timezone
 from tracker.models import Instrument
 
 
-def sync_prices(symbols: Optional[List[str]] = None):
+def sync_prices(isins: Optional[List[str]] = None, symbols: Optional[List[str]] = None):
     """
     Sets the latest bid price of the instruments in the provided list,
     or all instruments if this is not provided.
     """
-    return sync_prices_from_finki(symbols)
+    return sync_prices_from_finki(isins, symbols)
 
 
-def sync_prices_from_finki(symbols: Optional[List[str]] = None):
+def sync_prices_from_finki(isins: Optional[List[str]] = None, symbols: Optional[List[str]] = None):
     """
     Syncs prices from the FinkI API.
     """
-    if symbols:
+    if isins:
+        instruments = Instrument.objects.filter(isin__in=isins)
+        display = ', '.join(isins)
+    elif symbols:
         instruments = Instrument.objects.filter(symbol__in=symbols)
+        display = ', '.join(symbols)
     else:
         instruments = Instrument.objects.all()
+        display = 'all'
     api_key = os.environ.get('FINKI_API_KEY')
-    finki_function = 'bid'
-    print('\nSyncing prices from FinKi ({})'.format(
-        ', '.join(symbols) if symbols else 'all'))
+    print('\nSyncing prices from FinKi ({})'.format(display))
     for instrument in instruments:
         print()
         try:
+            finki_function = 'ukFundClose' if instrument.category == 'FUND' else 'bid'
             req = 'https://finki.io/callAPI.php?isin={isin}&function={function}&key={key}'.format(
                 isin=instrument.isin, function=finki_function, key=api_key)
             res = requests.get(req)

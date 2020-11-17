@@ -14,7 +14,7 @@ class InstrumentList(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         res = self.create(request, *args, **kwargs)
-        sync_prices([request.data['symbol']])
+        sync_prices(isins=[request.data['isin']])
         return res
 
 
@@ -29,7 +29,7 @@ class InstrumentViewSet(viewsets.ModelViewSet):
     """
     @action(detail=False)
     def sync(self, request):
-        sync_prices([])
+        sync_prices()
         return Response({'status': 'OK'})
 
 

@@ -14,7 +14,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Instrument
-        fields = ['id', 'symbol', 'name', 'currency', 'exchange',
+        fields = ['id', 'symbol', 'name', 'category', 'currency', 'exchange',
                   'data_source', 'isin', 'bid_price', 'bid_price_update_time', 'splits']
 
     def create(self, validated_data):
@@ -29,6 +29,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
         """
         instance.symbol = validated_data.get('symbol', instance.symbol)
         instance.name = validated_data.get('name', instance.name)
+        instance.category = validated_data.get('category', instance.category)
         instance.currency = validated_data.get('currency', instance.currency)
         instance.exchange = validated_data.get('exchange', instance.exchange)
         instance.data_source = validated_data.get(
@@ -76,6 +77,8 @@ class TradeSerializer(serializers.ModelSerializer):
 class HoldingSerializer(serializers.ModelSerializer):
     name = serializers.CharField(read_only=True, source="instrument.name")
     symbol = serializers.CharField(read_only=True, source="instrument.symbol")
+    category = serializers.CharField(
+        read_only=True, source="instrument.category")
     currency = serializers.CharField(
         read_only=True, source="instrument.currency")
     exchange = serializers.CharField(
@@ -92,7 +95,7 @@ class HoldingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Holding
-        fields = ['id', 'instrument', 'username', 'name', 'symbol', 'currency', 'exchange',
+        fields = ['id', 'instrument', 'username', 'name', 'symbol', 'category', 'currency', 'exchange',
                   'isin', 'bid_price', 'bid_price_update_time', 'splits', 'trades']
 
     def create(self, validated_data):

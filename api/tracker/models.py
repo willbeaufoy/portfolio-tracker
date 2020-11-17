@@ -4,6 +4,11 @@ from django.db import models
 
 class Instrument(models.Model):
 
+    class Category(models.TextChoices):
+        STOCK = 'STOCK'
+        ETF = 'ETF'
+        FUND = 'FUND'
+
     class DataSource(models.TextChoices):
         FINKI = 'FI'
         MARKETSTACK = 'MS'
@@ -11,10 +16,12 @@ class Instrument(models.Model):
     class Meta:
         ordering = ['name']
 
-    symbol = models.CharField(max_length=10)
+    symbol = models.CharField(max_length=10, blank=True)
     name = models.CharField(max_length=50)
+    category = models.CharField(
+        max_length=20, choices=Category.choices, default=Category.STOCK)
     currency = models.CharField(max_length=3)
-    exchange = models.CharField(max_length=50)
+    exchange = models.CharField(max_length=50, blank=True)
     data_source = models.CharField(
         max_length=2, choices=DataSource.choices, default=DataSource.FINKI)
     isin = models.CharField(max_length=12)
