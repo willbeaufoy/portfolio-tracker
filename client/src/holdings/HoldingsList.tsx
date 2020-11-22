@@ -45,8 +45,11 @@ export default function HoldingsList({user}: HoldingsListProps) {
   /** Fetches holdings from the API and sets their performance. */
   const fetchHoldings = async (user: User) => {
     const holdings = await API.listHoldings(user.username);
-    if (!holdings.length) return;
-    for (const holding of holdings) {
+    if (!holdings.length) {
+      setIsDataLoaded(true);      
+      return;
+    }
+      for (const holding of holdings) {
       setHoldingPerformance(holding);
     }
     setHoldings(holdings);
