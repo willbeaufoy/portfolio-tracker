@@ -2,6 +2,7 @@ import './AddHoldingForm.css';
 import {Field, Form, Formik} from 'formik';
 import API from '../api';
 import Button from '@material-ui/core/Button';
+import {CURRENCIES} from './utils';
 import React from 'react';
 import {TextField} from 'formik-material-ui';
 
@@ -20,7 +21,7 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
           symbol: '',
           category: 'STOCK',
           isin: '',
-          currency: '',
+          currency: CURRENCIES[0],
           exchange: '',
         }}
         onSubmit={async (values, actions) => {
@@ -57,11 +58,13 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
               <option value="FUND">Fund</option>
             </Field>
             <Field component={TextField} name="exchange" label="Exchange" />
-            <Field
-              component={TextField}
-              name="currency"
-              label="Currency (FinKi)"
-            />
+            <Field as="select" name="currency">
+              {CURRENCIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </Field>
             <Button
               variant="contained"
               color="primary"

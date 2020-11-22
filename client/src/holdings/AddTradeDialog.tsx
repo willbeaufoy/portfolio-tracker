@@ -3,6 +3,7 @@ import API, {Holding} from '../api';
 import {Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
+import {CURRENCIES} from './utils';
 import DateFnsUtils from '@date-io/date-fns';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -45,7 +46,7 @@ export default function AddTradeDialog({
           initialValues={{
             date: new Date(),
             broker: '',
-            priceCurrency: '',
+            priceCurrency: CURRENCIES[0],
             quantity: '',
             unitPrice: '',
             fee: '',
@@ -97,11 +98,13 @@ export default function AddTradeDialog({
                 </MuiPickersUtilsProvider>
                 <Field component={TextField} label="Broker" name="broker" />
                 <Field component={TextField} label="Quantity" name="quantity" />
-                <Field
-                  component={TextField}
-                  label="Price Currency"
-                  name="priceCurrency"
-                />
+                <Field as="select" name="priceCurrency">
+                  {CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </Field>
                 <Field
                   component={TextField}
                   label={`Unit Price`}

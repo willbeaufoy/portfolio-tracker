@@ -1,5 +1,8 @@
 import {Holding, Performance, Trade} from '../api';
 
+/** Supported currencies */
+export const CURRENCIES = ['CAD', 'GBP', 'GBX', 'USD'];
+
 /**
  * Gets the total performance from all the given holdings.
  * Assumes performance for the holdings and their trades has already been

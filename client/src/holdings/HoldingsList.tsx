@@ -1,11 +1,7 @@
 import './HoldingsList.css';
 import API, {Holding, Trade, Performance, User} from '../api';
 import React, {useEffect, useState} from 'react';
-import {
-  formatValue,
-  getTotalPerformance,
-  setHoldingPerformance,
-} from './performance_utils';
+import {formatValue, getTotalPerformance, setHoldingPerformance} from './utils';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
 import Button from '@material-ui/core/Button';
@@ -46,10 +42,10 @@ export default function HoldingsList({user}: HoldingsListProps) {
   const fetchHoldings = async (user: User) => {
     const holdings = await API.listHoldings(user.username);
     if (!holdings.length) {
-      setIsDataLoaded(true);      
+      setIsDataLoaded(true);
       return;
     }
-      for (const holding of holdings) {
+    for (const holding of holdings) {
       setHoldingPerformance(holding);
     }
     setHoldings(holdings);
