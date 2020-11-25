@@ -1,4 +1,5 @@
 import {Holding, Performance, Trade} from '../api';
+import startCase from 'lodash.startcase';
 
 /** Supported currencies */
 export const CURRENCIES = ['CAD', 'GBP', 'GBX', 'USD'];
@@ -58,6 +59,7 @@ export function setHoldingPerformance(holding: Holding) {
  * the data of itself and its parent holding.
  */
 function setTradePerformance(trade: Trade, holding: Holding) {
+  if (trade.category === 'SELL') return;
   const pricePaid = calculateTradePrice(trade);
   const currentValue = calculateTradeCurrentValue(trade, holding);
   const valueChange = currentValue - pricePaid;
@@ -104,4 +106,8 @@ function getHoldingPriceInUsersCurrency(h: Holding) {
       break;
   }
   return h.bidPrice * multiplier;
+}
+
+export function titleCase(str: string): string {
+  return startCase(str.toLowerCase());
 }

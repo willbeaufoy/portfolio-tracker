@@ -45,6 +45,7 @@ export default function AddTradeDialog({
         <Formik
           initialValues={{
             date: new Date(),
+            category: 'BUY',
             broker: '',
             priceCurrency: CURRENCIES[0],
             quantity: '',
@@ -64,6 +65,7 @@ export default function AddTradeDialog({
             const input = {
               holding: holding.id,
               date: values.date.toISOString().split('T')[0],
+              category: values.category,
               broker: values.broker ?? '',
               quantity: Number(values.quantity ?? 0),
               priceCurrency: values.priceCurrency,
@@ -96,6 +98,10 @@ export default function AddTradeDialog({
                     name="date"
                   />
                 </MuiPickersUtilsProvider>
+                <Field as="select" name="category">
+                  <option value="BUY">Buy</option>
+                  <option value="SELL">Sell</option>
+                </Field>
                 <Field component={TextField} label="Broker" name="broker" />
                 <Field component={TextField} label="Quantity" name="quantity" />
                 <Field as="select" name="priceCurrency">

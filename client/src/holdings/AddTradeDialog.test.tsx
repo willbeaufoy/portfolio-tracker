@@ -67,6 +67,7 @@ test('creates a trade', async () => {
   expect(API.createTrade).toHaveBeenCalledWith({
     holding: 2,
     date: new Date().toISOString().split('T')[0],
+    category: 'BUY',
     broker: 'Trading 212',
     priceCurrency: 'CAD',
     quantity: 0.003,

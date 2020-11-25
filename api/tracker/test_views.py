@@ -32,7 +32,7 @@ class TestHoldingList(APITestCase):
             {'instrument': self.instrument, 'username': 'a'})
         self.holding = Holding.objects.create(**self.holding_dict)
         self.trade_dict = collections.OrderedDict(
-            {'holding': self.holding, 'date': '2020-09-08', 'broker': 'Freetrade', 'price_currency': 'USD', 'quantity': 1.0, 'unit_price': 1.0,
+            {'holding': self.holding, 'date': '2020-09-08', 'category': 'BUY', 'broker': 'Freetrade', 'price_currency': 'USD', 'quantity': 1.0, 'unit_price': 1.0,
              'payment_currency': 'USD', 'fee': 1.0, 'tax': 1.5, 'fx_rate': 1.2, 'fx_fee': 0.45})
         self.trade = Trade.objects.create(**self.trade_dict)
 

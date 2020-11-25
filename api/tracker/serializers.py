@@ -46,7 +46,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
 class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade
-        fields = ['id', 'holding', 'date', 'broker', 'price_currency', 'quantity',
+        fields = ['id', 'holding', 'date', 'category', 'broker', 'price_currency', 'quantity',
                   'unit_price', 'payment_currency', 'fee', 'tax', 'fx_rate', 'fx_fee']
 
     def create(self, validated_data):

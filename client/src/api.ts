@@ -57,6 +57,7 @@ export interface Trade {
   id: number;
   holding: number;
   date: string;
+  category: string;
   broker: string;
   priceCurrency: string;
   quantity: number;
