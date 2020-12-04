@@ -122,6 +122,13 @@ export default class API {
     });
   }
 
+  /** Lists instruments by ISIN. */
+  static listInstruments(isin: string) {
+    return fetch(`${API_BASE}instruments/?isin=${isin}`).then((res) =>
+      res.json(),
+    );
+  }
+
   /** Creates a trade on the API. */
   static createTrade(data: CreateTradeData) {
     return fetch(`${API_BASE}trades/`, {

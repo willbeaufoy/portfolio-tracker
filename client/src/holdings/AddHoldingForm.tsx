@@ -26,15 +26,19 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
         }}
         onSubmit={async (values, actions) => {
           try {
-            const instrument = await API.createInstrument({
-              name: values.name,
-              symbol: values.symbol,
-              category: values.category,
-              isin: values.isin,
-              currency: values.currency,
-              exchange: values.exchange,
-              dataSource: 'FI',
-            });
+            const existingInstruments = await API.listInstruments(values.isin);
+            let instrument = existingInstruments[0];
+            if (!instrument) {
+              instrument = await API.createInstrument({
+                name: values.name,
+                symbol: values.symbol,
+                category: values.category,
+                isin: values.isin,
+                currency: values.currency,
+                exchange: values.exchange,
+                dataSource: 'FI',
+              });
+            }
             const holding = await API.createHolding({
               username: props.username,
               instrument: instrument.id,
