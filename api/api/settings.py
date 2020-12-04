@@ -131,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = '/home/portfolio/apps/portfolio-api-static'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -160,3 +160,4 @@ CORS_ALLOW_CREDENTIALS = True
 
 if os.environ.get('DJANGO_DEVELOPMENT'):
     DEBUG = True
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
