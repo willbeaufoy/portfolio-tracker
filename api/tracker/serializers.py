@@ -47,7 +47,7 @@ class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade
         fields = ['id', 'holding', 'date', 'category', 'broker', 'price_currency', 'quantity',
-                  'unit_price', 'payment_currency', 'fee', 'tax', 'fx_rate', 'fx_fee']
+                  'unit_price', 'payment_currency', 'fee', 'tax', 'fx_rate']
 
     def create(self, validated_data):
         """
@@ -69,7 +69,6 @@ class TradeSerializer(serializers.ModelSerializer):
         instance.fee = validated_data.get('fee', instance.fee)
         instance.tax = validated_data.get('tax', instance.tax)
         instance.fx_rate = validated_data.get('fx_rate', instance.fx_rate)
-        instance.fx_fee = validated_data.get('fx_fee', instance.fx_fee)
         instance.save()
         return instance
 

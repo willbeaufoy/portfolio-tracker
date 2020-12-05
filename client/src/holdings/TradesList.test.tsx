@@ -27,8 +27,8 @@ test('displays the calculated total price and performance of the trades', () => 
   expect(cells[5].textContent).toBe('£8,607.16');
   expect(cells[6].textContent).toBe('-£1,767.16 (20.53%)');
   // Second row should have no splits applied.
-  expect(cells[13].textContent).toBe('£6,642.27');
-  expect(cells[14].textContent).toBe('+£197.73 (2.98%)');
+  expect(cells[13].textContent).toBe('£6,641.82');
+  expect(cells[14].textContent).toBe('+£198.18 (2.98%)');
 });
 
 test('notifies the parent when the delete button is clicked', () => {

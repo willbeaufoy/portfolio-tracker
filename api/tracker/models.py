@@ -76,7 +76,6 @@ class Trade(models.Model):
     # FX rate between payment_currency and price_currency.
     # E.g. 1.31 if payment_currency is GBP and price_currency is USD.
     fx_rate = models.FloatField()
-    fx_fee = models.FloatField()
 
     def __str__(self):
         return '{} ({}) ({})'.format(self.holding.instrument.name, self.holding.username, self.date)

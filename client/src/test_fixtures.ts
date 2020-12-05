@@ -25,7 +25,6 @@ export const HOLDING_1: Holding = {
       fee: 0.1,
       tax: 0.5,
       fxRate: 1.22,
-      fxFee: 0,
     },
     {
       id: 12,
@@ -40,7 +39,6 @@ export const HOLDING_1: Holding = {
       fee: 0.1,
       tax: 0.5,
       fxRate: 1.31,
-      fxFee: 0.45,
     },
   ],
   splits: [
@@ -74,7 +72,6 @@ export const HOLDING_2: Holding = {
       fee: 0.1,
       tax: 0.5,
       fxRate: 100,
-      fxFee: 0,
     },
   ],
   splits: [],

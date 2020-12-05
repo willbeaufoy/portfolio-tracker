@@ -66,7 +66,6 @@ export interface Trade {
   fee: number;
   tax: number;
   fxRate: number;
-  fxFee: number;
   performance?: Performance;
 }
 

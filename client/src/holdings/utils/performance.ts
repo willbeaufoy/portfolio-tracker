@@ -59,7 +59,7 @@ function setTradePerformance(trade: Trade, holding: Holding) {
  */
 function calculateTradePrice(t: Trade): number {
   const unitPriceInUsersCurrency = t.unitPrice * (1 / t.fxRate);
-  return t.quantity * unitPriceInUsersCurrency + t.fee + t.tax + t.fxFee;
+  return t.quantity * unitPriceInUsersCurrency + t.fee + t.tax;
 }
 
 /**

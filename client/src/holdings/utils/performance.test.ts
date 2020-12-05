@@ -28,7 +28,6 @@ describe('setHoldingPerformance', () => {
           fee: 0,
           tax: 0,
           fxRate: 1.2896,
-          fxFee: 0,
         },
         {
           id: 12,
@@ -42,7 +41,6 @@ describe('setHoldingPerformance', () => {
           fee: 0,
           tax: 0,
           fxRate: 1.3157,
-          fxFee: 0,
         },
       ],
       splits: [],
