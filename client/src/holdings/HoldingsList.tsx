@@ -1,7 +1,8 @@
 import './HoldingsList.css';
 import API, {Holding, Trade, Performance, User} from '../api';
 import React, {useEffect, useState} from 'react';
-import {formatValue, getTotalPerformance, setHoldingPerformance} from './utils';
+import {getTotalPerformance, setHoldingPerformance} from './utils/performance';
+import {formatValue} from './utils/display';
 import AddHoldingForm from './AddHoldingForm';
 import AddTrade from './AddTradeDialog';
 import Button from '@material-ui/core/Button';

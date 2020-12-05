@@ -3,7 +3,7 @@ import API, {Holding} from '../api';
 import {Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
-import {CURRENCIES} from './utils';
+import {CURRENCIES} from './utils/performance';
 import DateFnsUtils from '@date-io/date-fns';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';

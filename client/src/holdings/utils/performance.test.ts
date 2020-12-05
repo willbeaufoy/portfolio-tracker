@@ -1,5 +1,5 @@
-import {Holding} from '../api';
-import {setHoldingPerformance} from './utils';
+import {Holding} from '../../api';
+import {setHoldingPerformance} from './performance';
 
 describe('setHoldingPerformance', () => {
   test('with trades priced in different currency from holding', () => {

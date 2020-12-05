@@ -2,7 +2,7 @@ import './AddHoldingForm.css';
 import {Field, Form, Formik} from 'formik';
 import API from '../api';
 import Button from '@material-ui/core/Button';
-import {CURRENCIES} from './utils';
+import {CURRENCIES} from './utils/performance';
 import React from 'react';
 import {TextField} from 'formik-material-ui';
 

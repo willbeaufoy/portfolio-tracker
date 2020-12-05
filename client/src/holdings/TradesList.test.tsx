@@ -3,7 +3,7 @@ import {fireEvent, render} from '@testing-library/react';
 import TradesList, {TradesListProps} from './TradesList';
 import React from 'react';
 import {screen} from '@testing-library/dom';
-import {setHoldingPerformance} from './utils';
+import {setHoldingPerformance} from './utils/performance';
 
 let props: TradesListProps;
 let removeTrade: Function;

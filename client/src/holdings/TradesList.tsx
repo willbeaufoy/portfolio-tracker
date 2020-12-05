@@ -11,7 +11,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {format} from 'date-fns';
-import {formatValue, titleCase} from './utils';
+import {formatValue, titleCase} from './utils/display';
 
 export type TradesListProps = {
   holding: Holding;

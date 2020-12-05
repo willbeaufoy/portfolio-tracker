@@ -1,5 +1,4 @@
-import {Holding, Performance, Trade} from '../api';
-import startCase from 'lodash.startcase';
+import {Holding, Performance, Trade} from '../../api';
 
 /** Supported currencies */
 export const CURRENCIES = ['CAD', 'GBP', 'GBX', 'USD'];
@@ -19,19 +18,6 @@ export function getTotalPerformance(holdings: Holding[]): Performance {
   const valueChange = currentValue - pricePaid;
   const percentChange = (valueChange / pricePaid) * 100;
   return {pricePaid, currentValue, valueChange, percentChange};
-}
-
-/**
- * Formats a monetary value in the given currency in the current
- * user's locale format.
- *
- * Currently only supports the GB locale.
- */
-export function formatValue(value: number, currency: string) {
-  if (!currency) return '';
-  return new Intl.NumberFormat('gb-GB', {style: 'currency', currency}).format(
-    value,
-  );
 }
 
 /**
@@ -106,8 +92,4 @@ function getHoldingPriceInUsersCurrency(h: Holding) {
       break;
   }
   return h.bidPrice * multiplier;
-}
-
-export function titleCase(str: string): string {
-  return startCase(str.toLowerCase());
 }
