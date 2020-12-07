@@ -1,5 +1,7 @@
-import {Holding} from '../../api';
-import {setHoldingPerformance} from './performance';
+import {Holding, Trade} from '../../api';
+import {setHoldingPerformance, TEST_ONLY} from './performance';
+
+const {setBuyTradePerformance, setSellTradePerformance} = TEST_ONLY;
 
 describe('setHoldingPerformance', () => {
   test('with trades priced in different currency from holding', () => {
@@ -19,6 +21,7 @@ describe('setHoldingPerformance', () => {
         {
           id: 11,
           holding: 1,
+          category: 'BUY',
           date: '2018-03-04',
           broker: 'Freetrade',
           priceCurrency: 'USD',
@@ -32,6 +35,7 @@ describe('setHoldingPerformance', () => {
         {
           id: 12,
           holding: 1,
+          category: 'BUY',
           date: '2020-09-08',
           broker: 'Trading 212',
           priceCurrency: 'USD',
@@ -66,5 +70,81 @@ describe('setHoldingPerformance', () => {
       valueChange: -3.4794383526459995,
       percentChange: -13.917670248394657,
     });
+  });
+});
+
+test('set buy trade performance', () => {
+  const t = {
+    category: 'BUY',
+    quantity: 5,
+    unitPrice: 50,
+    fee: 2,
+    tax: 1,
+    fxRate: 1.72,
+  } as Trade;
+  const h = {
+    bidPrice: 60,
+    currency: 'CAD',
+  } as Holding;
+
+  setBuyTradePerformance(t, h);
+
+  expect(t.performance).toEqual({
+    pricePaid: 148.34883720930233,
+    currentValue: 174,
+    valueChange: 25.65116279069767,
+    percentChange: 17.2911114594764,
+  });
+});
+
+test('set sell trade performance', () => {
+  const t = {
+    category: 'SELL',
+    date: '2020-09-10',
+    quantity: 5,
+    unitPrice: 50,
+    fee: 2,
+    tax: 1,
+    fxRate: 1.72,
+  } as Trade;
+  const prevBuyTrades = [
+    {
+      category: 'BUY',
+      date: '2020-09-08',
+      quantity: 2,
+      unitPrice: 30,
+      performance: {
+        pricePaid: 60,
+        currentValue: 120,
+        valueChange: 60,
+        percentChange: 100,
+      },
+    },
+    {
+      category: 'BUY',
+      date: '2020-09-09',
+      quantity: 3,
+      unitPrice: 40,
+      performance: {
+        pricePaid: 120,
+        currentValue: 180,
+        valueChange: 60,
+        percentChange: 50,
+      },
+    },
+  ] as Trade[];
+  const h = {
+    bidPrice: 60,
+    currency: 'CAD',
+    trades: [...prevBuyTrades, t],
+  } as Holding;
+
+  setSellTradePerformance(t, h);
+
+  expect(t.performance).toEqual({
+    pricePaid: 180,
+    currentValue: 142.34883720930233,
+    valueChange: -37.65116279069767,
+    percentChange: -20.917312661498705,
   });
 });

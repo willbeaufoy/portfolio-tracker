@@ -1,5 +1,5 @@
 import './AddTradeDialog.css';
-import API, {Holding} from '../api';
+import API, {Holding, TradeCategory} from '../api';
 import {Field, Form, Formik} from 'formik';
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
@@ -65,7 +65,7 @@ export default function AddTradeDialog({
             const input = {
               holding: holding.id,
               date: values.date.toISOString().split('T')[0],
-              category: values.category,
+              category: values.category as TradeCategory,
               broker: values.broker ?? '',
               quantity: Number(values.quantity ?? 0),
               priceCurrency: values.priceCurrency,

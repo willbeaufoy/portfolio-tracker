@@ -24,10 +24,10 @@ test('displays the calculated total price and performance of the trades', () => 
   const cells = screen.getAllByRole('cell');
   // First row should have both splits applied as the first split took place on
   // the day of the trade, and the second one subsequently.
-  expect(cells[5].textContent).toBe('£8,607.16');
+  expect(cells[5].textContent).toBe('-£8,607.16');
   expect(cells[6].textContent).toBe('-£1,767.16 (20.53%)');
   // Second row should have no splits applied.
-  expect(cells[13].textContent).toBe('£6,641.82');
+  expect(cells[13].textContent).toBe('-£6,641.82');
   expect(cells[14].textContent).toBe('+£198.18 (2.98%)');
 });
 

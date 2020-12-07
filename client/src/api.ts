@@ -43,7 +43,11 @@ interface InstrumentSplit {
 
 /**
  * Performance of a holding/trade in absolute value (in user's currency)
- * and in percentage terms.
+ * and in percentage terms. Valid for buy and sell trades.
+ *
+ * In the case of a sell trade, pricePaid is calculated as the weighted average of the
+ * price paid for the previous buy trades that were sold, and currentValue is the amount
+ * received in the sale.
  */
 export interface Performance {
   pricePaid: number;
@@ -52,12 +56,21 @@ export interface Performance {
   percentChange: number;
 }
 
+interface SellPerformance {
+  cost: number;
+  amountReceived: number;
+  profit: number;
+  profitPercent: number;
+}
+
+export type TradeCategory = 'BUY' | 'SELL';
+
 /** A trade as returned from the API. */
 export interface Trade {
   id: number;
   holding: number;
   date: string;
-  category: string;
+  category: TradeCategory;
   broker: string;
   priceCurrency: string;
   quantity: number;
@@ -67,6 +80,7 @@ export interface Trade {
   tax: number;
   fxRate: number;
   performance?: Performance;
+  sellPerformance?: SellPerformance;
 }
 
 type CreateTradeData = Omit<Trade, 'id' | 'performance'>;

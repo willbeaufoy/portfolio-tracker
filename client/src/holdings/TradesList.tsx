@@ -1,7 +1,7 @@
 import './TradesList.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import {Holding, User} from './../api';
+import {Holding, Trade, User} from './../api';
 import PerformanceDisplay from './PerformanceDisplay';
 import React from 'react';
 import Table from '@material-ui/core/Table';
@@ -12,6 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {format} from 'date-fns';
 import {formatValue, titleCase} from './utils/display';
+import {isBuyTrade} from './utils/performance';
 
 export type TradesListProps = {
   holding: Holding;
@@ -37,8 +38,8 @@ export default function TradesList({
                 <TableCell align="right">Broker</TableCell>
                 <TableCell align="right">Quantity</TableCell>
                 <TableCell align="right">Unit Price</TableCell>
-                <TableCell align="right">Cost</TableCell>
-                <TableCell align="right">Performance</TableCell>
+                <TableCell align="right">Cost/Sale Price</TableCell>
+                <TableCell align="right">Performance/Profit</TableCell>
                 <TableCell> </TableCell>
               </TableRow>
             </TableHead>
@@ -59,16 +60,13 @@ export default function TradesList({
                     <TableCell align="right">
                       {formatValue(t.unitPrice, t.priceCurrency)}
                     </TableCell>
-                    {/* Price Paid */}
+                    {/* Cost/Sale Price */}
                     {/* Assumes the trade was made in the user's primary currency.
                     This may not always be the case. */}
                     <TableCell align="right">
-                      {formatValue(
-                        t.performance?.pricePaid ?? 0,
-                        user.currency,
-                      )}
+                      {tradeCostOrSalePrice(t, user)}
                     </TableCell>
-                    {/* Performance */}
+                    {/* Performance/Profit */}
                     <TableCell align="right">
                       {t.performance && (
                         <PerformanceDisplay
@@ -96,4 +94,13 @@ export default function TradesList({
       )}
     </div>
   );
+}
+
+/** Gets a trade's cost if it is a buy trade, or sale price if it is a sell trade. */
+function tradeCostOrSalePrice(t: Trade, u: User): string {
+  const val = isBuyTrade(t)
+    ? t.performance?.pricePaid
+    : t.performance?.currentValue;
+  const res = formatValue(val ?? 0, u.currency);
+  return isBuyTrade(t) ? '-' + res : res;
 }
