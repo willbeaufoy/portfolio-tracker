@@ -63,7 +63,7 @@ class Trade(models.Model):
 
     holding = models.ForeignKey(
         Holding, related_name='trades', on_delete=models.PROTECT)
-    date = models.DateField()
+    date = models.DateTimeField()
     category = models.CharField(
         max_length=20, choices=Category.choices, default=Category.BUY)
     broker = models.CharField(max_length=100)

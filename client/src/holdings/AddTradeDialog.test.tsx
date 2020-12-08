@@ -66,7 +66,7 @@ test('creates a trade', async () => {
   // TODO: Set date specifically.
   expect(API.createTrade).toHaveBeenCalledWith({
     holding: 2,
-    date: new Date().toISOString().split('T')[0],
+    date: expect.stringMatching(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/),
     category: 'BUY',
     broker: 'Trading 212',
     priceCurrency: 'CAD',

@@ -9,7 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {KeyboardDatePicker} from 'formik-material-ui-pickers';
+import {KeyboardDateTimePicker} from 'formik-material-ui-pickers';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import {TextField} from 'formik-material-ui';
 
@@ -64,7 +64,7 @@ export default function AddTradeDialog({
             }
             const input = {
               holding: holding.id,
-              date: values.date.toISOString().split('T')[0],
+              date: values.date.toISOString().split('.')[0].replace('T', ' '),
               category: values.category as TradeCategory,
               broker: values.broker ?? '',
               quantity: Number(values.quantity ?? 0),
@@ -92,7 +92,7 @@ export default function AddTradeDialog({
               <DialogContent className="DialogContent">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Field
-                    component={KeyboardDatePicker}
+                    component={KeyboardDateTimePicker}
                     label="Date"
                     variant="inline"
                     name="date"
