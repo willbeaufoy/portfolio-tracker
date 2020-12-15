@@ -6,7 +6,7 @@ interface UserInfoProps {
   user: User;
 }
 const UserInfo = ({user}: UserInfoProps) => (
-  <div className="email">{user.email}</div>
+  <div className='email'>{user.email}</div>
 );
 
 export default UserInfo;

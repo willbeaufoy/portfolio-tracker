@@ -30,16 +30,16 @@ export default function TradesList({
     <div>
       {Boolean(h.trades.length) && (
         <TableContainer>
-          <Table size="small" aria-label="Trades table">
+          <Table size='small' aria-label='Trades table'>
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>
-                <TableCell align="right">Type</TableCell>
-                <TableCell align="right">Broker</TableCell>
-                <TableCell align="right">Quantity</TableCell>
-                <TableCell align="right">Unit Price</TableCell>
-                <TableCell align="right">Cost/Sale Price</TableCell>
-                <TableCell align="right">Performance/Profit</TableCell>
+                <TableCell align='right'>Type</TableCell>
+                <TableCell align='right'>Broker</TableCell>
+                <TableCell align='right'>Quantity</TableCell>
+                <TableCell align='right'>Unit Price</TableCell>
+                <TableCell align='right'>Cost/Sale Price</TableCell>
+                <TableCell align='right'>Performance/Profit</TableCell>
                 <TableCell> </TableCell>
               </TableRow>
             </TableHead>
@@ -47,27 +47,27 @@ export default function TradesList({
               {h.trades.map((t, i) => {
                 return (
                   <TableRow key={i}>
-                    <TableCell component="th" scope="row">
+                    <TableCell component='th' scope='row'>
                       {format(new Date(t.date), 'dd MMM yyyy')}
                     </TableCell>
                     {/* Category */}
-                    <TableCell align="right">{titleCase(t.category)}</TableCell>
+                    <TableCell align='right'>{titleCase(t.category)}</TableCell>
                     {/* Broker */}
-                    <TableCell align="right">{t.broker}</TableCell>
+                    <TableCell align='right'>{t.broker}</TableCell>
                     {/* Quantity */}
-                    <TableCell align="right">{t.quantity}</TableCell>
+                    <TableCell align='right'>{t.quantity}</TableCell>
                     {/* Unit Price */}
-                    <TableCell align="right">
+                    <TableCell align='right'>
                       {formatValue(t.unitPrice, t.priceCurrency)}
                     </TableCell>
                     {/* Cost/Sale Price */}
                     {/* Assumes the trade was made in the user's primary currency.
                     This may not always be the case. */}
-                    <TableCell align="right">
+                    <TableCell align='right'>
                       {tradeCostOrSalePrice(t, user)}
                     </TableCell>
                     {/* Performance/Profit */}
-                    <TableCell align="right">
+                    <TableCell align='right'>
                       {t.performance && (
                         <PerformanceDisplay
                           performance={t.performance}
@@ -75,14 +75,13 @@ export default function TradesList({
                         />
                       )}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align='right'>
                       <IconButton
                         onClick={() => {
                           onDeleteTradeClicked(t.id, i);
                         }}
-                        aria-label="delete"
-                      >
-                        <DeleteIcon fontSize="small" />
+                        aria-label='delete'>
+                        <DeleteIcon fontSize='small' />
                       </IconButton>
                     </TableCell>
                   </TableRow>

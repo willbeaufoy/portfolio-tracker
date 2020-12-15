@@ -116,7 +116,7 @@ function setSellTradePerformance(t: Trade, h: Holding) {
   if (!isSellTrade(t)) throw new Error('Not a sell trade');
   // Get the buy trades prior to the sell trade that have performance figures.
   const prevBuyTrades = h.trades.filter(
-    (tr) => tr.category === 'BUY' && tr.performance && tr.date < t.date,
+    (tr) => tr.category === 'BUY' && tr.performance && tr.date < t.date
   );
   const cost = getSellTradeCost(t, prevBuyTrades);
   updateBuyTradesBeforeSellTrade(prevBuyTrades, cost);
@@ -161,7 +161,7 @@ function getSellTradeCost(st: Trade, buyTrades: Trade[]): number {
  */
 function updateBuyTradesBeforeSellTrade(
   buyTrades: Trade[],
-  sellTradeCost: number,
+  sellTradeCost: number
 ) {
   let costRemaining = sellTradeCost;
   for (const bt of buyTrades) {

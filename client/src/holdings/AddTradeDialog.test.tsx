@@ -47,7 +47,7 @@ test('creates a trade', async () => {
     fireEvent.click(openButton);
     await waitFor(() => {
       expect(
-        screen.getByRole('heading', {name: DIALOG_TITLE}),
+        screen.getByRole('heading', {name: DIALOG_TITLE})
       ).toBeInTheDocument();
     });
 

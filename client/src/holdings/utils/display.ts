@@ -9,7 +9,7 @@ import startCase from 'lodash.startcase';
 export function formatValue(value: number, currency: string) {
   if (!currency) return '';
   return new Intl.NumberFormat('gb-GB', {style: 'currency', currency}).format(
-    value,
+    value
   );
 }
 

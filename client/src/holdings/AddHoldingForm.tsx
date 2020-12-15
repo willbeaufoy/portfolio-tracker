@@ -49,20 +49,19 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
             console.error(err);
           }
           actions.setSubmitting(false);
-        }}
-      >
+        }}>
         {({isSubmitting}) => (
-          <Form className="AddHoldingForm">
-            <Field component={TextField} name="name" label="Name" />
-            <Field component={TextField} name="symbol" label="Ticker Symbol" />
-            <Field component={TextField} name="isin" label="ISIN" />
-            <Field as="select" name="category">
-              <option value="STOCK">Stock</option>
-              <option value="ETF">ETF</option>
-              <option value="FUND">Fund</option>
+          <Form className='AddHoldingForm'>
+            <Field component={TextField} name='name' label='Name' />
+            <Field component={TextField} name='symbol' label='Ticker Symbol' />
+            <Field component={TextField} name='isin' label='ISIN' />
+            <Field as='select' name='category'>
+              <option value='STOCK'>Stock</option>
+              <option value='ETF'>ETF</option>
+              <option value='FUND'>Fund</option>
             </Field>
-            <Field component={TextField} name="exchange" label="Exchange" />
-            <Field as="select" name="currency">
+            <Field component={TextField} name='exchange' label='Exchange' />
+            <Field as='select' name='currency'>
               {CURRENCIES.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -70,11 +69,10 @@ export default function AddHoldingForm(props: AddHoldingFormProps) {
               ))}
             </Field>
             <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              disabled={isSubmitting}
-            >
+              variant='contained'
+              color='primary'
+              type='submit'
+              disabled={isSubmitting}>
               Add Holding
             </Button>
           </Form>

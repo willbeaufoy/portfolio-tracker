@@ -117,7 +117,7 @@ export default class API {
   /** Lists holdings for the given username on the API. */
   static listHoldings(username: string): Promise<Holding[]> {
     return fetch(`${API_BASE}holdings/?username=${username}`).then((res) =>
-      res.json(),
+      res.json()
     );
   }
 
@@ -138,7 +138,7 @@ export default class API {
   /** Lists instruments by ISIN. */
   static listInstruments(isin: string) {
     return fetch(`${API_BASE}instruments/?isin=${isin}`).then((res) =>
-      res.json(),
+      res.json()
     );
   }
 

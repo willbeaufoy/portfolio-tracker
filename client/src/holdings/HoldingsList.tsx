@@ -88,7 +88,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
   const deleteTrade = async (
     id: number,
     holdingIndex: number,
-    tradeIndex: number,
+    tradeIndex: number
   ) => {
     try {
       await API.deleteTrade(id);
@@ -110,13 +110,13 @@ export default function HoldingsList({user}: HoldingsListProps) {
   };
 
   if (!isDataLoaded) {
-    return <div className="loading">Loading...</div>;
+    return <div className='loading'>Loading...</div>;
   }
   return (
-    <div className="HoldingsList">
+    <div className='HoldingsList'>
       <h2>Holdings</h2>
       {totalPerformance && (
-        <div className="totalPerformance">
+        <div className='totalPerformance'>
           <div>
             Current value:{' '}
             <strong>
@@ -128,19 +128,18 @@ export default function HoldingsList({user}: HoldingsListProps) {
             <PerformanceDisplay performance={totalPerformance} user={user} />
           </div>
           <Button
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             disabled={isRefreshing}
             onClick={() => refreshPrices()}
-            aria-label="Refresh prices"
-          >
+            aria-label='Refresh prices'>
             Refresh Prices
           </Button>
         </div>
       )}
       {Boolean(holdings.length) && (
         <TableContainer>
-          <Table size="small" aria-label="Holdings table">
+          <Table size='small' aria-label='Holdings table'>
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -157,18 +156,17 @@ export default function HoldingsList({user}: HoldingsListProps) {
                 return (
                   <React.Fragment key={i}>
                     <TableRow
-                      className="Holding-row"
+                      className='Holding-row'
                       onClick={() => {
                         handleClick(i);
-                      }}
-                    >
+                      }}>
                       {/* Name and Symbol */}
                       <TableCell>{holdingTitle(h)}</TableCell>
                       {/* Value */}
                       <TableCell>
                         {formatValue(
                           h.performance?.currentValue ?? 0,
-                          user.currency,
+                          user.currency
                         )}
                       </TableCell>
                       {/* Performance */}
@@ -195,18 +193,16 @@ export default function HoldingsList({user}: HoldingsListProps) {
                             e.stopPropagation();
                           }}
                           href={chartUrl(h)}
-                          target="_blank"
-                        >
-                          <ShowChartIcon fontSize="small" />
+                          target='_blank'>
+                          <ShowChartIcon fontSize='small' />
                         </IconButton>
                       </TableCell>
                       {/* Delete button */}
                       <TableCell>
                         <IconButton
                           onClick={() => deleteHolding(h.id, i)}
-                          aria-label="delete"
-                        >
-                          <DeleteIcon fontSize="small" />
+                          aria-label='delete'>
+                          <DeleteIcon fontSize='small' />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -217,26 +213,23 @@ export default function HoldingsList({user}: HoldingsListProps) {
                           paddingBottom: 0,
                           paddingTop: 0,
                         }}
-                        colSpan={5}
-                      >
-                        <Collapse in={open[i]} timeout="auto" unmountOnExit>
+                        colSpan={5}>
+                        <Collapse in={open[i]} timeout='auto' unmountOnExit>
                           <TradesList
                             holding={h}
                             user={user}
                             onDeleteTradeClicked={(
                               id: number,
-                              tradeIndex: number,
+                              tradeIndex: number
                             ) => {
                               deleteTrade(id, i, tradeIndex);
-                            }}
-                          ></TradesList>
-                          <div className="AddTrade-button-container">
+                            }}></TradesList>
+                          <div className='AddTrade-button-container'>
                             <AddTrade
                               holding={h}
                               onTradeCreated={(trade: Trade) =>
                                 addTrade(trade, i)
-                              }
-                            ></AddTrade>
+                              }></AddTrade>
                           </div>
                         </Collapse>
                       </TableCell>
@@ -251,8 +244,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
       <div style={{margin: '20px 0'}}>
         <AddHoldingForm
           username={user.username}
-          onHoldingCreated={(h: Holding) => addHolding(h)}
-        ></AddHoldingForm>
+          onHoldingCreated={(h: Holding) => addHolding(h)}></AddHoldingForm>
       </div>
     </div>
   );

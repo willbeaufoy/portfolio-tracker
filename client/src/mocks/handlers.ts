@@ -23,7 +23,7 @@ export const handlers = [
 function handlePricesRequest(req: any, res: any, ctx: any) {
   const symbols = req.url.searchParams.get('symbols')!.split(',');
   const data = symbols.map(
-    (s: string) => holdingsBySymbol.get(s) ?? {close: 0},
+    (s: string) => holdingsBySymbol.get(s) ?? {close: 0}
   );
   return res(ctx.json({data}));
 }

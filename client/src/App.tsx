@@ -26,16 +26,16 @@ const App = () => {
   }, []);
 
   if (!isUserLoaded) {
-    return <div className="loading">Loading...</div>;
+    return <div className='loading'>Loading...</div>;
   } else {
     return (
-      <div className="App">
-        <header className="App-header">
+      <div className='App'>
+        <header className='App-header'>
           <div></div>
-          <h1 className="App-Title">Portfolio Tracker</h1>
+          <h1 className='App-Title'>Portfolio Tracker</h1>
           <UserInfo user={user}></UserInfo>
         </header>
-        <div className="App-Content">
+        <div className='App-Content'>
           <HoldingsList user={user}></HoldingsList>
         </div>
       </div>

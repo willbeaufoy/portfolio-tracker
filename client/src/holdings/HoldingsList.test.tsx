@@ -23,7 +23,7 @@ describe('holdings with trades', () => {
     API.listHoldings = jest
       .fn()
       .mockReturnValue(
-        Promise.resolve([cloneDeep(HOLDING_1), cloneDeep(HOLDING_2)]),
+        Promise.resolve([cloneDeep(HOLDING_1), cloneDeep(HOLDING_2)])
       );
   });
 
@@ -38,13 +38,13 @@ describe('holdings with trades', () => {
       expect(screen.getByText('Amazon (AMZN)')).toBeInTheDocument();
       expect(screen.getByText('-£1,568.98 (10.29%)')).toBeInTheDocument();
       expect(links[0].href).toBe(
-        'https://www.google.com/search?q=NASDAQ:+AMZN&tbm=fin',
+        'https://www.google.com/search?q=NASDAQ:+AMZN&tbm=fin'
       );
       // Boohoo.
       expect(screen.getByText('Boohoo (BOO)')).toBeInTheDocument();
       expect(screen.getByText('-£17.60 (8.13%)')).toBeInTheDocument();
       expect(links[1].href).toBe(
-        'https://www.google.com/search?q=LON:+BOO&tbm=fin',
+        'https://www.google.com/search?q=LON:+BOO&tbm=fin'
       );
     });
   });
@@ -101,7 +101,7 @@ describe('holdings with trades', () => {
     const holding1New: Holding = cloneDeep(HOLDING_1);
     holding1New.bidPrice += 100;
     API.listHoldings.mockReturnValue(
-      Promise.resolve([holding1New, cloneDeep(HOLDING_2)]),
+      Promise.resolve([holding1New, cloneDeep(HOLDING_2)])
     );
 
     act(() => {

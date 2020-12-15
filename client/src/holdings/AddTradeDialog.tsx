@@ -34,14 +34,13 @@ export default function AddTradeDialog({
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant='outlined' color='primary' onClick={handleClickOpen}>
         Add Trade
       </Button>
       <Dialog
         open={open}
         onClose={handleCancel}
-        aria-labelledby="form-dialog-title"
-      >
+        aria-labelledby='form-dialog-title'>
         <Formik
           initialValues={{
             date: new Date(),
@@ -84,27 +83,26 @@ export default function AddTradeDialog({
               console.error(err);
             }
             setSubmitting(false);
-          }}
-        >
+          }}>
           {({isSubmitting}) => (
             <Form>
-              <DialogTitle id="form-dialog-title">Add Trade</DialogTitle>
-              <DialogContent className="DialogContent">
+              <DialogTitle id='form-dialog-title'>Add Trade</DialogTitle>
+              <DialogContent className='DialogContent'>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Field
                     component={KeyboardDateTimePicker}
-                    label="Date"
-                    variant="inline"
-                    name="date"
+                    label='Date'
+                    variant='inline'
+                    name='date'
                   />
                 </MuiPickersUtilsProvider>
-                <Field as="select" name="category">
-                  <option value="BUY">Buy</option>
-                  <option value="SELL">Sell</option>
+                <Field as='select' name='category'>
+                  <option value='BUY'>Buy</option>
+                  <option value='SELL'>Sell</option>
                 </Field>
-                <Field component={TextField} label="Broker" name="broker" />
-                <Field component={TextField} label="Quantity" name="quantity" />
-                <Field as="select" name="priceCurrency">
+                <Field component={TextField} label='Broker' name='broker' />
+                <Field component={TextField} label='Quantity' name='quantity' />
+                <Field as='select' name='priceCurrency'>
                   {CURRENCIES.map((c) => (
                     <option key={c} value={c}>
                       {c}
@@ -114,17 +112,17 @@ export default function AddTradeDialog({
                 <Field
                   component={TextField}
                   label={`Unit Price`}
-                  name="unitPrice"
+                  name='unitPrice'
                 />
-                <Field component={TextField} label="Fee" name="fee" />
-                <Field component={TextField} label="Tax" name="tax" />
-                <Field component={TextField} label="FX Rate" name="fxRate" />
+                <Field component={TextField} label='Fee' name='fee' />
+                <Field component={TextField} label='Tax' name='tax' />
+                <Field component={TextField} label='FX Rate' name='fxRate' />
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCancel} color="primary">
+                <Button onClick={handleCancel} color='primary'>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isSubmitting} color="primary">
+                <Button type='submit' disabled={isSubmitting} color='primary'>
                   Add
                 </Button>
               </DialogActions>
