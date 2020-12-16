@@ -22,7 +22,14 @@ export function getTotalPerformance(holdings: Holding[]): Performance {
   }
   const valueChange = currentValueForPerf - pricePaidForPerf;
   const percentChange = (valueChange / pricePaid) * 100;
-  return {pricePaid, currentValue, valueChange, percentChange};
+  return {
+    pricePaid,
+    pricePaidForPerf: pricePaid,
+    currentValue,
+    currentValueForPerf: currentValue,
+    valueChange,
+    percentChange,
+  };
 }
 
 /**
@@ -50,11 +57,11 @@ export function setHoldingPerformance(h: Holding) {
   let currentValue = 0;
   let currentValueForPerf = 0;
   for (const t of h.trades) {
-    pricePaidForPerf += t.performance?.pricePaid ?? 0;
-    currentValueForPerf += t.performance?.currentValue ?? 0;
+    pricePaidForPerf += t.performance?.pricePaidForPerf ?? 0;
+    currentValueForPerf += t.performance?.currentValueForPerf ?? 0;
     if (isBuyTrade(t)) {
-      pricePaid += t.performance?.pricePaid ?? 0;
-      currentValue += t.performance?.currentValue ?? 0;
+      pricePaid += t.performance?.pricePaidForPerf ?? 0;
+      currentValue += t.performance?.currentValueForPerf ?? 0;
     }
   }
   const valueChange = currentValueForPerf - pricePaidForPerf;
@@ -79,7 +86,14 @@ function setBuyTradePerformance(t: Trade, h: Holding) {
   const currentValue = getBuyTradeCurrentValue(t, h);
   const valueChange = currentValue - pricePaid;
   const percentChange = (valueChange / pricePaid) * 100;
-  t.performance = {pricePaid, currentValue, valueChange, percentChange};
+  t.performance = {
+    pricePaid,
+    pricePaidForPerf: pricePaid,
+    currentValue,
+    currentValueForPerf: currentValue,
+    valueChange,
+    percentChange,
+  };
 }
 
 /**
@@ -127,7 +141,8 @@ function setSellTradePerformance(t: Trade, h: Holding) {
   if (!isSellTrade(t)) throw new Error('Not a sell trade');
   // Get the buy trades prior to the sell trade that have performance figures.
   const prevBuyTrades = h.trades.filter(
-    (tr) => tr.category === 'BUY' && tr.performance && tr.date < t.date
+    (tr) =>
+      isBuyTrade(tr) && tr.performance?.pricePaidForPerf && tr.date < t.date
   );
   const cost = getSellTradeCost(t, prevBuyTrades, h.splits);
   updateBuyTradesBeforeSellTrade(prevBuyTrades, cost);
@@ -136,7 +151,9 @@ function setSellTradePerformance(t: Trade, h: Holding) {
   const profitPercent = (profit / cost) * 100;
   t.performance = {
     pricePaid: cost,
+    pricePaidForPerf: cost,
     currentValue: amountReceived,
+    currentValueForPerf: amountReceived,
     valueChange: profit,
     percentChange: profitPercent,
   };
@@ -150,17 +167,17 @@ function setSellTradePerformance(t: Trade, h: Holding) {
  */
 function getSellTradeCost(
   st: Trade,
-  buyTrades: Trade[],
+  prevBuyTrades: Trade[],
   splits: InstrumentSplit[]
 ): number {
   let totalPricePaid = 0;
   let totalUnits = 0;
-  for (const bt of buyTrades) {
+  for (const bt of prevBuyTrades) {
     if (!isBuyTrade(bt) || bt.date >= st.date || !bt.performance) {
       // Prevent calling function incorrectly.
       throw new Error('Not a valid buy trade');
     }
-    let pricePaid = bt.performance.pricePaid;
+    let pricePaid = bt.performance.pricePaidForPerf;
     for (const s of splits ?? []) {
       if (bt.date <= s.date) pricePaid /= s.ratio;
     }
@@ -187,16 +204,21 @@ function updateBuyTradesBeforeSellTrade(
       // Prevent calling function incorrectly.
       throw new Error('Not a valid buy trade');
     }
-    const pricePaidRemaining = bt.performance.pricePaid - costRemaining;
-    if (pricePaidRemaining > 0) {
-      const divisor = bt.performance.pricePaid / pricePaidRemaining;
-      bt.performance.pricePaid /= divisor;
-      bt.performance.currentValue /= divisor;
+    const pricePaidForPerfRemaining =
+      bt.performance.pricePaidForPerf - costRemaining;
+    if (pricePaidForPerfRemaining > 0) {
+      const divisor =
+        bt.performance.pricePaidForPerf / pricePaidForPerfRemaining;
+      bt.performance.pricePaidForPerf /= divisor;
+      bt.performance.currentValueForPerf /= divisor;
       bt.performance.valueChange /= divisor;
       break;
     } else {
-      costRemaining -= bt.performance.pricePaid;
-      bt.performance = undefined;
+      costRemaining -= bt.performance.pricePaidForPerf;
+      bt.performance.pricePaidForPerf = 0;
+      bt.performance.currentValueForPerf = 0;
+      bt.performance.valueChange = 0;
+      bt.performance.percentChange = 0;
     }
   }
 }

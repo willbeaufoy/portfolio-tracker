@@ -54,9 +54,9 @@ export interface InstrumentSplit {
  */
 export interface Performance {
   pricePaid: number;
-  pricePaidForPerf?: number;
+  pricePaidForPerf: number;
   currentValue: number;
-  currentValueForPerf?: number;
+  currentValueForPerf: number;
   valueChange: number;
   percentChange: number;
 }

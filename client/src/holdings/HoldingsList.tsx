@@ -29,7 +29,9 @@ export default function HoldingsList({user}: HoldingsListProps) {
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [totalPerformance, setTotalPerformance] = useState<Performance>({
     pricePaid: 0,
+    pricePaidForPerf: 0,
     currentValue: 0,
+    currentValueForPerf: 0,
     valueChange: 0,
     percentChange: 0,
   });
