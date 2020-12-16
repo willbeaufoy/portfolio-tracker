@@ -118,13 +118,19 @@ export default function HoldingsList({user}: HoldingsListProps) {
       {totalPerformance && (
         <div className='totalPerformance'>
           <div>
+            Price paid:{' '}
+            <strong>
+              {formatValue(totalPerformance.pricePaid, user.currency)}
+            </strong>
+          </div>
+          <div>
             Current value:{' '}
             <strong>
               {formatValue(totalPerformance.currentValue, user.currency)}
             </strong>
           </div>
           <div>
-            <div>Total Performance:</div>
+            <div>Total Performance (incl. sales):</div>
             <PerformanceDisplay performance={totalPerformance} user={user} />
           </div>
           <Button

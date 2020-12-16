@@ -11,12 +11,16 @@ export const CURRENCIES = ['CAD', 'GBP', 'GBX', 'USD'];
  */
 export function getTotalPerformance(holdings: Holding[]): Performance {
   let pricePaid = 0;
+  let pricePaidForPerf = 0;
   let currentValue = 0;
+  let currentValueForPerf = 0;
   for (const holding of holdings) {
     pricePaid += holding.performance?.pricePaid ?? 0;
+    pricePaidForPerf += holding.performance?.pricePaidForPerf ?? 0;
     currentValue += holding.performance?.currentValue ?? 0;
+    currentValueForPerf += holding.performance?.currentValueForPerf ?? 0;
   }
-  const valueChange = currentValue - pricePaid;
+  const valueChange = currentValueForPerf - pricePaidForPerf;
   const percentChange = (valueChange / pricePaid) * 100;
   return {pricePaid, currentValue, valueChange, percentChange};
 }
@@ -55,7 +59,14 @@ export function setHoldingPerformance(h: Holding) {
   }
   const valueChange = currentValueForPerf - pricePaidForPerf;
   const percentChange = (valueChange / pricePaidForPerf) * 100;
-  h.performance = {pricePaid, currentValue, valueChange, percentChange};
+  h.performance = {
+    pricePaid,
+    pricePaidForPerf,
+    currentValue,
+    currentValueForPerf,
+    valueChange,
+    percentChange,
+  };
 }
 
 /**

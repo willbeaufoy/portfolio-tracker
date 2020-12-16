@@ -48,19 +48,17 @@ export interface InstrumentSplit {
  * In the case of a sell trade, pricePaid is calculated as the weighted average of the
  * price paid for the previous buy trades that were sold, and currentValue is the amount
  * received in the sale.
+ *
+ * The ...forPerf variables are for calculating performance for higher up the chain, and
+ * are not displayed to the user.
  */
 export interface Performance {
   pricePaid: number;
+  pricePaidForPerf?: number;
   currentValue: number;
+  currentValueForPerf?: number;
   valueChange: number;
   percentChange: number;
-}
-
-interface SellPerformance {
-  cost: number;
-  amountReceived: number;
-  profit: number;
-  profitPercent: number;
 }
 
 export type TradeCategory = 'BUY' | 'SELL';
@@ -80,7 +78,6 @@ export interface Trade {
   tax: number;
   fxRate: number;
   performance?: Performance;
-  sellPerformance?: SellPerformance;
 }
 
 type CreateTradeData = Omit<Trade, 'id' | 'performance'>;
