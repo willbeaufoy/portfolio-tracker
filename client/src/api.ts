@@ -114,9 +114,15 @@ export default class API {
     });
   }
 
-  /** Lists holdings for the given username on the API. */
-  static listHoldings(username: string): Promise<Holding[]> {
-    return fetch(`${API_BASE}holdings/?username=${username}`).then((res) =>
+  /** Lists holdings for the given username (and optionally symbols) on the API. */
+  static listHoldings(
+    username: string,
+    symbols?: string[]
+  ): Promise<Holding[]> {
+    const url = new URL('/holdings/', API_BASE);
+    const params = new URLSearchParams({username});
+    if (symbols) params.append('symbols', symbols.join());
+    return fetch(`${url.toString()}?${params.toString()}`).then((res) =>
       res.json()
     );
   }

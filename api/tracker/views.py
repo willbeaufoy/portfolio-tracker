@@ -43,7 +43,12 @@ class HoldingList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         username = self.request.query_params.get('username', '')
-        return Holding.objects.filter(username=username)
+        holdings = Holding.objects.filter(username=username)
+        symbols = self.request.query_params.get('symbols', '')
+        if symbols is not '':
+            holdings = holdings.filter(
+                instrument__symbol__in=symbols.split(','))
+        return holdings
 
 
 class HoldingDetail(generics.RetrieveUpdateDestroyAPIView):
