@@ -1,5 +1,5 @@
 import round from 'lodash.round';
-import {Holding, Performance, Trade} from '../../api';
+import {InstrumentSplit, Holding, Performance, Trade} from '../../api';
 
 /** Supported currencies */
 export const CURRENCIES = ['CAD', 'GBP', 'GBX', 'USD'];
@@ -118,7 +118,7 @@ function setSellTradePerformance(t: Trade, h: Holding) {
   const prevBuyTrades = h.trades.filter(
     (tr) => tr.category === 'BUY' && tr.performance && tr.date < t.date
   );
-  const cost = getSellTradeCost(t, prevBuyTrades);
+  const cost = getSellTradeCost(t, prevBuyTrades, h.splits);
   updateBuyTradesBeforeSellTrade(prevBuyTrades, cost);
   const amountReceived = getSellTradeReceived(t);
   const profit = amountReceived - cost;
@@ -136,9 +136,12 @@ function setSellTradePerformance(t: Trade, h: Holding) {
  * of the given prior buy trades.
  * Limitations:
  * - Relies on buy trades earlier than the given sell trade already having had their performance calculated
- * - Sell trade must be on a separate date from other trades
  */
-function getSellTradeCost(st: Trade, buyTrades: Trade[]): number {
+function getSellTradeCost(
+  st: Trade,
+  buyTrades: Trade[],
+  splits: InstrumentSplit[]
+): number {
   let totalPricePaid = 0;
   let totalUnits = 0;
   for (const bt of buyTrades) {
@@ -146,7 +149,11 @@ function getSellTradeCost(st: Trade, buyTrades: Trade[]): number {
       // Prevent calling function incorrectly.
       throw new Error('Not a valid buy trade');
     }
-    totalPricePaid += bt.performance.pricePaid;
+    let pricePaid = bt.performance.pricePaid;
+    for (const s of splits ?? []) {
+      if (bt.date <= s.date) pricePaid /= s.ratio;
+    }
+    totalPricePaid += pricePaid;
     totalUnits += bt.quantity;
   }
   const meanUnitCost = totalPricePaid / totalUnits;
@@ -156,7 +163,7 @@ function getSellTradeCost(st: Trade, buyTrades: Trade[]): number {
 
 /**
  * Updates performance of buy trades prior to a sell trade.
- * This remomves performance figures where the performance is accounted for
+ * This removes performance figures where the performance is accounted for
  * in the sell trade.
  */
 function updateBuyTradesBeforeSellTrade(

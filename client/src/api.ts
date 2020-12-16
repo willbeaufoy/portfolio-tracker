@@ -36,7 +36,7 @@ type CreateInstrumentData = {
   isin: string;
 };
 
-interface InstrumentSplit {
+export interface InstrumentSplit {
   date: string;
   ratio: number;
 }
