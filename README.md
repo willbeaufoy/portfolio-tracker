@@ -52,6 +52,13 @@ Frontend:
 
 `npm test`
 
+## Code editor
+
+If you have no strong editor preference then use VS Code, and make sure the following extensions are installed:
+Django, ESLint, markdownlint, Prettier, Python and Python-autopep8. These provide linting and code formatting so
+the project has a consistent style. Also make sure the 'format on save' setting is on. If you want to use another editor
+you'll need to make sure it can apply the same formatting rules.
+
 ## Code committing process
 
 New code should be done in non-master branches, then pushed to GitHub for code review within a pull request
