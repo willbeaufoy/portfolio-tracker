@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db import models
+from django.db.models.functions import Lower
 
 
 class Instrument(models.Model):
@@ -44,7 +45,7 @@ class InstrumentSplit(models.Model):
 
 class Holding(models.Model):
     class Meta:
-        ordering = ['instrument__name']
+        ordering = [Lower('instrument__name')]
 
     instrument = models.ForeignKey(Instrument, on_delete=models.PROTECT)
     username = models.CharField(max_length=100)
