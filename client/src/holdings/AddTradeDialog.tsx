@@ -24,13 +24,13 @@ export default function AddTradeDialog({
 }: AddTradeDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  function handleClickOpen() {
     setOpen(true);
-  };
+  }
 
-  const handleCancel = () => {
+  function handleCancel() {
     setOpen(false);
-  };
+  }
 
   return (
     <div>

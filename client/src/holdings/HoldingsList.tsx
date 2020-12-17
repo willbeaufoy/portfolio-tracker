@@ -42,7 +42,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
   }, [user]);
 
   /** Fetches holdings from the API and sets their performance. */
-  const fetchHoldings = async (user: User) => {
+  async function fetchHoldings(user: User) {
     const holdings = await API.listHoldings(user.username);
     if (!holdings.length) {
       setIsDataLoaded(true);
@@ -54,7 +54,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
     setHoldings(holdings);
     setTotalPerformance(getTotalPerformance(holdings));
     setIsDataLoaded(true);
-  };
+  }
 
   const [open, setOpen] = React.useState(holdings.map(() => false));
   const handleClick = (i: number) => {
@@ -79,19 +79,19 @@ export default function HoldingsList({user}: HoldingsListProps) {
   };
 
   /** Adds a trade that has just been created on the API to the display. */
-  const addTrade = (trade: Trade, holdingIndex: number) => {
+  async function addTrade(trade: Trade, holdingIndex: number) {
     const holding = holdings[holdingIndex];
     holding.trades.push(trade);
     setHoldingPerformance(holding);
     setTotalPerformance(getTotalPerformance(holdings));
     setHoldings([...holdings]);
-  };
+  }
 
-  const deleteTrade = async (
+  async function deleteTrade(
     id: number,
     holdingIndex: number,
     tradeIndex: number
-  ) => {
+  ) {
     try {
       await API.deleteTrade(id);
       const holding = holdings[holdingIndex];
@@ -102,14 +102,14 @@ export default function HoldingsList({user}: HoldingsListProps) {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
 
-  const refreshPrices = async () => {
+  async function refreshPrices() {
     setIsRefreshing(true);
     await API.refreshPrices();
     await fetchHoldings(user);
     setIsRefreshing(false);
-  };
+  }
 
   if (!isDataLoaded) {
     return <div className='loading'>Loading...</div>;
