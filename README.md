@@ -59,18 +59,21 @@ before being merged with the main branch. Here is an example process if using gi
 
 1. Make sure the master branch is up to date with origin, then make a new branch e.g. `git checkout -b demobranch`
 1. Make your changes and commit them, e.g. `git add . && git commit`.
-1. Follow [this guide](https://chris.beams.io/posts/git-commit/) for writing commit messages. Unless your change
-   affects the whole codebase, put the service(s) changed [API, Client, Docs] in your git commit messages, e.g.
+1. Follow [this guide](https://chris.beams.io/posts/git-commit/) for writing commit messages, and:
 
-```none
-[API, Client] Add support for datetimes for trades
+   - Unless your change affects the whole codebase, put the service(s) changed [API, Client, Docs]
+     in the message
+   - If your code fixes a bug, put (fix #bugnum) at the end of the message
 
-This allows users to...
-```
+   ```none
+   [API, Client] Add support for datetimes for trades (fix #12)
 
-```none
-Add .prettierrc and reformat whole codebase
-```
+   This allows users to...
+   ```
+
+   ```none
+   Add .prettierrc and reformat whole codebase
+   ```
 
 1. Push the branch to GitHub, setting an equivalent upstream branch at the same time: `git push -u origin demobranch`
 1. Go to your new branch in GitHub, e.g. https://github.com/willbeaufoy/portfolio-tracker/tree/demobranch/
