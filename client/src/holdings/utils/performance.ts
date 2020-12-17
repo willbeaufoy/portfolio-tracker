@@ -126,13 +126,13 @@ function getHoldingPriceInUsersCurrency(h: Holding) {
   // Provide dummy exchange rates.
   switch (h.currency) {
     case 'CAD':
-      multiplier = 0.58;
+      multiplier = 0.578865;
       break;
     case 'GBX':
       multiplier = 0.01;
       break;
     case 'USD':
-      multiplier = 0.76;
+      multiplier = 0.736629;
       break;
   }
   return h.bidPrice * multiplier;
