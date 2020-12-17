@@ -62,9 +62,10 @@ export default function HoldingsList({user}: HoldingsListProps) {
     setOpen([...open]);
   };
 
-  const addHolding = (holding: Holding) => {
-    holdings.push(holding);
-    setHoldings([...holdings]);
+  const addHolding = (holding: Holding) => { 
+    holdings.push(holding); 
+    holdings.sort((a, b) => (a.name > b.name) ? 1 : -1) 
+    setHoldings([...holdings]); 
   };
 
   const deleteHolding = async (id: number, holdingIndex: number) => {
