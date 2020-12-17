@@ -21,7 +21,7 @@ export function getTotalPerformance(holdings: Holding[]): Performance {
     currentValueForPerf += holding.performance?.currentValueForPerf ?? 0;
   }
   const valueChange = currentValueForPerf - pricePaidForPerf;
-  const percentChange = (valueChange / pricePaid) * 100;
+  const percentChange = (valueChange / pricePaidForPerf) * 100;
   return {
     pricePaid,
     pricePaidForPerf: pricePaid,
@@ -93,6 +93,7 @@ function setBuyTradePerformance(t: Trade, h: Holding) {
     currentValueForPerf: currentValue,
     valueChange,
     percentChange,
+    quantityForPerf: t.quantity,
   };
 }
 
@@ -182,7 +183,7 @@ function getSellTradeCost(
       if (bt.date <= s.date) pricePaid /= s.ratio;
     }
     totalPricePaid += pricePaid;
-    totalUnits += bt.quantity;
+    totalUnits += bt.performance.quantityForPerf!;
   }
   const meanUnitCost = totalPricePaid / totalUnits;
   const cost = meanUnitCost * st.quantity;
@@ -212,6 +213,7 @@ function updateBuyTradesBeforeSellTrade(
       bt.performance.pricePaidForPerf /= divisor;
       bt.performance.currentValueForPerf /= divisor;
       bt.performance.valueChange /= divisor;
+      bt.performance.quantityForPerf! /= divisor;
       break;
     } else {
       costRemaining -= bt.performance.pricePaidForPerf;
@@ -219,6 +221,7 @@ function updateBuyTradesBeforeSellTrade(
       bt.performance.currentValueForPerf = 0;
       bt.performance.valueChange = 0;
       bt.performance.percentChange = 0;
+      bt.performance.quantityForPerf = 0;
     }
   }
 }

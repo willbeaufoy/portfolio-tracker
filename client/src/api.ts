@@ -59,6 +59,7 @@ export interface Performance {
   currentValueForPerf: number;
   valueChange: number;
   percentChange: number;
+  quantityForPerf?: number;
 }
 
 export type TradeCategory = 'BUY' | 'SELL';
