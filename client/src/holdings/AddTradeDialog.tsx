@@ -35,7 +35,7 @@ export default function AddTradeDialog({
   return (
     <div>
       <Button variant='outlined' color='primary' onClick={handleClickOpen}>
-        Add Trade
+        Add Trade ({holding.symbol})
       </Button>
       <Dialog
         open={open}
