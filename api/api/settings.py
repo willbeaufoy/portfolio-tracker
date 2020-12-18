@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_WHITELIST = [
     'https://master.d2xlug9wi9lkht.amplifyapp.com',
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
+    'http://127.0.0.1:3000',
 ]
 
 SESSION_COOKIE_SAMESITE = None
