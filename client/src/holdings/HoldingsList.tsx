@@ -64,7 +64,7 @@ export default function HoldingsList({user}: HoldingsListProps) {
 
   const addHolding = (holding: Holding) => { 
     holdings.push(holding); 
-    holdings.sort((a, b) => (a.name > b.name) ? 1 : -1) 
+    holdings.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
     setHoldings([...holdings]); 
   };
 
