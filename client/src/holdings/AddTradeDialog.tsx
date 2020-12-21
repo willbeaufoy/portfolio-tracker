@@ -86,7 +86,7 @@ export default function AddTradeDialog({
           }}>
           {({isSubmitting}) => (
             <Form>
-              <DialogTitle id='form-dialog-title'>Add Trade</DialogTitle>
+              <DialogTitle id='form-dialog-title'>Add Trade ({holding.symbol})</DialogTitle>
               <DialogContent className='DialogContent'>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Field
