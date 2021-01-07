@@ -1,5 +1,7 @@
 import './UserInfo.css';
+
 import React from 'react';
+
 import {User} from './api';
 
 interface UserInfoProps {

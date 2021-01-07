@@ -1,8 +1,10 @@
-import {HOLDING_1, USER} from '../test_fixtures';
-import {fireEvent, render} from '@testing-library/react';
-import TradesList, {TradesListProps} from './TradesList';
 import React from 'react';
+
 import {screen} from '@testing-library/dom';
+import {fireEvent, render} from '@testing-library/react';
+
+import {HOLDING_1, USER} from '../test_fixtures';
+import TradesList, {TradesListProps} from './TradesList';
 import {setHoldingPerformance} from './utils/performance';
 
 let props: TradesListProps;

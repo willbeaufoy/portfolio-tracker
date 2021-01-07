@@ -1,23 +1,26 @@
 import './HoldingsList.css';
-import API, {Holding, Trade, Performance, User} from '../api';
+
 import React, {useEffect, useState} from 'react';
-import {getTotalPerformance, setHoldingPerformance} from './utils/performance';
-import {formatValue} from './utils/display';
-import AddHoldingForm from './AddHoldingForm';
-import AddTrade from './AddTradeDialog';
+
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
-import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import PerformanceDisplay from './PerformanceDisplay';
-import ShowChartIcon from '@material-ui/icons/ShowChart';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
+
+import API, {Holding, Performance, Trade, User} from '../api';
+import AddHoldingForm from './AddHoldingForm';
+import AddTrade from './AddTradeDialog';
+import PerformanceDisplay from './PerformanceDisplay';
 import TradesList from './TradesList';
+import {formatValue} from './utils/display';
+import {getTotalPerformance, setHoldingPerformance} from './utils/performance';
 
 export type HoldingsListProps = {
   user: User;
@@ -62,10 +65,12 @@ export default function HoldingsList({user}: HoldingsListProps) {
     setOpen([...open]);
   };
 
-  const addHolding = (holding: Holding) => { 
-    holdings.push(holding); 
-    holdings.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
-    setHoldings([...holdings]); 
+  const addHolding = (holding: Holding) => {
+    holdings.push(holding);
+    holdings.sort((a, b) =>
+      a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+    );
+    setHoldings([...holdings]);
   };
 
   const deleteHolding = async (id: number, holdingIndex: number) => {

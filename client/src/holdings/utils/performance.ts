@@ -1,5 +1,6 @@
 import round from 'lodash.round';
-import {InstrumentSplit, Holding, Performance, Trade} from '../../api';
+
+import {Holding, InstrumentSplit, Performance, Trade} from '../../api';
 
 /** Supported currencies */
 export const CURRENCIES = ['CAD', 'GBP', 'GBX', 'USD'];

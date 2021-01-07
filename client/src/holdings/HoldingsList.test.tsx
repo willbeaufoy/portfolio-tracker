@@ -1,11 +1,13 @@
+import cloneDeep from 'lodash.clonedeep';
+import React from 'react';
+import {act} from 'react-dom/test-utils';
+
+import {screen} from '@testing-library/dom';
+import {fireEvent, render, waitFor} from '@testing-library/react';
+
 import API, {Holding} from '../api';
 import {HOLDING_1, HOLDING_2, USER} from '../test_fixtures';
-import {fireEvent, render, waitFor} from '@testing-library/react';
 import HoldingsList, {HoldingsListProps} from './HoldingsList';
-import React from 'react';
-import cloneDeep from 'lodash.clonedeep';
-import {screen} from '@testing-library/dom';
-import {act} from 'react-dom/test-utils';
 
 let props: HoldingsListProps;
 

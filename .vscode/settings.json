@@ -1,0 +1,8 @@
+{
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": true,
+    "importSorter.generalConfiguration.sortOnBeforeSave": true,
+    "importSorter.importStringConfiguration.spacingPerImportExpression.afterStartingBracket": 0,
+    "importSorter.importStringConfiguration.spacingPerImportExpression.beforeEndingBracket": 0,
+    "typescript.format.enable": false,
+  }

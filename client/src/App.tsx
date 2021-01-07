@@ -1,10 +1,13 @@
 import './App.css';
-import React, {useEffect, useState} from 'react';
+
 import {Auth} from 'aws-amplify';
+import React, {useEffect, useState} from 'react';
+
+import {withAuthenticator} from '@aws-amplify/ui-react';
+
+import {User} from './api';
 import HoldingsList from './holdings/HoldingsList';
 import UserInfo from './UserInfo';
-import {User} from './api';
-import {withAuthenticator} from '@aws-amplify/ui-react';
 
 const App = () => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);

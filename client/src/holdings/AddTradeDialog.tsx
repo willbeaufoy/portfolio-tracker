@@ -1,17 +1,20 @@
 import './AddTradeDialog.css';
-import API, {Holding, TradeCategory} from '../api';
+
 import {Field, Form, Formik} from 'formik';
+import {TextField} from 'formik-material-ui';
+import {KeyboardDateTimePicker} from 'formik-material-ui-pickers';
 import React, {useState} from 'react';
-import Button from '@material-ui/core/Button';
-import {CURRENCIES} from './utils/performance';
+
 import DateFnsUtils from '@date-io/date-fns';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {KeyboardDateTimePicker} from 'formik-material-ui-pickers';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import {TextField} from 'formik-material-ui';
+
+import API, {Holding, TradeCategory} from '../api';
+import {CURRENCIES} from './utils/performance';
 
 export type AddTradeDialogProps = {
   holding: Holding;
@@ -86,7 +89,9 @@ export default function AddTradeDialog({
           }}>
           {({isSubmitting}) => (
             <Form>
-              <DialogTitle id='form-dialog-title'>Add Trade ({holding.symbol})</DialogTitle>
+              <DialogTitle id='form-dialog-title'>
+                Add Trade ({holding.symbol})
+              </DialogTitle>
               <DialogContent className='DialogContent'>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Field

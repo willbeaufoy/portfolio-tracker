@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {Performance, User} from '../api';
 import {formatValue} from './utils/display';
 

@@ -1,16 +1,19 @@
 import './TradesList.css';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
-import {Holding, Trade, User} from './../api';
-import PerformanceDisplay from './PerformanceDisplay';
+
+import {format} from 'date-fns';
 import React from 'react';
+
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {format} from 'date-fns';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import {Holding, Trade, User} from '../api';
+import PerformanceDisplay from './PerformanceDisplay';
 import {formatValue, titleCase} from './utils/display';
 import {isBuyTrade} from './utils/performance';
 

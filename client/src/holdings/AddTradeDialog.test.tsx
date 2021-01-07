@@ -1,11 +1,13 @@
-import {fireEvent, render, waitFor} from '@testing-library/react';
-import API from '../api';
-import AddTradeDialog, {AddTradeDialogProps} from './AddTradeDialog';
-import {HOLDING_2} from '../test_fixtures';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
+
 import {screen} from '@testing-library/dom';
+import {fireEvent, render, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import API from '../api';
+import {HOLDING_2} from '../test_fixtures';
+import AddTradeDialog, {AddTradeDialogProps} from './AddTradeDialog';
 
 const DIALOG_TITLE = 'Add Trade';
 let props: AddTradeDialogProps;

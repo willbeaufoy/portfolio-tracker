@@ -1,5 +1,6 @@
 import {rest} from 'msw';
-import {MS_INTRADAY_LATEST_BASE_URL, MS_EOD_LATEST_BASE_URL} from '../settings';
+
+import {MS_EOD_LATEST_BASE_URL, MS_INTRADAY_LATEST_BASE_URL} from '../settings';
 
 const holdingsBySymbol = new Map([
   ['AMZN', {symbol: 'AMZN', close: 3482.74}],
