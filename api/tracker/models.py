@@ -63,7 +63,7 @@ class Trade(models.Model):
         ordering = ['date']
 
     holding = models.ForeignKey(
-        Holding, related_name='trades', on_delete=models.PROTECT)
+        Holding, related_name='trades', on_delete=models.CASCADE)
     date = models.DateTimeField()
     category = models.CharField(
         max_length=20, choices=Category.choices, default=Category.BUY)

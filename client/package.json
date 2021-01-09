@@ -23,6 +23,7 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.round": "^4.0.4",
     "lodash.startcase": "^4.4.0",
+    "material-ui-confirm": "^2.1.1",
     "msw": "^0.21.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

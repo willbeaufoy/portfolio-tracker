@@ -1,6 +1,7 @@
 import './App.css';
 
 import {Auth} from 'aws-amplify';
+import {ConfirmProvider} from 'material-ui-confirm';
 import React, {useEffect, useState} from 'react';
 
 import {withAuthenticator} from '@aws-amplify/ui-react';
@@ -32,16 +33,18 @@ function App() {
     return <div className='loading'>Loading...</div>;
   } else {
     return (
-      <div className='App'>
-        <header className='App-header'>
-          <div></div>
-          <h1 className='App-Title'>Portfolio Tracker</h1>
-          <UserInfo user={user}></UserInfo>
-        </header>
-        <div className='App-Content'>
-          <HoldingsList user={user}></HoldingsList>
+      <ConfirmProvider>
+        <div className='App'>
+          <header className='App-header'>
+            <div></div>
+            <h1 className='App-Title'>Portfolio Tracker</h1>
+            <UserInfo user={user}></UserInfo>
+          </header>
+          <div className='App-Content'>
+            <HoldingsList user={user}></HoldingsList>
+          </div>
         </div>
-      </div>
+      </ConfirmProvider>
     );
   }
 }

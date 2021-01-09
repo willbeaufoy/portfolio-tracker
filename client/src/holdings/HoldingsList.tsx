@@ -1,5 +1,6 @@
 import './HoldingsList.css';
 
+import {useConfirm} from 'material-ui-confirm';
 import React, {useEffect, useState} from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -30,6 +31,9 @@ export type HoldingsListProps = {
 export function HoldingsList({user}: HoldingsListProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
+  const [isHoldingOpen, setIsHoldingOpen] = React.useState(
+    holdings.map(() => false)
+  );
   const [totalPerformance, setTotalPerformance] = useState<Performance>({
     pricePaid: 0,
     pricePaidForPerf: 0,
@@ -39,6 +43,7 @@ export function HoldingsList({user}: HoldingsListProps) {
     percentChange: 0,
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const confirm = useConfirm();
 
   useEffect(() => {
     fetchHoldings(user);
@@ -59,21 +64,29 @@ export function HoldingsList({user}: HoldingsListProps) {
     setIsDataLoaded(true);
   }
 
-  const [open, setOpen] = React.useState(holdings.map(() => false));
-  const handleClick = (i: number) => {
-    open[i] = !open[i];
-    setOpen([...open]);
-  };
+  function toggleIsHoldingOpen(i: number) {
+    isHoldingOpen[i] = !isHoldingOpen[i];
+    setIsHoldingOpen([...isHoldingOpen]);
+  }
 
-  const addHolding = (holding: Holding) => {
+  function addHolding(holding: Holding) {
     holdings.push(holding);
     holdings.sort((a, b) =>
       a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
     );
     setHoldings([...holdings]);
-  };
+  }
 
-  const deleteHolding = async (id: number, holdingIndex: number) => {
+  async function confirmDeleteHolding(id: number, holdingIndex: number) {
+    try {
+      await confirm({
+        title: `Really delete holding ${holdings[holdingIndex].symbol}?`,
+        description: 'This action is permanent!',
+      });
+    } catch (err) {
+      // User did not confirm deletion so do nothing.
+      return;
+    }
     try {
       await API.deleteHolding(id);
       holdings.splice(holdingIndex, 1);
@@ -82,7 +95,7 @@ export function HoldingsList({user}: HoldingsListProps) {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
 
   /** Adds a trade that has just been created on the API to the display. */
   async function addTrade(trade: Trade, holdingIndex: number) {
@@ -172,7 +185,7 @@ export function HoldingsList({user}: HoldingsListProps) {
                     <TableRow
                       className='Holding-row'
                       onClick={() => {
-                        handleClick(i);
+                        toggleIsHoldingOpen(i);
                       }}>
                       {/* Name and Symbol */}
                       <TableCell>{holdingTitle(h)}</TableCell>
@@ -214,7 +227,10 @@ export function HoldingsList({user}: HoldingsListProps) {
                       {/* Delete button */}
                       <TableCell>
                         <IconButton
-                          onClick={() => deleteHolding(h.id, i)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            confirmDeleteHolding(h.id, i);
+                          }}
                           aria-label='delete'>
                           <DeleteIcon fontSize='small' />
                         </IconButton>
@@ -228,7 +244,10 @@ export function HoldingsList({user}: HoldingsListProps) {
                           paddingTop: 0,
                         }}
                         colSpan={5}>
-                        <Collapse in={open[i]} timeout='auto' unmountOnExit>
+                        <Collapse
+                          in={isHoldingOpen[i]}
+                          timeout='auto'
+                          unmountOnExit>
                           <TradesList
                             holding={h}
                             user={user}
