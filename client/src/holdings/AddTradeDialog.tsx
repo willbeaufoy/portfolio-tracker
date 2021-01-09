@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
-import API, {Holding, TradeCategory} from '../api';
+import {API, Holding, TradeCategory} from '../api';
 import {CURRENCIES} from './utils/performance';
 
 export type AddTradeDialogProps = {
@@ -21,10 +21,7 @@ export type AddTradeDialogProps = {
   onTradeCreated: Function;
 };
 
-export default function AddTradeDialog({
-  holding,
-  onTradeCreated,
-}: AddTradeDialogProps) {
+export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
   const [open, setOpen] = useState(false);
 
   function handleClickOpen() {

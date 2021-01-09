@@ -6,7 +6,7 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 
-import API from '../api';
+import {API} from '../api';
 import {CURRENCIES} from './utils/performance';
 
 type AddHoldingFormProps = {
@@ -15,7 +15,7 @@ type AddHoldingFormProps = {
 };
 
 /** Form to add a holding. */
-export default function AddHoldingForm(props: AddHoldingFormProps) {
+export function AddHoldingForm(props: AddHoldingFormProps) {
   return (
     <div>
       <Formik

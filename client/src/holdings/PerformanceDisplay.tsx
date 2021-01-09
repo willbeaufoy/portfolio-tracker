@@ -9,7 +9,7 @@ interface PerformanceDisplayProps {
 }
 
 /** Displays of all the user's holdings with the option to add more. */
-export default function PerformanceDisplay({
+export function PerformanceDisplay({
   performance,
   user,
 }: PerformanceDisplayProps) {

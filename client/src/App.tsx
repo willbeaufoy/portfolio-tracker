@@ -6,10 +6,10 @@ import React, {useEffect, useState} from 'react';
 import {withAuthenticator} from '@aws-amplify/ui-react';
 
 import {User} from './api';
-import HoldingsList from './holdings/HoldingsList';
-import UserInfo from './UserInfo';
+import {HoldingsList} from './holdings/HoldingsList';
+import {UserInfo} from './UserInfo';
 
-const App = () => {
+function App() {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [user, setUser] = useState<User>({
     username: '',
@@ -44,6 +44,6 @@ const App = () => {
       </div>
     );
   }
-};
+}
 
 export default withAuthenticator(App);

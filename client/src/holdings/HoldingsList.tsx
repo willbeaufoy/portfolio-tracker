@@ -14,11 +14,11 @@ import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 
-import API, {Holding, Performance, Trade, User} from '../api';
-import AddHoldingForm from './AddHoldingForm';
-import AddTrade from './AddTradeDialog';
-import PerformanceDisplay from './PerformanceDisplay';
-import TradesList from './TradesList';
+import {API, Holding, Performance, Trade, User} from '../api';
+import {AddHoldingForm} from './AddHoldingForm';
+import {AddTradeDialog} from './AddTradeDialog';
+import {PerformanceDisplay} from './PerformanceDisplay';
+import {TradesList} from './TradesList';
 import {formatValue} from './utils/display';
 import {getTotalPerformance, setHoldingPerformance} from './utils/performance';
 
@@ -27,7 +27,7 @@ export type HoldingsListProps = {
 };
 
 /** Displays of all the user's holdings with the option to add more. */
-export default function HoldingsList({user}: HoldingsListProps) {
+export function HoldingsList({user}: HoldingsListProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [totalPerformance, setTotalPerformance] = useState<Performance>({
@@ -238,12 +238,12 @@ export default function HoldingsList({user}: HoldingsListProps) {
                             ) => {
                               deleteTrade(id, i, tradeIndex);
                             }}></TradesList>
-                          <div className='AddTrade-button-container'>
-                            <AddTrade
+                          <div className='AddTradeDialog-button-container'>
+                            <AddTradeDialog
                               holding={h}
                               onTradeCreated={(trade: Trade) =>
                                 addTrade(trade, i)
-                              }></AddTrade>
+                              }></AddTradeDialog>
                           </div>
                         </Collapse>
                       </TableCell>

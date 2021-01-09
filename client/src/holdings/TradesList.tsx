@@ -13,7 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import {Holding, Trade, User} from '../api';
-import PerformanceDisplay from './PerformanceDisplay';
+import {PerformanceDisplay} from './PerformanceDisplay';
 import {formatValue, titleCase} from './utils/display';
 import {isBuyTrade} from './utils/performance';
 
@@ -24,7 +24,7 @@ export type TradesListProps = {
 };
 
 /** Displays a holding's trades with the option to delete them. */
-export default function TradesList({
+export function TradesList({
   holding: h,
   user,
   onDeleteTradeClicked,

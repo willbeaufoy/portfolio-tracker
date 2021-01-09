@@ -114,6 +114,11 @@ Follow the [Django Coding style](https://docs.djangoproject.com/en/dev/internals
 
 ### TypeScript+JavaScript
 
+#### Exports
+
+Use named exports where you can i.e. `export MyComponent` not `export default MyComponent`.
+Default exports have no benefit for us and using named ones promotes consistency and clarity.
+
 #### Function declarations vs function expressions
 
 When creating a named function, use function declarations not function expressions, as function declarations

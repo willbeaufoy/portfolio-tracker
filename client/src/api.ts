@@ -90,7 +90,7 @@ export interface User {
 }
 
 /** Static methods for calling APIs. */
-export default class API {
+export class API {
   /** Creates a holding on the API. */
   static createHolding(data: CreateHoldingData): Promise<Holding> {
     return fetch(`${API_BASE}holdings/`, {
