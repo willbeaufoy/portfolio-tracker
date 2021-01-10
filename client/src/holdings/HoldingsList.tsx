@@ -106,11 +106,20 @@ export function HoldingsList({user}: HoldingsListProps) {
     setHoldings([...holdings]);
   }
 
-  async function deleteTrade(
+  async function confirmDeleteTrade(
     id: number,
     holdingIndex: number,
     tradeIndex: number
   ) {
+    try {
+      await confirm({
+        title: `Really delete this ${holdings[holdingIndex].symbol} trade?`,
+        description: 'This action is permanent!',
+      });
+    } catch (err) {
+      // User did not confirm deletion so do nothing.
+      return;
+    }
     try {
       await API.deleteTrade(id);
       const holding = holdings[holdingIndex];
@@ -255,7 +264,7 @@ export function HoldingsList({user}: HoldingsListProps) {
                               id: number,
                               tradeIndex: number
                             ) => {
-                              deleteTrade(id, i, tradeIndex);
+                              confirmDeleteTrade(id, i, tradeIndex);
                             }}></TradesList>
                           <div className='AddTradeDialog-button-container'>
                             <AddTradeDialog
