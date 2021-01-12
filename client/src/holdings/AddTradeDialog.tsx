@@ -45,7 +45,7 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
           initialValues={{
             date: new Date(),
             category: 'BUY',
-            broker: '',
+            broker: holding.trades.slice(-1)[0]?.broker ?? '',
             priceCurrency: CURRENCIES[0],
             quantity: '',
             unitPrice: '',
