@@ -6,17 +6,19 @@ import React, {useEffect, useState} from 'react';
 
 import {withAuthenticator} from '@aws-amplify/ui-react';
 
-import {User} from './api';
+import {API, FxRates, User} from './api';
 import {HoldingsList} from './holdings/HoldingsList';
+import {USER_CURRENCY} from './settings';
 import {UserInfo} from './UserInfo';
 
 function App() {
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [isDataLoaded, setisDataLoaded] = useState(false);
   const [user, setUser] = useState<User>({
     username: '',
     email: '',
     currency: '',
   });
+  const [fxRates, setFxRates] = useState<FxRates>({CAD: 1, USD: 1});
 
   useEffect(() => {
     Auth.currentUserInfo().then((cognitoUser) => {
@@ -25,11 +27,14 @@ function App() {
         email: cognitoUser.attributes.email,
         currency: 'GBP', // Only support GBP for now.
       });
-      setIsUserLoaded(true);
+      API.listFxRates(USER_CURRENCY).then((fxRates) => {
+        setFxRates(fxRates.rates);
+        setisDataLoaded(true);
+      });
     });
   }, []);
 
-  if (!isUserLoaded) {
+  if (!isDataLoaded) {
     return <div className='loading'>Loading...</div>;
   } else {
     return (
@@ -41,7 +46,7 @@ function App() {
             <UserInfo user={user}></UserInfo>
           </header>
           <div className='App-Content'>
-            <HoldingsList user={user}></HoldingsList>
+            <HoldingsList user={user} fxRates={fxRates}></HoldingsList>
           </div>
         </div>
       </ConfirmProvider>

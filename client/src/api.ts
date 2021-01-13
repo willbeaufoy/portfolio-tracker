@@ -1,4 +1,8 @@
-import {API_BASE} from './settings';
+import {API_BASE, FX_API_BASE} from './settings';
+
+/** Supported currencies */
+export type Currency = 'CAD' | 'GBP' | 'GBX' | 'USD';
+export const CURRENCIES: Currency[] = ['CAD', 'GBP', 'GBX', 'USD'];
 
 /**
  * A holding as returned from the API and displayed to the user.
@@ -12,7 +16,7 @@ export interface Holding {
   bidPrice: number;
   bidPriceUpdateTime: string;
   category: string;
-  currency: string;
+  currency: Currency;
   exchange: string;
   isin: string;
   trades: Trade[];
@@ -30,7 +34,7 @@ type CreateInstrumentData = {
   name: string;
   symbol: string;
   category: string;
-  currency: string;
+  currency: Currency;
   exchange: string;
   dataSource: string;
   isin: string;
@@ -71,22 +75,27 @@ export interface Trade {
   date: string;
   category: TradeCategory;
   broker: string;
-  priceCurrency: string;
+  priceCurrency: Currency;
   quantity: number;
   unitPrice: number;
-  paymentCurrency: string;
+  paymentCurrency: Currency;
   fee: number;
   tax: number;
   fxRate: number;
   performance?: Performance;
 }
 
-type CreateTradeData = Omit<Trade, 'id' | 'performance'>;
+export type CreateTradeData = Omit<Trade, 'id' | 'performance'>;
 
 export interface User {
   username: string;
   email: string;
   currency: string;
+}
+
+export interface FxRates {
+  CAD: number;
+  USD: number;
 }
 
 /** Static methods for calling APIs. */
@@ -173,5 +182,14 @@ export class API {
   /** Refreshes the latest prices on the API. */
   static refreshPrices() {
     return fetch(`${API_BASE}instruments/sync/`);
+  }
+
+  /** Lists FX rates in the given base currency */
+  static listFxRates(base: Currency) {
+    const url = new URL('/latest/', FX_API_BASE);
+    const params = new URLSearchParams({base, symbols: 'CAD,USD'});
+    return fetch(`${url.toString()}?${params.toString()}`).then((res) =>
+      res.json()
+    );
   }
 }

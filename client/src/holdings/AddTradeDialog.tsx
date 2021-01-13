@@ -13,8 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
-import {API, Holding, TradeCategory} from '../api';
-import {CURRENCIES} from './utils/performance';
+import {API, CreateTradeData, CURRENCIES, Holding, TradeCategory} from '../api';
 
 export type AddTradeDialogProps = {
   holding: Holding;
@@ -61,7 +60,7 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
               // in the user's currency.
               fxRate = holding.currency === 'GBX' ? 100 : 1;
             }
-            const input = {
+            const input: CreateTradeData = {
               holding: holding.id,
               date: values.date.toISOString().split('.')[0].replace('T', ' '),
               category: values.category as TradeCategory,
@@ -73,7 +72,6 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
               fee: Number(values.fee ?? 0),
               tax: Number(values.tax ?? 0),
               fxRate,
-              fxFee: 0, // Field not used currenctly.
             };
             try {
               const trade = await API.createTrade(input);

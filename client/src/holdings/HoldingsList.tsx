@@ -15,20 +15,22 @@ import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 
-import {API, Holding, Performance, Trade, User} from '../api';
+import {API, FxRates, Holding, Performance, Trade, User} from '../api';
+import {USER_CURRENCY} from '../settings';
 import {AddHoldingForm} from './AddHoldingForm';
 import {AddTradeDialog} from './AddTradeDialog';
 import {PerformanceDisplay} from './PerformanceDisplay';
 import {TradesList} from './TradesList';
 import {formatValue} from './utils/display';
-import {getTotalPerformance, setHoldingPerformance} from './utils/performance';
+import {getTotalPerformance, PerfCalculator} from './utils/performance';
 
-export type HoldingsListProps = {
+export type IProps = {
   user: User;
+  fxRates: FxRates;
 };
 
 /** Displays of all the user's holdings with the option to add more. */
-export function HoldingsList({user}: HoldingsListProps) {
+export function HoldingsList({user, fxRates}: IProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [isHoldingOpen, setIsHoldingOpen] = React.useState(
@@ -44,10 +46,13 @@ export function HoldingsList({user}: HoldingsListProps) {
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const confirm = useConfirm();
+  const perfCalculator = new PerfCalculator({userCurrency: USER_CURRENCY});
 
   useEffect(() => {
+    perfCalculator.setFx(fxRates);
     fetchHoldings(user);
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, fxRates]);
 
   /** Fetches holdings from the API and sets their performance. */
   async function fetchHoldings(user: User) {
@@ -57,7 +62,7 @@ export function HoldingsList({user}: HoldingsListProps) {
       return;
     }
     for (const holding of holdings) {
-      setHoldingPerformance(holding);
+      perfCalculator.setHoldingPerformance(holding);
     }
     setHoldings(holdings);
     setTotalPerformance(getTotalPerformance(holdings));
@@ -101,7 +106,7 @@ export function HoldingsList({user}: HoldingsListProps) {
   async function addTrade(trade: Trade, holdingIndex: number) {
     const holding = holdings[holdingIndex];
     holding.trades.push(trade);
-    setHoldingPerformance(holding);
+    perfCalculator.setHoldingPerformance(holding);
     setTotalPerformance(getTotalPerformance(holdings));
     setHoldings([...holdings]);
   }
@@ -124,7 +129,7 @@ export function HoldingsList({user}: HoldingsListProps) {
       await API.deleteTrade(id);
       const holding = holdings[holdingIndex];
       holding.trades.splice(tradeIndex, 1);
-      setHoldingPerformance(holding);
+      perfCalculator.setHoldingPerformance(holding);
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
