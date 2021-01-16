@@ -41,6 +41,7 @@ export const HOLDING_1: Holding = {
       fxRate: 1.31,
     },
   ],
+  dividends: [],
   splits: [
     {ratio: 3, date: '2019-01-02'},
     {ratio: 0.2, date: '2018-03-04'},
@@ -74,6 +75,7 @@ export const HOLDING_2: Holding = {
       fxRate: 100,
     },
   ],
+  dividends: [],
   splits: [],
 };
 

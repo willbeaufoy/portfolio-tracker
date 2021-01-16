@@ -1,6 +1,13 @@
 import round from 'lodash.round';
 
-import {Currency, FxRates, Holding, InstrumentSplit, Performance, Trade} from '../../api';
+import {
+  Currency,
+  FxRates,
+  Holding,
+  InstrumentSplit,
+  Performance,
+  Trade,
+} from '../../api';
 
 interface Options {
   userCurrency: Currency;
@@ -28,10 +35,7 @@ export class PerfCalculator {
     this.fxRates.set('USD', rates.USD);
   }
 
-  /**
-   * Sets the current performance data for the given holding and its trades
-   * from its existing data.
-   */
+  /** Sets the current performance data for the given holding, its trades and dividends */
   setHoldingPerformance(h: Holding) {
     if (!h.trades.length || !h.bidPrice) {
       h.performance = undefined;
@@ -47,7 +51,7 @@ export class PerfCalculator {
         : this.setSellTradePerformance(t, h);
     }
     // Calculate price paid and current value for current holdings (i.e. buy trades only)
-    // and including sell trades for performance calculations.
+    // and include sell trades for performance calculations.
     let pricePaid = 0;
     let pricePaidForPerf = 0;
     let currentValue = 0;
@@ -59,6 +63,10 @@ export class PerfCalculator {
         pricePaid += t.performance?.pricePaidForPerf ?? 0;
         currentValue += t.performance?.currentValueForPerf ?? 0;
       }
+    }
+    // Add dividends to performance calculation
+    for (const d of h.dividends) {
+      currentValueForPerf += d.value;
     }
     const valueChange = currentValueForPerf - pricePaidForPerf;
     const percentChange = (valueChange / pricePaidForPerf) * 100;

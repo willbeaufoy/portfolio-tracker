@@ -1,5 +1,3 @@
-import './TradesList.css';
-
 import {format} from 'date-fns';
 import React from 'react';
 
@@ -12,28 +10,34 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import {Holding, Trade, User} from '../api';
+import {Dividend, Holding, isTrade, Trade, User} from '../api';
 import {PerformanceDisplay} from './PerformanceDisplay';
 import {formatValue, titleCase} from './utils/display';
 import {isBuyTrade} from './utils/performance';
 
-export type TradesListProps = {
+export type TransactionsListProps = {
   holding: Holding;
   user: User;
-  onDeleteTradeClicked: Function;
+  onDeleteTransactionClicked: Function;
 };
 
-/** Displays a holding's trades with the option to delete them. */
-export function TradesList({
+/** Displays a holding's trades and dividends with the option to delete them. */
+export function TransactionsList({
   holding: h,
   user,
-  onDeleteTradeClicked,
-}: TradesListProps) {
+  onDeleteTransactionClicked,
+}: TransactionsListProps) {
+  const transactions: Array<Trade | Dividend> = [...h.trades, ...h.dividends];
+  transactions.sort((a, b) => {
+    if (a.date < b.date) return -1;
+    if (a.date > b.date) return 1;
+    return 0;
+  });
   return (
     <div>
-      {Boolean(h.trades.length) && (
+      {Boolean(transactions.length) && (
         <TableContainer>
-          <Table size='small' aria-label='Trades table'>
+          <Table size='small' aria-label='Transactions table'>
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>
@@ -41,37 +45,45 @@ export function TradesList({
                 <TableCell align='right'>Broker</TableCell>
                 <TableCell align='right'>Quantity</TableCell>
                 <TableCell align='right'>Unit Price</TableCell>
-                <TableCell align='right'>Cost/Sale Price</TableCell>
+                <TableCell align='right'>Cost/Amount Received</TableCell>
                 <TableCell align='right'>Performance/Profit</TableCell>
                 <TableCell> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {h.trades.map((t, i) => {
+              {transactions.map((t, i) => {
                 return (
                   <TableRow key={i}>
                     <TableCell component='th' scope='row'>
                       {format(new Date(t.date), 'dd MMM yyyy')}
                     </TableCell>
                     {/* Category */}
-                    <TableCell align='right'>{titleCase(t.category)}</TableCell>
+                    <TableCell align='right'>
+                      {isTrade(t) ? titleCase(t.category) : 'Dividend'}
+                    </TableCell>
                     {/* Broker */}
                     <TableCell align='right'>{t.broker}</TableCell>
                     {/* Quantity */}
-                    <TableCell align='right'>{t.quantity}</TableCell>
+                    <TableCell align='right'>
+                      {isTrade(t) ? t.quantity : ''}
+                    </TableCell>
                     {/* Unit Price */}
                     <TableCell align='right'>
-                      {formatValue(t.unitPrice, t.priceCurrency)}
+                      {isTrade(t)
+                        ? formatValue(t.unitPrice, t.priceCurrency)
+                        : ''}
                     </TableCell>
                     {/* Cost/Sale Price */}
                     {/* Assumes the trade was made in the user's primary currency.
                     This may not always be the case. */}
                     <TableCell align='right'>
-                      {tradeCostOrSalePrice(t, user)}
+                      {isTrade(t)
+                        ? tradeCostOrSalePrice(t, user)
+                        : formatValue(t.value, user.currency)}
                     </TableCell>
                     {/* Performance/Profit */}
                     <TableCell align='right'>
-                      {t.performance && (
+                      {isTrade(t) && t.performance && (
                         <PerformanceDisplay
                           performance={t.performance}
                           user={user}
@@ -81,7 +93,7 @@ export function TradesList({
                     <TableCell align='right'>
                       <IconButton
                         onClick={() => {
-                          onDeleteTradeClicked(t.id, i);
+                          onDeleteTransactionClicked(t);
                         }}
                         aria-label='delete'>
                         <DeleteIcon fontSize='small' />

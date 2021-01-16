@@ -15,12 +15,23 @@ import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 
-import {API, FxRates, Holding, Performance, Trade, User} from '../api';
+import {
+  API,
+  Dividend,
+  FxRates,
+  Holding,
+  isTrade,
+  Performance,
+  Trade,
+  Transaction,
+  User,
+} from '../api';
 import {USER_CURRENCY} from '../settings';
+import {AddDividendDialog} from './AddDividendDialog';
 import {AddHoldingForm} from './AddHoldingForm';
 import {AddTradeDialog} from './AddTradeDialog';
 import {PerformanceDisplay} from './PerformanceDisplay';
-import {TradesList} from './TradesList';
+import {TransactionsList} from './TransactionsList';
 import {formatValue} from './utils/display';
 import {getTotalPerformance, PerfCalculator} from './utils/performance';
 
@@ -102,7 +113,7 @@ export function HoldingsList({user, fxRates}: IProps) {
     }
   }
 
-  /** Adds a trade that has just been created on the API to the display. */
+  /** Adds a trade that has just been created on the API to its holding. */
   async function addTrade(trade: Trade, holdingIndex: number) {
     const holding = holdings[holdingIndex];
     holding.trades.push(trade);
@@ -111,14 +122,28 @@ export function HoldingsList({user, fxRates}: IProps) {
     setHoldings([...holdings]);
   }
 
-  async function confirmDeleteTrade(
-    id: number,
-    holdingIndex: number,
-    tradeIndex: number
+  /** Adds a dividend that has just been created on the API to its holding. */
+  async function addDividend(dividend: Dividend, holdingIndex: number) {
+    const holding = holdings[holdingIndex];
+    holding.dividends.push(dividend);
+    perfCalculator.setHoldingPerformance(holding);
+    setTotalPerformance(getTotalPerformance(holdings));
+    setHoldings([...holdings]);
+  }
+
+  /**
+   * Opens a confirm dialog to delete the transaction (trade or dividend) with the given ID
+   * and deletes it if the user confirms.
+   */
+  async function confirmDeleteTransaction(
+    t: Transaction,
+    holdingIndex: number
   ) {
     try {
       await confirm({
-        title: `Really delete this ${holdings[holdingIndex].symbol} trade?`,
+        title: `Really delete this ${holdings[holdingIndex].symbol} ${
+          isTrade(t) ? 'trade' : 'dividend'
+        }?`,
         description: 'This action is permanent!',
       });
     } catch (err) {
@@ -126,9 +151,16 @@ export function HoldingsList({user, fxRates}: IProps) {
       return;
     }
     try {
-      await API.deleteTrade(id);
       const holding = holdings[holdingIndex];
-      holding.trades.splice(tradeIndex, 1);
+      if (isTrade(t)) {
+        await API.deleteTrade(t.id);
+        const i = holding.trades.indexOf(t);
+        holding.trades.splice(i, 1);
+      } else {
+        await API.deleteDividend(t.id);
+        const i = holding.dividends.indexOf(t);
+        holding.dividends.splice(i, 1);
+      }
       perfCalculator.setHoldingPerformance(holding);
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
@@ -262,21 +294,27 @@ export function HoldingsList({user, fxRates}: IProps) {
                           in={isHoldingOpen[i]}
                           timeout='auto'
                           unmountOnExit>
-                          <TradesList
+                          <TransactionsList
                             holding={h}
                             user={user}
-                            onDeleteTradeClicked={(
-                              id: number,
-                              tradeIndex: number
-                            ) => {
-                              confirmDeleteTrade(id, i, tradeIndex);
-                            }}></TradesList>
-                          <div className='AddTradeDialog-button-container'>
-                            <AddTradeDialog
-                              holding={h}
-                              onTradeCreated={(trade: Trade) =>
-                                addTrade(trade, i)
-                              }></AddTradeDialog>
+                            onDeleteTransactionClicked={(t: Transaction) => {
+                              confirmDeleteTransaction(t, i);
+                            }}></TransactionsList>
+                          <div style={{display: 'flex'}}>
+                            <div style={{margin: '15px 0 15px 15px'}}>
+                              <AddTradeDialog
+                                holding={h}
+                                onTradeCreated={(trade: Trade) =>
+                                  addTrade(trade, i)
+                                }></AddTradeDialog>
+                            </div>
+                            <div style={{margin: '15px 0 15px 15px'}}>
+                              <AddDividendDialog
+                                holding={h}
+                                onDividendCreated={(dividend: Dividend) =>
+                                  addDividend(dividend, i)
+                                }></AddDividendDialog>
+                            </div>
                           </div>
                         </Collapse>
                       </TableCell>

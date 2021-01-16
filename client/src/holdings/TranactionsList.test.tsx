@@ -4,10 +4,10 @@ import {screen} from '@testing-library/dom';
 import {fireEvent, render} from '@testing-library/react';
 
 import {HOLDING_1, USER} from '../test_fixtures';
-import TradesList, {TradesListProps} from './TradesList';
+import TransactionsList, {TransactionsListProps} from './TransactionsList';
 import {setHoldingPerformance} from './utils/performance';
 
-let props: TradesListProps;
+let props: TransactionsListProps;
 let removeTrade: Function;
 
 beforeEach(() => {
@@ -21,7 +21,7 @@ beforeEach(() => {
 });
 
 test('displays the calculated total price and performance of the trades', () => {
-  render(<TradesList {...props} />);
+  render(<TransactionsList {...props} />);
 
   const cells = screen.getAllByRole('cell');
   // First row should have both splits applied as the first split took place on
@@ -34,7 +34,7 @@ test('displays the calculated total price and performance of the trades', () => 
 });
 
 test('notifies the parent when the delete button is clicked', () => {
-  render(<TradesList {...props} />);
+  render(<TransactionsList {...props} />);
 
   const deleteButtons = screen.getAllByRole('button', {name: 'delete'});
   fireEvent.click(deleteButtons[0]);

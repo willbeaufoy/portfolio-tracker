@@ -82,4 +82,18 @@ class Trade(models.Model):
         return '{} ({}) ({})'.format(self.holding.instrument.name, self.holding.username, self.date)
 
 
-admin.site.register([Holding, Instrument, InstrumentSplit, Trade])
+class Dividend(models.Model):
+    class Meta:
+        ordering = ['date']
+
+    holding = models.ForeignKey(
+        Holding, related_name='dividends', on_delete=models.CASCADE)
+    date = models.DateTimeField()
+    broker = models.CharField(max_length=100)
+    value = models.FloatField()
+
+    def __str__(self):
+        return '{} ({}) ({})'.format(self.holding.instrument.name, self.holding.username, self.date)
+
+
+admin.site.register([Holding, Instrument, InstrumentSplit, Trade, Dividend])

@@ -2,8 +2,8 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from tracker.models import Holding, Instrument, Trade
-from tracker.serializers import (HoldingSerializer, InstrumentSerializer,
+from tracker.models import Dividend, Holding, Instrument, Trade
+from tracker.serializers import (DividendSerializer, HoldingSerializer, InstrumentSerializer,
                                  TradeSerializer)
 from tracker.sync import sync_prices
 
@@ -69,3 +69,13 @@ class TradeList(generics.ListCreateAPIView):
 class TradeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Trade.objects.all()
     serializer_class = TradeSerializer
+
+
+class DividendList(generics.ListCreateAPIView):
+    queryset = Dividend.objects.all()
+    serializer_class = DividendSerializer
+
+
+class DividendDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Dividend.objects.all()
+    serializer_class = DividendSerializer

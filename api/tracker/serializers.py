@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from tracker.models import Holding, Instrument, InstrumentSplit, Trade
+from tracker.models import Dividend, Holding, Instrument, InstrumentSplit, Trade
 
 
 class InstrumentSplitSerializer(serializers.ModelSerializer):
@@ -73,6 +73,18 @@ class TradeSerializer(serializers.ModelSerializer):
         return instance
 
 
+class DividendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dividend
+        fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Dividend` instance, given the validated data.
+        """
+        return Dividend.objects.create(**validated_data)
+
+
 class HoldingSerializer(serializers.ModelSerializer):
     name = serializers.CharField(read_only=True, source="instrument.name")
     symbol = serializers.CharField(read_only=True, source="instrument.symbol")
@@ -91,11 +103,12 @@ class HoldingSerializer(serializers.ModelSerializer):
     splits = InstrumentSplitSerializer(
         many=True, read_only=True, source="instrument.splits")
     trades = TradeSerializer(many=True, read_only=True)
+    dividends = DividendSerializer(many=True, read_only=True)
 
     class Meta:
         model = Holding
         fields = ['id', 'instrument', 'username', 'name', 'symbol', 'category', 'currency', 'exchange',
-                  'isin', 'bid_price', 'bid_price_update_time', 'splits', 'trades']
+                  'isin', 'bid_price', 'bid_price_update_time', 'splits', 'trades', 'dividends']
 
     def create(self, validated_data):
         """

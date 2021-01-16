@@ -13,6 +13,9 @@ urlpatterns = [
          views.InstrumentViewSet.as_view({'get': 'sync'}), name='instrument-sync'),
     path('trades/', views.TradeList.as_view(), name='trade-list'),
     path('trades/<int:pk>/', views.TradeDetail.as_view(), name='trade-detail'),
+    path('dividends/', views.DividendList.as_view(), name='dividend-list'),
+    path('dividends/<int:pk>/', views.DividendDetail.as_view(),
+         name='dividend-detail'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

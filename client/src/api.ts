@@ -4,6 +4,17 @@ import {API_BASE, FX_API_BASE} from './settings';
 export type Currency = 'CAD' | 'GBP' | 'GBX' | 'USD';
 export const CURRENCIES: Currency[] = ['CAD', 'GBP', 'GBX', 'USD'];
 
+/** A dividend as returned from the API */
+export interface Dividend {
+  id: number;
+  holding: number;
+  date: string;
+  broker: string;
+  value: number;
+}
+
+export type CreateDividendData = Omit<Dividend, 'id'>;
+
 /**
  * A holding as returned from the API and displayed to the user.
  * Made up of data from a holding, its trades and its instrument.
@@ -21,6 +32,7 @@ export interface Holding {
   isin: string;
   trades: Trade[];
   splits: InstrumentSplit[];
+  dividends: Dividend[];
   performance?: Performance;
 }
 
@@ -98,8 +110,36 @@ export interface FxRates {
   USD: number;
 }
 
+export type Transaction = Dividend | Trade;
+
 /** Static methods for calling APIs. */
 export class API {
+  /** Creates a dividend on the API. */
+  static createDividend(data: CreateDividendData) {
+    const url = new URL('/dividends/', API_BASE);
+    return fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    });
+  }
+
+  /** Deletes a dividend on the API. */
+  static deleteDividend(id: number) {
+    const url = new URL(`/dividends/${id}`, API_BASE);
+    return fetch(url.toString(), {
+      method: 'DELETE',
+    }).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res;
+    });
+  }
+
   /** Creates a holding on the API. */
   static createHolding(data: CreateHoldingData): Promise<Holding> {
     return fetch(`${API_BASE}holdings/`, {
@@ -192,4 +232,8 @@ export class API {
       res.json()
     );
   }
+}
+
+export function isTrade(t: Trade | Dividend): t is Trade {
+  return t.hasOwnProperty('category');
 }
