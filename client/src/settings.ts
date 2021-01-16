@@ -1,4 +1,4 @@
-import {Currency} from './api';
+import {Currency} from './types';
 
 export const API_BASE =
   process.env.NODE_ENV === 'development'

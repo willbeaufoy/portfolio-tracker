@@ -7,7 +7,7 @@ import {
   InstrumentSplit,
   Performance,
   Trade,
-} from '../../api';
+} from '../../types';
 
 interface Options {
   userCurrency: Currency;

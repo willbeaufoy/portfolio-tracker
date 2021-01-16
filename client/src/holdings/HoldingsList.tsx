@@ -15,8 +15,9 @@ import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 
+import {API} from '../api';
+import {USER_CURRENCY} from '../settings';
 import {
-  API,
   Dividend,
   FxRates,
   Holding,
@@ -25,8 +26,7 @@ import {
   Trade,
   Transaction,
   User,
-} from '../api';
-import {USER_CURRENCY} from '../settings';
+} from '../types';
 import {AddDividendDialog} from './AddDividendDialog';
 import {AddHoldingForm} from './AddHoldingForm';
 import {AddTradeDialog} from './AddTradeDialog';

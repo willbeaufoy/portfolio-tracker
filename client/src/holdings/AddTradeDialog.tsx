@@ -13,7 +13,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 
-import {API, CreateTradeData, CURRENCIES, Holding, TradeCategory} from '../api';
+import {API} from '../api';
+import {CURRENCIES} from '../constants';
+import {CreateTradeData, Holding, TradeCategory} from '../types';
 
 export type AddTradeDialogProps = {
   holding: Holding;

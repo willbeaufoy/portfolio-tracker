@@ -1,4 +1,4 @@
-import {Holding, User} from './api';
+import {Holding, User} from './types';
 
 export const HOLDING_1: Holding = {
   id: 1,

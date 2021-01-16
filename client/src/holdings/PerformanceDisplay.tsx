@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Performance, User} from '../api';
+import {Performance, User} from '../types';
 import {formatValue} from './utils/display';
 
 interface PerformanceDisplayProps {

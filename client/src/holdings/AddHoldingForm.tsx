@@ -6,7 +6,8 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 
-import {API, CURRENCIES} from '../api';
+import {API} from '../api';
+import {CURRENCIES} from '../constants';
 
 type AddHoldingFormProps = {
   username: string;

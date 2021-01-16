@@ -6,9 +6,10 @@ import React, {useEffect, useState} from 'react';
 
 import {withAuthenticator} from '@aws-amplify/ui-react';
 
-import {API, FxRates, User} from './api';
+import {API} from './api';
 import {HoldingsList} from './holdings/HoldingsList';
 import {USER_CURRENCY} from './settings';
+import {FxRates, User} from './types';
 import {UserInfo} from './UserInfo';
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
       setUser({
         username: cognitoUser.username,
         email: cognitoUser.attributes.email,
-        currency: 'GBP', // Only support GBP for now.
+        currency: USER_CURRENCY,
       });
       API.listFxRates(USER_CURRENCY).then((fxRates) => {
         setFxRates(fxRates.rates);

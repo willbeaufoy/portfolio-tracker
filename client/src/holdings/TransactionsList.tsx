@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import {Dividend, Holding, isTrade, Trade, User} from '../api';
+import {Dividend, Holding, isTrade, Trade, User} from '../types';
 import {PerformanceDisplay} from './PerformanceDisplay';
 import {formatValue, titleCase} from './utils/display';
 import {isBuyTrade} from './utils/performance';
@@ -65,13 +65,13 @@ export function TransactionsList({
                     <TableCell align='right'>{t.broker}</TableCell>
                     {/* Quantity */}
                     <TableCell align='right'>
-                      {isTrade(t) ? t.quantity : ''}
+                      {isTrade(t) ? t.quantity : '-'}
                     </TableCell>
                     {/* Unit Price */}
                     <TableCell align='right'>
                       {isTrade(t)
                         ? formatValue(t.unitPrice, t.priceCurrency)
-                        : ''}
+                        : '-'}
                     </TableCell>
                     {/* Cost/Sale Price */}
                     {/* Assumes the trade was made in the user's primary currency.
@@ -83,11 +83,13 @@ export function TransactionsList({
                     </TableCell>
                     {/* Performance/Profit */}
                     <TableCell align='right'>
-                      {isTrade(t) && t.performance && (
+                      {isTrade(t) && t.performance ? (
                         <PerformanceDisplay
                           performance={t.performance}
                           user={user}
                         />
+                      ) : (
+                        '-'
                       )}
                     </TableCell>
                     <TableCell align='right'>

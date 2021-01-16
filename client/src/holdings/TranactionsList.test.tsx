@@ -4,7 +4,7 @@ import {screen} from '@testing-library/dom';
 import {fireEvent, render} from '@testing-library/react';
 
 import {HOLDING_1, USER} from '../test_fixtures';
-import TransactionsList, {TransactionsListProps} from './TransactionsList';
+import {TransactionsList, TransactionsListProps} from './TransactionsList';
 import {setHoldingPerformance} from './utils/performance';
 
 let props: TransactionsListProps;
