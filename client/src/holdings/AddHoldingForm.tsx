@@ -5,6 +5,7 @@ import {TextField} from 'formik-material-ui';
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -64,13 +65,19 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
               <option value='FUND'>Fund</option>
             </Field>
             <Field component={TextField} name='exchange' label='Exchange' />
-            <Field as='select' name='currency'>
-              {CURRENCIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </Field>
+            <Tooltip
+              title='This is the currency the instrument is priced in on FinKi'
+              placement='top'
+              arrow
+              interactive>
+              <Field as='select' name='currency'>
+                {CURRENCIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </Field>
+            </Tooltip>
             <Button
               variant='contained'
               color='primary'
