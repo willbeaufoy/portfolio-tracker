@@ -14,6 +14,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -200,14 +201,23 @@ export function HoldingsList({user, fxRates}: IProps) {
             <div>Total Performance (incl. sales):</div>
             <PerformanceDisplay performance={totalPerformance} user={user} />
           </div>
-          <Button
-            variant='contained'
-            color='primary'
-            disabled={isRefreshing}
-            onClick={() => refreshPrices()}
-            aria-label='Refresh prices'>
-            Refresh Prices
-          </Button>
+          {Boolean(holdings.length) && (
+            <Tooltip
+              title={
+                'Last updated at:' +
+                new Date(holdings[0]?.bidPriceUpdateTime).toLocaleString()
+              }
+              arrow>
+              <Button
+                variant='contained'
+                color='primary'
+                disabled={isRefreshing}
+                onClick={() => refreshPrices()}
+                aria-label='Refresh prices'>
+                Refresh Prices
+              </Button>
+            </Tooltip>
+          )}
         </div>
       )}
       {Boolean(holdings.length) && (
