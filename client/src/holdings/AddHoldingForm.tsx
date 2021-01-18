@@ -5,6 +5,7 @@ import {TextField} from 'formik-material-ui';
 import React from 'react';
 
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -78,6 +79,7 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
               disabled={isSubmitting}>
               Add Holding
             </Button>
+            <div>{Boolean(isSubmitting) && <CircularProgress />}</div>
           </Form>
         )}
       </Formik>

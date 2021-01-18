@@ -12,6 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -88,6 +89,7 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
             <Form>
               <DialogTitle id='form-dialog-title'>
                 Add Trade ({holding.symbol})
+                {Boolean(isSubmitting) && <CircularProgress />}
               </DialogTitle>
               <DialogContent className='DialogContent'>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
