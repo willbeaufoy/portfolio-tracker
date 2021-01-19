@@ -223,7 +223,9 @@ export function HoldingsList({user, fxRates}: IProps) {
               </Button>
             </Tooltip>
           )}
-          <div>{Boolean(isRefreshing) && <CircularProgress />}</div>
+          {!!isRefreshing && (
+            <CircularProgress size={25} style={{marginRight: '10px'}} />
+          )}
         </div>
       )}
       {Boolean(holdings.length) && (

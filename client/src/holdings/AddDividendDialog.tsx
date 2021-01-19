@@ -87,6 +87,9 @@ export function AddDividendDialog({holding, onDividendCreated}: IProps) {
                 />
               </DialogContent>
               <DialogActions>
+                {!!isSubmitting && (
+                  <CircularProgress size={25} style={{marginRight: '10px'}} />
+                )}
                 <Button onClick={handleCancel} color='primary'>
                   Cancel
                 </Button>
@@ -94,7 +97,6 @@ export function AddDividendDialog({holding, onDividendCreated}: IProps) {
                   Add
                 </Button>
               </DialogActions>
-              <div>{Boolean(isSubmitting) && <CircularProgress />}</div>
             </Form>
           )}
         </Formik>

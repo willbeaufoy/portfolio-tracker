@@ -123,6 +123,9 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
                 <Field component={TextField} label='FX Rate' name='fxRate' />
               </DialogContent>
               <DialogActions>
+              {!!isSubmitting && (
+                  <CircularProgress size={25} style={{marginRight: '10px'}} />
+                )}
                 <Button onClick={handleCancel} color='primary'>
                   Cancel
                 </Button>
