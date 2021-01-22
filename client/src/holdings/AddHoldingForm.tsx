@@ -6,6 +6,7 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -67,16 +68,18 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
             <Field component={TextField} name='exchange' label='Exchange' />
             <Tooltip
               title='This is the currency the instrument is priced in on FinKi'
-              placement='top'
+              placement='left-end'
               arrow
               interactive>
-              <Field as='select' name='currency'>
-                {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </Field>
+              <span>
+                <Field as='select' name='currency'>
+                  {CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </Field>
+              </span>
             </Tooltip>
             <Button
               variant='contained'
@@ -85,6 +88,7 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
               disabled={isSubmitting}>
               Add Holding
             </Button>
+            <div>{Boolean(isSubmitting) && <CircularProgress size={25} />}</div>
           </Form>
         )}
       </Formik>

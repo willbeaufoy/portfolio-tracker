@@ -13,6 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -128,6 +129,9 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
                 <Field component={TextField} label='FX Rate' name='fxRate' />
               </DialogContent>
               <DialogActions>
+                {!!isSubmitting && (
+                  <CircularProgress size={25} style={{marginRight: '10px'}} />
+                )}
                 <Button onClick={handleCancel} color='primary'>
                   Cancel
                 </Button>
