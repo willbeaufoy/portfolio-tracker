@@ -90,7 +90,6 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
             <Form>
               <DialogTitle id='form-dialog-title'>
                 Add Trade ({holding.symbol})
-                {Boolean(isSubmitting) && <CircularProgress />}
               </DialogTitle>
               <DialogContent className='DialogContent'>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>

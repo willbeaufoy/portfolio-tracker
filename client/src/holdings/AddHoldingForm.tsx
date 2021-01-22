@@ -71,13 +71,15 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
               placement='top'
               arrow
               interactive>
-              <Field as='select' name='currency'>
-                {CURRENCIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </Field>
+              <span>
+                <Field as='select' name='currency'>
+                  {CURRENCIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </Field>
+              </span>
             </Tooltip>
             <Button
               variant='contained'
@@ -86,7 +88,7 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
               disabled={isSubmitting}>
               Add Holding
             </Button>
-            <div>{Boolean(isSubmitting) && <CircularProgress />}</div>
+            <div>{Boolean(isSubmitting) && <CircularProgress size={25} />}</div>
           </Form>
         )}
       </Formik>
