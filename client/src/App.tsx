@@ -6,6 +6,8 @@ import React, {useEffect, useState} from 'react';
 
 import {withAuthenticator} from '@aws-amplify/ui-react';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import {API} from './api';
 import {HoldingsList} from './holdings/HoldingsList';
 import {USER_CURRENCY} from './settings';
@@ -36,7 +38,11 @@ function App() {
   }, []);
 
   if (!isDataLoaded) {
-    return <div className='loading'>Loading...</div>;
+    return (
+      <div className='loading'>
+        <CircularProgress />
+      </div>
+    );
   } else {
     return (
       <ConfirmProvider>

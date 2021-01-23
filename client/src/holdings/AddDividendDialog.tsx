@@ -12,6 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -86,6 +87,9 @@ export function AddDividendDialog({holding, onDividendCreated}: IProps) {
                 />
               </DialogContent>
               <DialogActions>
+                {!!isSubmitting && (
+                  <CircularProgress size={25} style={{marginRight: '10px'}} />
+                )}
                 <Button onClick={handleCancel} color='primary'>
                   Cancel
                 </Button>

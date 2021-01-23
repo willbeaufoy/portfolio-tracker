@@ -15,6 +15,7 @@ import TableRow from '@material-ui/core/TableRow';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -178,7 +179,11 @@ export function HoldingsList({user, fxRates}: IProps) {
   }
 
   if (!isDataLoaded) {
-    return <div className='loading'>Loading...</div>;
+    return (
+      <div className='loading'>
+        <CircularProgress />
+      </div>
+    );
   }
   return (
     <div className='HoldingsList'>
@@ -218,6 +223,11 @@ export function HoldingsList({user, fxRates}: IProps) {
               </Button>
             </Tooltip>
           )}
+          <div>
+            {!!isRefreshing && (
+              <CircularProgress size={25} style={{marginRight: '10px'}} />
+            )}
+          </div>
         </div>
       )}
       {Boolean(holdings.length) && (
