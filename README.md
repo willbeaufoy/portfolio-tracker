@@ -24,7 +24,7 @@ Web app for tracking the performance of a stocks portfolio.
 
 ### Frontend
 
-1. Install `npm` if you haven't already
+1. Install `npm` if you haven't already. Note, we use `npm` not `yarn` in this project.
 1. Open a new tab in your terminal, and go to the top level `client` directory (e.g. `cd ../client`)
 1. Run `npm install` to install the required packages from `package.json`
 1. You will need to create an extra file for authentication to work: `src/aws-exports.js`
@@ -97,7 +97,10 @@ before being merged with the main branch. Here is an example process if using gi
 1. If changes are required, willbeaufoy will comment on the pull request:
    1. Make these changes by either amending your commit or adding another commit. Amend if it's a small fix to what you've already done,
       make a new commit if it's different functionality.
-   1. Then push to GitHub again.
+   1. Make sure to respond to all comments before sending it back for review, even if it's just to say why you won't be doing anything
+      about a comment right now.
+   1. Make sure you have no merge conflicts.
+   1. Once you are happy with your changes, request review again.
 1. Once your change is ready, willbeaufoy will approve it and merge it into master
 
 ## Style guide
