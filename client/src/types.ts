@@ -1,5 +1,5 @@
 /** Supported currencies */
-export type Currency = 'CAD' | 'GBP' | 'GBX' | 'USD';
+export type Currency = 'CAD' | 'EUR' | 'GBP' | 'GBX' | 'USD';
 
 /** A dividend as returned from the API */
 export interface Dividend {
@@ -104,6 +104,7 @@ export interface User {
 
 export interface FxRates {
   CAD: number;
+  EUR: number;
   USD: number;
 }
 

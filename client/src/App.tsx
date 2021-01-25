@@ -5,7 +5,6 @@ import {ConfirmProvider} from 'material-ui-confirm';
 import React, {useEffect, useState} from 'react';
 
 import {withAuthenticator} from '@aws-amplify/ui-react';
-
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from './api';
@@ -21,7 +20,7 @@ function App() {
     email: '',
     currency: '',
   });
-  const [fxRates, setFxRates] = useState<FxRates>({CAD: 1, USD: 1});
+  const [fxRates, setFxRates] = useState<FxRates>({CAD: 1, EUR: 1, USD: 1});
 
   useEffect(() => {
     Auth.currentUserInfo().then((cognitoUser) => {

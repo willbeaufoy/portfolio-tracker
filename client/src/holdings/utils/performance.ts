@@ -1,13 +1,6 @@
 import round from 'lodash.round';
 
-import {
-  Currency,
-  FxRates,
-  Holding,
-  InstrumentSplit,
-  Performance,
-  Trade,
-} from '../../types';
+import {Currency, FxRates, Holding, InstrumentSplit, Performance, Trade} from '../../types';
 
 interface Options {
   userCurrency: Currency;
@@ -21,6 +14,7 @@ export class PerfCalculator {
    */
   fxRates = new Map([
     ['CAD', 1],
+    ['EUR', 1],
     ['GBP', 1],
     ['GBX', 100],
     ['USD', 1],
