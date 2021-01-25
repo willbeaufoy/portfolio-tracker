@@ -16,6 +16,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -60,6 +62,13 @@ export function HoldingsList({user, fxRates}: IProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const confirm = useConfirm();
   const perfCalculator = new PerfCalculator({userCurrency: USER_CURRENCY});
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const handleSnackClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   useEffect(() => {
     perfCalculator.setFx(fxRates);
@@ -172,9 +181,13 @@ export function HoldingsList({user, fxRates}: IProps) {
   }
 
   async function refreshPrices() {
-    setIsRefreshing(true);
-    await API.refreshPrices();
-    await fetchHoldings(user);
+    try {
+      setIsRefreshing(true);
+      await API.refreshPrices();
+      await fetchHoldings(user);
+    } catch (err) {
+      setSnackbarOpen(true);
+    }
     setIsRefreshing(false);
   }
 
@@ -346,6 +359,12 @@ export function HoldingsList({user, fxRates}: IProps) {
           </Table>
         </TableContainer>
       )}
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackClose}>
+        <MuiAlert severity='error'>Refresh Prices Failed!</MuiAlert>
+      </Snackbar>
       <div style={{margin: '20px 0'}}>
         <AddHoldingForm
           username={user.username}

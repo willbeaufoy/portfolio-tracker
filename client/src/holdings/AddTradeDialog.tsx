@@ -13,6 +13,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -33,6 +35,13 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
   function handleCancel() {
     setOpen(false);
   }
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const handleSnackClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
     <div>
@@ -81,7 +90,7 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
               onTradeCreated(trade);
               setOpen(false);
             } catch (err) {
-              console.error(err);
+              setSnackbarOpen(true);
             }
             setSubmitting(false);
           }}>
@@ -105,9 +114,7 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
                 </Field>
                 <Field component={TextField} label='Broker' name='broker' />
                 <Field component={TextField} label='Quantity' name='quantity' />
-                <Field
-                  as='select'
-                  name='priceCurrency'>
+                <Field as='select' name='priceCurrency'>
                   {CURRENCIES.map((c) => (
                     <option key={c} value={c}>
                       {c}
@@ -137,6 +144,12 @@ export function AddTradeDialog({holding, onTradeCreated}: AddTradeDialogProps) {
             </Form>
           )}
         </Formik>
+        <Snackbar
+          open={isSnackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleSnackClose}>
+          <MuiAlert severity='error'>Add Trade Failed!</MuiAlert>
+        </Snackbar>
       </Dialog>
     </div>
   );

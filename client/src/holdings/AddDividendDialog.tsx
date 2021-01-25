@@ -13,6 +13,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -25,6 +27,13 @@ export type IProps = {
 
 export function AddDividendDialog({holding, onDividendCreated}: IProps) {
   const [open, setOpen] = useState(false);
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const handleSnackClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   function handleClickOpen() {
     setOpen(true);
@@ -61,7 +70,7 @@ export function AddDividendDialog({holding, onDividendCreated}: IProps) {
               onDividendCreated(dividend);
               setOpen(false);
             } catch (err) {
-              console.error(err);
+              setSnackbarOpen(true);
             }
             setSubmitting(false);
           }}>
@@ -95,11 +104,17 @@ export function AddDividendDialog({holding, onDividendCreated}: IProps) {
                 </Button>
                 <Button type='submit' disabled={isSubmitting} color='primary'>
                   Add
-                </Button>
+                </Button>{' '}
               </DialogActions>
             </Form>
           )}
         </Formik>
+        <Snackbar
+          open={isSnackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleSnackClose}>
+          <MuiAlert severity='error'>Add Dividend Failed!</MuiAlert>
+        </Snackbar>
       </Dialog>
     </div>
   );

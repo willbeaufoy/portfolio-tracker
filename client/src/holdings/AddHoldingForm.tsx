@@ -2,10 +2,12 @@ import './AddHoldingForm.css';
 
 import {Field, Form, Formik} from 'formik';
 import {TextField} from 'formik-material-ui';
-import React from 'react';
+import React, {useState} from 'react';
 
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -17,6 +19,13 @@ type AddHoldingFormProps = {
 
 /** Form to add a holding. */
 export function AddHoldingForm(props: AddHoldingFormProps) {
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const handleSnackClose = (event: any, reason: any) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
   return (
     <div>
       <Formik
@@ -50,7 +59,7 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
             actions.resetForm();
             props.onHoldingCreated(holding);
           } catch (err) {
-            console.error(err);
+            setSnackbarOpen(true);
           }
           actions.setSubmitting(false);
         }}>
@@ -83,6 +92,12 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
           </Form>
         )}
       </Formik>
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackClose}>
+        <MuiAlert severity='error'>Add Holding Failed!</MuiAlert>
+      </Snackbar>
     </div>
   );
 }
