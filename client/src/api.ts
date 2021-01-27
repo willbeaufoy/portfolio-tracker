@@ -119,7 +119,7 @@ export class API {
 
   /** Refreshes the latest prices on the API. */
   static refreshPrices() {
-    return fetch(`${API_BASE}instruments/sync/`);
+    return fetch(`${API_BASE}instruments/sync1/`);
   }
 
   /** Lists FX rates in the given base currency */

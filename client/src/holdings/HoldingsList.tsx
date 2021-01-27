@@ -70,6 +70,12 @@ export function HoldingsList({user, fxRates}: IProps) {
     setSnackbarOpen(false);
   };
 
+  function Alert(props: any) {
+    return (
+      <MuiAlert elevation={6} variant='filled' severity='error' {...props} />
+    );
+  }
+
   useEffect(() => {
     perfCalculator.setFx(fxRates);
     fetchHoldings(user);
@@ -120,7 +126,7 @@ export function HoldingsList({user, fxRates}: IProps) {
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
-      console.error(err);
+      Alert(setSnackbarOpen(true));
     }
   }
 
@@ -186,7 +192,7 @@ export function HoldingsList({user, fxRates}: IProps) {
       await API.refreshPrices();
       await fetchHoldings(user);
     } catch (err) {
-      setSnackbarOpen(true);
+      console.error(err);
     }
     setIsRefreshing(false);
   }
@@ -363,7 +369,7 @@ export function HoldingsList({user, fxRates}: IProps) {
         open={isSnackbarOpen}
         autoHideDuration={3000}
         onClose={handleSnackClose}>
-        <MuiAlert severity='error'>Refresh Prices Failed!</MuiAlert>
+        <Alert onClose={handleSnackClose}>Operation Failed</Alert>
       </Snackbar>
       <div style={{margin: '20px 0'}}>
         <AddHoldingForm
