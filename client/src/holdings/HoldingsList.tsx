@@ -4,6 +4,7 @@ import {useConfirm} from 'material-ui-confirm';
 import React, {useEffect, useState} from 'react';
 
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -12,12 +13,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
-import Tooltip from '@material-ui/core/Tooltip';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -42,10 +40,11 @@ import {getTotalPerformance, PerfCalculator} from './utils/performance';
 export type IProps = {
   user: User;
   fxRates: FxRates;
+  showNotification: Function;
 };
 
 /** Displays of all the user's holdings with the option to add more. */
-export function HoldingsList({user, fxRates}: IProps) {
+export function HoldingsList({user, fxRates, showNotification}: IProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [isHoldingOpen, setIsHoldingOpen] = React.useState(
@@ -62,19 +61,6 @@ export function HoldingsList({user, fxRates}: IProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const confirm = useConfirm();
   const perfCalculator = new PerfCalculator({userCurrency: USER_CURRENCY});
-  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
-  const handleSnackClose = (event: any, reason: any) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
-
-  function Alert(props: any) {
-    return (
-      <MuiAlert elevation={6} variant='filled' severity='error' {...props} />
-    );
-  }
 
   useEffect(() => {
     perfCalculator.setFx(fxRates);
@@ -126,7 +112,7 @@ export function HoldingsList({user, fxRates}: IProps) {
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
-      Alert(setSnackbarOpen(true));
+      showNotification('Delete holding failed!', 'error');
     }
   }
 
@@ -192,7 +178,7 @@ export function HoldingsList({user, fxRates}: IProps) {
       await API.refreshPrices();
       await fetchHoldings(user);
     } catch (err) {
-      console.error(err);
+      showNotification('Delete holding failed!', 'error');
     }
     setIsRefreshing(false);
   }
@@ -365,12 +351,6 @@ export function HoldingsList({user, fxRates}: IProps) {
           </Table>
         </TableContainer>
       )}
-      <Snackbar
-        open={isSnackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackClose}>
-        <Alert onClose={handleSnackClose}>Operation Failed</Alert>
-      </Snackbar>
       <div style={{margin: '20px 0'}}>
         <AddHoldingForm
           username={user.username}
