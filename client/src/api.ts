@@ -1,18 +1,12 @@
 import {API_BASE, FX_API_BASE} from './settings';
 import {
-  CreateDividendData,
-  CreateHoldingData,
-  CreateInstrumentData,
-  CreateTradeData,
-  Currency,
-  Dividend,
-  Holding,
-  Trade,
+    CreateDividendData, CreateHoldingData, CreateInstrumentData, CreateTradeData, Currency,
+    Dividend, Holding, Trade
 } from './types';
 
-/** Static methods for calling APIs. */
+/** Static methods for calling APIs */
 export class API {
-  /** Creates a dividend on the API. */
+  /** Creates a dividend on the API */
   static createDividend(data: CreateDividendData): Promise<Dividend> {
     const url = new URL('/dividends/', API_BASE);
     return fetch(url.toString(), {
@@ -27,7 +21,7 @@ export class API {
     });
   }
 
-  /** Deletes a dividend on the API. */
+  /** Deletes a dividend on the API */
   static deleteDividend(id: number) {
     const url = new URL(`/dividends/${id}`, API_BASE);
     return fetch(url.toString(), {
@@ -38,7 +32,7 @@ export class API {
     });
   }
 
-  /** Creates a holding on the API. */
+  /** Creates a holding on the API */
   static createHolding(data: CreateHoldingData): Promise<Holding> {
     return fetch(`${API_BASE}holdings/`, {
       method: 'POST',
@@ -46,10 +40,13 @@ export class API {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).then((res) => res.json());
+    }).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    });
   }
 
-  /** Deletes a holding on the API. */
+  /** Deletes a holding on the API */
   static deleteHolding(id: number) {
     return fetch(`${API_BASE}holdings/${id}`, {
       method: 'DELETE',
@@ -59,7 +56,7 @@ export class API {
     });
   }
 
-  /** Lists holdings for the given username (and optionally symbols) on the API. */
+  /** Lists holdings for the given username (and optionally symbols) on the API */
   static listHoldings(
     username: string,
     symbols?: string[]
@@ -67,12 +64,13 @@ export class API {
     const url = new URL('/holdings/', API_BASE);
     const params = new URLSearchParams({username});
     if (symbols) params.append('symbols', symbols.join());
-    return fetch(`${url.toString()}?${params.toString()}`).then((res) =>
-      res.json()
-    );
+    return fetch(`${url.toString()}?${params.toString()}`).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    });
   }
 
-  /** Creates an instrument on the API. */
+  /** Creates an instrument on the API */
   static createInstrument(data: CreateInstrumentData) {
     return fetch(`${API_BASE}instruments/`, {
       method: 'POST',
@@ -86,14 +84,15 @@ export class API {
     });
   }
 
-  /** Lists instruments by ISIN. */
+  /** Lists instruments by ISIN */
   static listInstruments(isin: string) {
-    return fetch(`${API_BASE}instruments/?isin=${isin}`).then((res) =>
-      res.json()
-    );
+    return fetch(`${API_BASE}instruments/?isin=${isin}`).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    });
   }
 
-  /** Creates a trade on the API. */
+  /** Creates a trade on the API */
   static createTrade(data: CreateTradeData): Promise<Trade> {
     return fetch(`${API_BASE}trades/`, {
       method: 'POST',
@@ -107,7 +106,7 @@ export class API {
     });
   }
 
-  /** Deletes a trade on the API. */
+  /** Deletes a trade on the API */
   static deleteTrade(id: number) {
     return fetch(`${API_BASE}trades/${id}`, {
       method: 'DELETE',
@@ -117,17 +116,21 @@ export class API {
     });
   }
 
-  /** Refreshes the latest prices on the API. */
+  /** Refreshes the latest prices on the API */
   static refreshPrices() {
-    return fetch(`${API_BASE}instruments/sync/`);
+    return fetch(`${API_BASE}instruments/sync/`).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res;
+    });
   }
 
   /** Lists FX rates in the given base currency */
   static listFxRates(base: Currency) {
     const url = new URL('/latest/', FX_API_BASE);
     const params = new URLSearchParams({base, symbols: 'CAD,USD'});
-    return fetch(`${url.toString()}?${params.toString()}`).then((res) =>
-      res.json()
-    );
+    return fetch(`${url.toString()}?${params.toString()}`).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    });
   }
 }
