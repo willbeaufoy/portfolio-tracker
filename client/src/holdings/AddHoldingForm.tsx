@@ -20,7 +20,7 @@ type AddHoldingFormProps = {
 export function AddHoldingForm({
   username,
   onHoldingCreated,
-  showNotification
+  showNotification,
 }: AddHoldingFormProps) {
   return (
     <div>

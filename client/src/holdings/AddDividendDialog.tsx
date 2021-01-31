@@ -27,7 +27,7 @@ export type IProps = {
 export function AddDividendDialog({
   holding,
   onDividendCreated,
-  showNotification
+  showNotification,
 }: IProps) {
   const [open, setOpen] = useState(false);
 
@@ -67,7 +67,7 @@ export function AddDividendDialog({
               setOpen(false);
             } catch (err) {
               showNotification(
-                `Create dividend ${holding.symbol} failed!`,
+                `Create dividend for ${holding.symbol} failed!`,
                 'error'
               );
             }
