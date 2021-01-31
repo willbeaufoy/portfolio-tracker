@@ -13,10 +13,14 @@ import {CURRENCIES} from '../constants';
 type AddHoldingFormProps = {
   username: string;
   onHoldingCreated: Function;
+  showNotification: Function;
 };
 
 /** Form to add a holding. */
-export function AddHoldingForm(props: AddHoldingFormProps) {
+export function AddHoldingForm(
+  props: AddHoldingFormProps,
+  showNotification: Function
+) {
   return (
     <div>
       <Formik
@@ -50,7 +54,7 @@ export function AddHoldingForm(props: AddHoldingFormProps) {
             actions.resetForm();
             props.onHoldingCreated(holding);
           } catch (err) {
-            console.error(err);
+            showNotification(`Add Holding ${Symbol} failed!`, 'error');
           }
           actions.setSubmitting(false);
         }}>

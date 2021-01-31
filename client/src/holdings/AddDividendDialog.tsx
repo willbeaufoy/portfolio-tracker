@@ -21,9 +21,14 @@ import {CreateDividendData, Holding} from '../types';
 export type IProps = {
   holding: Holding;
   onDividendCreated: Function;
+  showNotification: Function;
 };
 
-export function AddDividendDialog({holding, onDividendCreated}: IProps) {
+export function AddDividendDialog({
+  holding,
+  onDividendCreated,
+  showNotification,
+}: IProps) {
   const [open, setOpen] = useState(false);
 
   function handleClickOpen() {
@@ -61,7 +66,7 @@ export function AddDividendDialog({holding, onDividendCreated}: IProps) {
               onDividendCreated(dividend);
               setOpen(false);
             } catch (err) {
-              console.error(err);
+              showNotification(`Create Dividend ${holding.symbol} failed!`, 'error');
             }
             setSubmitting(false);
           }}>
