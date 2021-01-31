@@ -17,10 +17,11 @@ type AddHoldingFormProps = {
 };
 
 /** Form to add a holding. */
-export function AddHoldingForm(
-  props: AddHoldingFormProps,
-  showNotification: Function
-) {
+export function AddHoldingForm({
+  username,
+  onHoldingCreated,
+  showNotification
+}: AddHoldingFormProps) {
   return (
     <div>
       <Formik
@@ -48,13 +49,13 @@ export function AddHoldingForm(
               });
             }
             const holding = await API.createHolding({
-              username: props.username,
+              username: username,
               instrument: instrument.id,
             });
             actions.resetForm();
-            props.onHoldingCreated(holding);
+            onHoldingCreated(holding);
           } catch (err) {
-            showNotification(`Add Holding ${Symbol} failed!`, 'error');
+            showNotification(`Add holding ${values.symbol} failed!`, 'error');
           }
           actions.setSubmitting(false);
         }}>

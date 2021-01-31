@@ -7,12 +7,12 @@ import React, {useState} from 'react';
 
 import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -27,7 +27,7 @@ export type IProps = {
 export function AddDividendDialog({
   holding,
   onDividendCreated,
-  showNotification,
+  showNotification
 }: IProps) {
   const [open, setOpen] = useState(false);
 
@@ -66,7 +66,10 @@ export function AddDividendDialog({
               onDividendCreated(dividend);
               setOpen(false);
             } catch (err) {
-              showNotification(`Create Dividend ${holding.symbol} failed!`, 'error');
+              showNotification(
+                `Create dividend ${holding.symbol} failed!`,
+                'error'
+              );
             }
             setSubmitting(false);
           }}>

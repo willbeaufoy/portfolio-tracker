@@ -5,8 +5,8 @@ import {ConfirmProvider} from 'material-ui-confirm';
 import React, {useEffect, useState} from 'react';
 
 import {withAuthenticator} from '@aws-amplify/ui-react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import {Snackbar} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import MuiAlert, {Color as AlertColor} from '@material-ui/lab/Alert';
 
 import {API} from './api';
@@ -25,9 +25,7 @@ function App() {
   const [fxRates, setFxRates] = useState<FxRates>({CAD: 1, EUR: 1, USD: 1});
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [alertColor, setAlertColor] = useState<AlertColor | undefined>(
-    undefined
-  );
+  const [alertColor, setAlertColor] = useState<AlertColor | undefined>();
 
   useEffect(() => {
     Auth.currentUserInfo().then((cognitoUser) => {
@@ -89,4 +87,5 @@ function App() {
     );
   }
 }
+
 export default withAuthenticator(App);

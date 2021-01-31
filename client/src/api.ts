@@ -1,13 +1,7 @@
 import {API_BASE, FX_API_BASE} from './settings';
 import {
-  CreateDividendData,
-  CreateHoldingData,
-  CreateInstrumentData,
-  CreateTradeData,
-  Currency,
-  Dividend,
-  Holding,
-  Trade,
+    CreateDividendData, CreateHoldingData, CreateInstrumentData, CreateTradeData, Currency,
+    Dividend, Holding, Trade
 } from './types';
 
 /** Static methods for calling APIs */

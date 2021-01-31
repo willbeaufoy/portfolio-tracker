@@ -19,16 +19,7 @@ import ShowChartIcon from '@material-ui/icons/ShowChart';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
-import {
-  Dividend,
-  FxRates,
-  Holding,
-  isTrade,
-  Performance,
-  Trade,
-  Transaction,
-  User,
-} from '../types';
+import {Dividend, FxRates, Holding, isTrade, Performance, Trade, Transaction, User} from '../types';
 import {AddDividendDialog} from './AddDividendDialog';
 import {AddHoldingForm} from './AddHoldingForm';
 import {AddTradeDialog} from './AddTradeDialog';
@@ -71,6 +62,7 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
   /** Fetches holdings from the API and sets their performance. */
   async function fetchHoldings(user: User) {
     const holdings = await API.listHoldings(user.username);
+
     if (!holdings.length) {
       setIsDataLoaded(true);
       return;
@@ -97,9 +89,10 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
   }
 
   async function confirmDeleteHolding(id: number, holdingIndex: number) {
+    const holding = holdings[holdingIndex];
     try {
       await confirm({
-        title: `Really delete holding ${holdings[holdingIndex].symbol}?`,
+        title: `Really delete holding ${holding.symbol}?`,
         description: 'This action is permanent!',
       });
     } catch (err) {
@@ -113,7 +106,7 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
       setHoldings([...holdings]);
     } catch (err) {
       showNotification(
-        `Delete Holding ${holdings[holdingIndex].symbol} failed!`,
+        `Delete holding ${holding.symbol} failed!`,
         'error'
       );
     }
@@ -145,9 +138,10 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
     t: Transaction,
     holdingIndex: number
   ) {
+    const holding = holdings[holdingIndex];
     try {
       await confirm({
-        title: `Really delete this ${holdings[holdingIndex].symbol} ${
+        title: `Really delete this ${holding.symbol} ${
           isTrade(t) ? 'trade' : 'dividend'
         }?`,
         description: 'This action is permanent!',
@@ -171,8 +165,9 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
+      const transactionType = isTrade(t) ? 'trade' : 'dividend';
       showNotification(
-        `Delete transaction ${holdings[holdingIndex].symbol} failed!`,
+        `Delete ${transactionType} ${holding.symbol} failed!`,
         'error'
       );
     }
@@ -184,7 +179,7 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
       await API.refreshPrices();
       await fetchHoldings(user);
     } catch (err) {
-      showNotification('Refresh Prices failed!', 'error');
+      showNotification('Refresh prices failed!', 'error');
     }
     setIsRefreshing(false);
   }

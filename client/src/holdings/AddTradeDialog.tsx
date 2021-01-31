@@ -7,12 +7,12 @@ import React, {useState} from 'react';
 
 import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -24,7 +24,11 @@ export type AddTradeDialogProps = {
   showNotification: Function;
 };
 
-export function AddTradeDialog({holding, onTradeCreated, showNotification,}: AddTradeDialogProps) {
+export function AddTradeDialog({
+  holding,
+  onTradeCreated,
+  showNotification,
+}: AddTradeDialogProps) {
   const [open, setOpen] = useState(false);
 
   function handleClickOpen() {
@@ -82,7 +86,10 @@ export function AddTradeDialog({holding, onTradeCreated, showNotification,}: Add
               onTradeCreated(trade);
               setOpen(false);
             } catch (err) {
-              showNotification(`Create Trade ${holding.symbol} failed!`, 'error');
+              showNotification(
+                `Create trade for ${holding.symbol} failed!`,
+                'error'
+              );
             }
             setSubmitting(false);
           }}>
