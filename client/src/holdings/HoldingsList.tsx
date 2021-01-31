@@ -4,6 +4,7 @@ import {useConfirm} from 'material-ui-confirm';
 import React, {useEffect, useState} from 'react';
 
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
@@ -12,23 +13,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
-import Tooltip from '@material-ui/core/Tooltip';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
-import {
-  Dividend,
-  FxRates,
-  Holding,
-  isTrade,
-  Performance,
-  Trade,
-  Transaction,
-  User,
-} from '../types';
+import {Dividend, FxRates, Holding, isTrade, Performance, Trade, Transaction, User} from '../types';
 import {AddDividendDialog} from './AddDividendDialog';
 import {AddHoldingForm} from './AddHoldingForm';
 import {AddTradeDialog} from './AddTradeDialog';
@@ -40,10 +31,11 @@ import {getTotalPerformance, PerfCalculator} from './utils/performance';
 export type IProps = {
   user: User;
   fxRates: FxRates;
+  showNotification: Function;
 };
 
 /** Displays of all the user's holdings with the option to add more. */
-export function HoldingsList({user, fxRates}: IProps) {
+export function HoldingsList({user, fxRates, showNotification}: IProps) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [isHoldingOpen, setIsHoldingOpen] = React.useState(
@@ -70,6 +62,7 @@ export function HoldingsList({user, fxRates}: IProps) {
   /** Fetches holdings from the API and sets their performance. */
   async function fetchHoldings(user: User) {
     const holdings = await API.listHoldings(user.username);
+
     if (!holdings.length) {
       setIsDataLoaded(true);
       return;
@@ -96,9 +89,10 @@ export function HoldingsList({user, fxRates}: IProps) {
   }
 
   async function confirmDeleteHolding(id: number, holdingIndex: number) {
+    const holding = holdings[holdingIndex];
     try {
       await confirm({
-        title: `Really delete holding ${holdings[holdingIndex].symbol}?`,
+        title: `Really delete holding ${holding.symbol}?`,
         description: 'This action is permanent!',
       });
     } catch (err) {
@@ -111,7 +105,10 @@ export function HoldingsList({user, fxRates}: IProps) {
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
-      console.error(err);
+      showNotification(
+        `Delete holding ${holding.symbol} failed!`,
+        'error'
+      );
     }
   }
 
@@ -141,9 +138,10 @@ export function HoldingsList({user, fxRates}: IProps) {
     t: Transaction,
     holdingIndex: number
   ) {
+    const holding = holdings[holdingIndex];
     try {
       await confirm({
-        title: `Really delete this ${holdings[holdingIndex].symbol} ${
+        title: `Really delete this ${holding.symbol} ${
           isTrade(t) ? 'trade' : 'dividend'
         }?`,
         description: 'This action is permanent!',
@@ -167,14 +165,22 @@ export function HoldingsList({user, fxRates}: IProps) {
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
-      console.error(err);
+      const transactionType = isTrade(t) ? 'trade' : 'dividend';
+      showNotification(
+        `Delete ${transactionType} ${holding.symbol} failed!`,
+        'error'
+      );
     }
   }
 
   async function refreshPrices() {
-    setIsRefreshing(true);
-    await API.refreshPrices();
-    await fetchHoldings(user);
+    try {
+      setIsRefreshing(true);
+      await API.refreshPrices();
+      await fetchHoldings(user);
+    } catch (err) {
+      showNotification('Refresh prices failed!', 'error');
+    }
     setIsRefreshing(false);
   }
 
@@ -326,6 +332,9 @@ export function HoldingsList({user, fxRates}: IProps) {
                                 holding={h}
                                 onTradeCreated={(trade: Trade) =>
                                   addTrade(trade, i)
+                                }
+                                showNotification={
+                                  showNotification
                                 }></AddTradeDialog>
                             </div>
                             <div style={{margin: '15px 0 15px 15px'}}>
@@ -333,6 +342,9 @@ export function HoldingsList({user, fxRates}: IProps) {
                                 holding={h}
                                 onDividendCreated={(dividend: Dividend) =>
                                   addDividend(dividend, i)
+                                }
+                                showNotification={
+                                  showNotification
                                 }></AddDividendDialog>
                             </div>
                           </div>
@@ -349,7 +361,8 @@ export function HoldingsList({user, fxRates}: IProps) {
       <div style={{margin: '20px 0'}}>
         <AddHoldingForm
           username={user.username}
-          onHoldingCreated={(h: Holding) => addHolding(h)}></AddHoldingForm>
+          onHoldingCreated={(h: Holding) => addHolding(h)}
+          showNotification={showNotification}></AddHoldingForm>
       </div>
     </div>
   );
