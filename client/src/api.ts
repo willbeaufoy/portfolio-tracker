@@ -34,7 +34,8 @@ export class API {
 
   /** Creates a holding on the API */
   static createHolding(data: CreateHoldingData): Promise<Holding> {
-    return fetch(`${API_BASE}holdings/`, {
+    const url = new URL('/holdings/', API_BASE);
+    return fetch(url.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +49,8 @@ export class API {
 
   /** Deletes a holding on the API */
   static deleteHolding(id: number) {
-    return fetch(`${API_BASE}holdings/${id}`, {
+    const url = new URL(`/holdings/${id}`, API_BASE);
+    return fetch(url.toString(), {
       method: 'DELETE',
     }).then((res) => {
       if (!res.ok) throw new Error(res.statusText);
@@ -64,7 +66,7 @@ export class API {
     const url = new URL('/holdings/', API_BASE);
     const params = new URLSearchParams({username});
     if (symbols) params.append('symbols', symbols.join());
-    return fetch(`${url.toString()}?${params.toString()}`).then((res) => {
+    return fetch(makeUrlString(url, params)).then((res) => {
       if (!res.ok) throw new Error(res.statusText);
       return res.json();
     });
@@ -72,7 +74,8 @@ export class API {
 
   /** Creates an instrument on the API */
   static createInstrument(data: CreateInstrumentData) {
-    return fetch(`${API_BASE}instruments/`, {
+    const url = new URL('/instruments/', API_BASE);
+    return fetch(url.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,7 +89,8 @@ export class API {
 
   /** Lists instruments by ISIN */
   static listInstruments(isin: string) {
-    return fetch(`${API_BASE}instruments/?isin=${isin}`).then((res) => {
+    const url = new URL(`/instruments/?isin=${isin}`, API_BASE);
+    return fetch(url.toString()).then((res) => {
       if (!res.ok) throw new Error(res.statusText);
       return res.json();
     });
@@ -94,7 +98,8 @@ export class API {
 
   /** Creates a trade on the API */
   static createTrade(data: CreateTradeData): Promise<Trade> {
-    return fetch(`${API_BASE}trades/`, {
+    const url = new URL('/trades/', API_BASE);
+    return fetch(url.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +113,8 @@ export class API {
 
   /** Deletes a trade on the API */
   static deleteTrade(id: number) {
-    return fetch(`${API_BASE}trades/${id}`, {
+    const url = new URL(`/trades/${id}`, API_BASE);
+    return fetch(url.toString(), {
       method: 'DELETE',
     }).then((res) => {
       if (!res.ok) throw new Error(res.statusText);
@@ -117,8 +123,10 @@ export class API {
   }
 
   /** Refreshes the latest prices on the API */
-  static refreshPrices() {
-    return fetch(`${API_BASE}instruments/sync/`).then((res) => {
+  static refreshPrices(username: string) {
+    const url = new URL('/instruments/sync/', API_BASE);
+    const params = new URLSearchParams({username});
+    return fetch(makeUrlString(url, params)).then((res) => {
       if (!res.ok) throw new Error(res.statusText);
       return res;
     });
@@ -128,9 +136,14 @@ export class API {
   static listFxRates(base: Currency) {
     const url = new URL('/latest/', FX_API_BASE);
     const params = new URLSearchParams({base, symbols: 'CAD,USD'});
-    return fetch(`${url.toString()}?${params.toString()}`).then((res) => {
+    return fetch(makeUrlString(url, params)).then((res) => {
       if (!res.ok) throw new Error(res.statusText);
       return res.json();
     });
   }
+}
+
+/** Makes a URL string from the URL and URLSearchParams web API objects */
+function makeUrlString(url: URL, params: URLSearchParams): string {
+  return `${url.toString()}?${params.toString()}`;
 }

@@ -4,7 +4,6 @@ from django.db.models.functions import Lower
 
 
 class Instrument(models.Model):
-
     class Category(models.TextChoices):
         STOCK = 'STOCK'
         ETF = 'ETF'

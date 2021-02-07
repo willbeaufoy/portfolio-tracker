@@ -14,11 +14,19 @@ Web app for tracking the performance of a stocks portfolio.
 
 ### Backend API
 
-1. Install virtualenvwrapper and then make a virtualenv for the app using python3, e.g. `mkvirtualenv --python 3 portfolio`
-1. `cd api`. Then activate the virtualenv if it's not already activated, e.g. `workon portfolio`
-1. Run `pip install -r requirements.txt` to install the required backend dependencies
-1. Add this line to your `.bashrc`/`.bash_aliases` etc: `export DJANGO_DEVELOPMENT=true`
-1. Request an API key from [FinKi](https://finki.io/finkiAPI.html), then add `export FINKI_API_KEY='your_key'` to the same file
+1. Make sure you have python3.8 installed
+1. Enter the `api` directory and create a virtualenv, then activate it and install requirements:
+
+   ```shell
+   cd api
+   python3.8 -m venv .venv
+   . .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+1. Make an `.env` file and put `DEBUG=True` in it. This will turn on debug mode in the Django settings file.
+1. Request an API key from [FinKi](https://finki.io/finkiAPI.html), then add `FINKI_API_KEY=your_key` to `.env` as well
+1. Ask Will for the Marketstack API key, and add it to `.env`, e.g. `MARKETSTACK_API_KEY=key`
 1. Run `./manage.py migrate`
 1. Run `./manage.py runserver`
 
@@ -60,6 +68,7 @@ If you have no strong editor preference then use VS Code, and make sure the foll
 - ESLint
 - markdownlint
 - Prettier
+- Pylance
 - Python
 - Python-autopep8
 - TypeScript Import Sorter

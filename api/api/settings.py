@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import sys
 
+from decouple import config
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,10 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-key')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+SECRET_KEY = config('DJANGO_SECRET_KEY', default='dev-key')
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -158,6 +157,7 @@ SESSION_COOKIE_SAMESITE = None
 CORS_ALLOW_CREDENTIALS = True
 
 
-if os.environ.get('DJANGO_DEVELOPMENT'):
-    DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
+if DEBUG == True:
+    # If debug is true we assume we are doing local development
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/')

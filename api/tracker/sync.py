@@ -2,25 +2,26 @@ import os
 from typing import List, Optional
 
 import requests
+from decouple import config
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
 from tracker.models import Instrument
 
-
-def sync_prices(isins: Optional[List[str]] = None, symbols: Optional[List[str]] = None):
-    """
-    Sets the latest bid price of the instruments in the provided list,
-    or all instruments if this is not provided.
-    """
-    return sync_prices_from_finki(isins, symbols)
+FINKI_API_KEY = config('FINKI_API_KEY')
+# Note, this is not yet used
+MARKETSTACK_API_KEY = config('MARKETSTACK_API_KEY')
 
 
-def sync_prices_from_finki(isins: Optional[List[str]] = None, symbols: Optional[List[str]] = None):
+def sync_prices(username: Optional[str] = None, isins: Optional[List[str]] = None, symbols: Optional[List[str]] = None) -> None:
     """
-    Syncs prices from the FinkI API.
+    Sets the latest bid price of the instruments selected by the given params,
+    or all instruments if no params are provided.
     """
-    if isins:
+    if username:
+        instruments = Instrument.objects.filter(holding__username=username)
+        display = f'username={username}'
+    elif isins:
         instruments = Instrument.objects.filter(isin__in=isins)
         display = ', '.join(isins)
     elif symbols:
@@ -29,30 +30,27 @@ def sync_prices_from_finki(isins: Optional[List[str]] = None, symbols: Optional[
     else:
         instruments = Instrument.objects.all()
         display = 'all'
-    api_key = os.environ.get('FINKI_API_KEY')
-    print('\nSyncing prices from FinKi ({})'.format(display))
+    print(f'\nSyncing prices from FinKi ({display})')
     for instrument in instruments:
         print()
         try:
             finki_function = 'ukFundClose' if instrument.category == 'FUND' else 'bid'
-            req = 'https://finki.io/callAPI.php?isin={isin}&function={function}&key={key}'.format(
-                isin=instrument.isin, function=finki_function, key=api_key)
+            req = f'https://finki.io/callAPI.php?isin={instrument.isin}&function={finki_function}&key={FINKI_API_KEY}'
             res = requests.get(req)
             bid_price = float(res.text)
             if bid_price == 0:
                 # Sometimes FinKi returns 0, but will correct itself for subsequent requests.
-                print('Did not update {} as its FinKi price is currently 0'.format(
-                    instrument.name))
+                print(
+                    f'Did not update {instrument.name} as its FinKi price is currently 0')
                 continue
             instrument.bid_price = bid_price
             instrument.bid_price_update_time = timezone.now()
             instrument.save()
-            print('Successfully updated {} ({} {})'.format(
-                instrument.name, instrument.currency, bid_price))
-        except ValueError as e:
             print(
-                'Error fetching price for {}'.format(instrument.name))
-            print('Request was: {}'.format(req))
-            print('Error was: {}'.format(e))
+                f'Successfully updated {instrument.name} ({instrument.currency} {bid_price})')
+        except ValueError as e:
+            print(f'Error fetching price for {instrument.name}')
+            print(f'Request was: {req}')
+            print(f'Error was: {e}')
 
     return

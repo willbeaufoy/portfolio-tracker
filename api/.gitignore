@@ -5,3 +5,7 @@ __pycache__
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+# Config file for python-decouple
+.env
+# Virtualenv
+/.venv

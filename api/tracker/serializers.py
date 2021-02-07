@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from tracker.models import Dividend, Holding, Instrument, InstrumentSplit, Trade
+from tracker.models import (Dividend, Holding, Instrument, InstrumentSplit,
+                            Trade)
 
 
 class InstrumentSplitSerializer(serializers.ModelSerializer):

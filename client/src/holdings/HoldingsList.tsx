@@ -105,10 +105,7 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
       setTotalPerformance(getTotalPerformance(holdings));
       setHoldings([...holdings]);
     } catch (err) {
-      showNotification(
-        `Delete holding ${holding.symbol} failed!`,
-        'error'
-      );
+      showNotification(`Delete holding ${holding.symbol} failed!`, 'error');
     }
   }
 
@@ -173,10 +170,11 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
     }
   }
 
+  /** Refreshes prices on the API */
   async function refreshPrices() {
     try {
       setIsRefreshing(true);
-      await API.refreshPrices();
+      await API.refreshPrices(user.username);
       await fetchHoldings(user);
     } catch (err) {
       showNotification('Refresh prices failed!', 'error');

@@ -3,8 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from tracker.models import Dividend, Holding, Instrument, Trade
-from tracker.serializers import (DividendSerializer, HoldingSerializer, InstrumentSerializer,
-                                 TradeSerializer)
+from tracker.serializers import (DividendSerializer, HoldingSerializer,
+                                 InstrumentSerializer, TradeSerializer)
 from tracker.sync import sync_prices
 
 
@@ -33,7 +33,7 @@ class InstrumentViewSet(viewsets.ModelViewSet):
     """
     @action(detail=False)
     def sync(self, request):
-        sync_prices()
+        sync_prices(username=self.request.query_params.get('username', ''))
         return Response({'status': 'OK'})
 
 
@@ -45,7 +45,7 @@ class HoldingList(generics.ListCreateAPIView):
         username = self.request.query_params.get('username', '')
         holdings = Holding.objects.filter(username=username)
         symbols = self.request.query_params.get('symbols', '')
-        if symbols is not '':
+        if symbols != '':
             holdings = holdings.filter(
                 instrument__symbol__in=symbols.split(','))
         return holdings
