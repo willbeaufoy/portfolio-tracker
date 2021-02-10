@@ -1,22 +1,25 @@
 import './AddTradeDialog.css';
 
-import {Field, Form, Formik} from 'formik';
-import {TextField} from 'formik-material-ui';
-import {KeyboardDateTimePicker} from 'formik-material-ui-pickers';
 import React, {useState} from 'react';
+import {Controller, useForm} from 'react-hook-form';
 
 import DateFnsUtils from '@date-io/date-fns';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {Select} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import TextField from '@material-ui/core/TextField';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import {DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
 import {CreateTradeData, Holding, TradeCategory} from '../types';
+import {tradeValidationSchema} from './tradevalidationschema';
 
 export type AddTradeDialogProps = {
   holding: Holding;
@@ -30,6 +33,26 @@ export function AddTradeDialog({
   showNotification,
 }: AddTradeDialogProps) {
   const [open, setOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const handleDateChange = (date: any) => {
+    setSelectedDate(date);
+  };
+  const {register, handleSubmit, control} = useForm<CreateTradeData>({
+    resolver: yupResolver(tradeValidationSchema),
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+    defaultValues: {
+      date: '',
+      category: 'BUY',
+      broker: holding.trades.slice(-1)[0]?.broker ?? '',
+      priceCurrency: holding.currency,
+      quantity: undefined,
+      unitPrice: undefined,
+      fee: undefined,
+      tax: undefined,
+      fxRate: undefined,
+    },
+  });
 
   function handleClickOpen() {
     setOpen(true);
@@ -38,7 +61,34 @@ export function AddTradeDialog({
   function handleCancel() {
     setOpen(false);
   }
-
+  async function onSubmit(data: CreateTradeData) {
+    const input: CreateTradeData = {
+      holding: holding.id,
+      date: new Date().toISOString().split('T')[0],
+      category: data.category as TradeCategory,
+      broker: data.broker,
+      quantity: data.quantity,
+      priceCurrency: data.priceCurrency,
+      unitPrice: data.unitPrice,
+      fee: data.fee,
+      tax: data.tax,
+      fxRate: data.fxRate,
+      paymentCurrency: 'GBP', // Assume trade was always paid for in GBP for now.
+    };
+    let fxRate: number = Number(data.fxRate ?? 0);
+    if (!fxRate) {
+      // An FX rate must always be provided even if the trade was made
+      // in the user's currency.
+      fxRate = holding.currency === 'GBX' ? 100 : 1;
+    }
+    try {
+      const trade = await API.createTrade(input);
+      onTradeCreated(trade);
+      setOpen(false);
+    } catch (err) {
+      showNotification(`Create trade for ${holding.symbol} failed!`, 'error');
+    }
+  }
   return (
     <div>
       <Button variant='outlined' color='primary' onClick={handleClickOpen}>
@@ -48,101 +98,100 @@ export function AddTradeDialog({
         open={open}
         onClose={handleCancel}
         aria-labelledby='form-dialog-title'>
-        <Formik
-          initialValues={{
-            date: new Date(),
-            category: 'BUY',
-            broker: holding.trades.slice(-1)[0]?.broker ?? '',
-            priceCurrency: holding.currency,
-            quantity: '',
-            unitPrice: '',
-            fee: '',
-            tax: '',
-            fxRate: '',
-            fxFee: '',
-          }}
-          onSubmit={async (values, {setSubmitting}) => {
-            let fxRate = Number(values.fxRate ?? 0);
-            if (!fxRate) {
-              // An FX rate must always be provided even if the trade was made
-              // in the user's currency.
-              fxRate = holding.currency === 'GBX' ? 100 : 1;
-            }
-            const input: CreateTradeData = {
-              holding: holding.id,
-              date: values.date.toISOString().split('.')[0].replace('T', ' '),
-              category: values.category as TradeCategory,
-              broker: values.broker ?? '',
-              quantity: Number(values.quantity ?? 0),
-              priceCurrency: values.priceCurrency,
-              unitPrice: Number(values.unitPrice ?? 0),
-              paymentCurrency: 'GBP', // Assume trade was always paid for in GBP for now.
-              fee: Number(values.fee ?? 0),
-              tax: Number(values.tax ?? 0),
-              fxRate,
-            };
-            try {
-              const trade = await API.createTrade(input);
-              onTradeCreated(trade);
-              setOpen(false);
-            } catch (err) {
-              showNotification(
-                `Create trade for ${holding.symbol} failed!`,
-                'error'
-              );
-            }
-            setSubmitting(false);
-          }}>
-          {({isSubmitting}) => (
-            <Form>
-              <DialogTitle id='form-dialog-title'>
-                Add Trade ({holding.symbol})
-              </DialogTitle>
-              <DialogContent className='DialogContent'>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Field
-                    component={KeyboardDateTimePicker}
-                    label='Date'
-                    variant='inline'
-                    name='date'
-                  />
-                </MuiPickersUtilsProvider>
-                <Field as='select' name='category'>
-                  <option value='BUY'>Buy</option>
-                  <option value='SELL'>Sell</option>
-                </Field>
-                <Field component={TextField} label='Broker' name='broker' />
-                <Field component={TextField} label='Quantity' name='quantity' />
-                <Field as='select' name='priceCurrency'>
-                  {CURRENCIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </Field>
-                <Field
-                  component={TextField}
-                  label={`Unit Price`}
-                  name='unitPrice'
-                />
-                <Field component={TextField} label='Fee' name='fee' />
-                <Field component={TextField} label='Tax' name='tax' />
-                <Field component={TextField} label='FX Rate' name='fxRate' />
-              </DialogContent>
-              <DialogActions>
-                {!!isSubmitting && (
-                  <CircularProgress size={25} style={{marginRight: '10px'}} />
-                )}
-                <Button onClick={handleCancel} color='primary'>
-                  Cancel
-                </Button>
-                <Button type='submit' disabled={isSubmitting} color='primary'>
-                  Add
-                </Button>
-              </DialogActions>
-            </Form>
-          )}
-        </Formik>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogTitle id='form-dialog-title'>
+            Add Trade ({holding.symbol})
+          </DialogTitle>
+          <DialogContent className='DialogContent'>
+            <Controller
+              render={(props) => (
+                <ToggleButtonGroup
+                  exclusive
+                  aria-label='text alignment'
+                  {...props}
+                  onChange={(e, value) => {
+                    props.onChange(value);
+                  }}>
+                  <ToggleButton value='BUY' key='BUY'>
+                    BUY
+                  </ToggleButton>
+                  <ToggleButton value='SELL' key='SELL'>
+                    SELL
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              )}
+              name='category'
+              defaultValue={'Buy'}
+              control={control}
+              inputRef={register}
+            />
+
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DateTimePicker
+                value={selectedDate}
+                onChange={handleDateChange}
+                label='Date'
+                variant='inline'
+                name='date'
+                inputRef={register}
+              />
+            </MuiPickersUtilsProvider>
+            <TextField
+              margin='dense'
+              label='Broker'
+              name='Broker'
+              inputRef={register}
+            />
+            <TextField
+              margin='dense'
+              label='Quantity'
+              name='Quantity'
+              inputRef={register}
+            />
+            <Select
+              name='priceCurrency'
+              inputRef={register}
+              defaultValue={holding.currency}>
+              {CURRENCIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </Select>
+            <TextField
+              margin='dense'
+              label='Unit Price'
+              name='Unit Price'
+              inputRef={register}
+            />
+            <TextField
+              margin='dense'
+              label='Fee'
+              name='Fee'
+              inputRef={register}
+            />
+            <TextField
+              margin='dense'
+              label='Tax'
+              name='Tax'
+              inputRef={register}
+            />
+            <TextField
+              margin='dense'
+              label='FX Rate'
+              name='FX Rate'
+              inputRef={register}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancel} color='primary'>
+              Cancel
+            </Button>
+            <Button type='submit' color='primary'>
+              Add
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );

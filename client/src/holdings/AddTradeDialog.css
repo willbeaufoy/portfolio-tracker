@@ -1,5 +1,9 @@
 .DialogContent {
   display: grid;
   gap: 20px;
-  grid-template-columns: 45% 45%;
+  grid-template-columns: 47% 47%;
+
+  box-shadow: -1px 1px 2px rgba(67, 70, 74, 0.0001),
+    -2px 2px 5px rgba(67, 86, 100, 0.123689);
+  border-radius: 8px;
 }
