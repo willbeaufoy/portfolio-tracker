@@ -52,5 +52,9 @@ def sync_prices(username: Optional[str] = None, isins: Optional[List[str]] = Non
             print(f'Error fetching price for {instrument.name}')
             print(f'Request was: {req}')
             print(f'Error was: {e}')
+            # If we encounter an error then the API is probably overloaded, so do not make any more
+            # requests in order to give it a rest.
+            print('Ending sync')
+            break
 
     return
