@@ -1,5 +1,13 @@
 .DialogContent {
   display: grid;
   gap: 20px;
-  grid-template-columns: 45% 45%;
+  grid-template-columns: 47% 47%;
+}
+
+.Category {
+  text-align: center;
+}
+
+#form-dialog-title {
+  text-align: center;
 }
