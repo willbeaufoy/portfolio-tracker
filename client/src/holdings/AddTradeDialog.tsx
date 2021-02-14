@@ -6,16 +6,11 @@ import * as yup from 'yup';
 
 import DateFnsUtils from '@date-io/date-fns';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {MenuItem, Select} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import {
+    Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select,
+    TextField
+} from '@material-ui/core';
+import {ToggleButton, ToggleButtonGroup} from '@material-ui/lab';
 import {DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 
 import {API} from '../api';
@@ -29,9 +24,9 @@ interface IFormInput {
   priceCurrency: Currency;
   quantity: number;
   unitPrice: number;
-  fee: number;
-  tax: number;
-  fxRate: number;
+  fee: string;
+  tax: string;
+  fxRate: string;
 }
 
 export type AddTradeDialogProps = {
@@ -73,7 +68,7 @@ export function AddTradeDialog({
     },
   });
 
-  function handleClickOpen() {
+  function openDialog() {
     setOpen(true);
   }
 
@@ -81,7 +76,7 @@ export function AddTradeDialog({
     setOpen(false);
   }
 
-  async function onSubmit(data: IFormInput) {
+  async function submitForm(data: IFormInput) {
     let fxRate: number = Number(data.fxRate) ?? 0;
     if (!fxRate) {
       // An FX rate must always be provided even if the trade was made
@@ -112,12 +107,12 @@ export function AddTradeDialog({
 
   return (
     <div>
-      <Button variant='outlined' color='primary' onClick={handleClickOpen}>
+      <Button variant='outlined' color='primary' onClick={openDialog}>
         Add Trade
       </Button>
       <Dialog open={open} onClose={cancel} aria-labelledby='form-dialog-title'>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle id='form-dialog-title'>
+        <form onSubmit={handleSubmit(submitForm)}>
+          <DialogTitle id='form-dialog-title' style={{textAlign: 'center'}}>
             Add Trade ({holding.symbol})
           </DialogTitle>
           <DialogContent className='DialogContent'>
