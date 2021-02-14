@@ -46,10 +46,6 @@ export function AddTradeDialog({
   showNotification,
 }: AddTradeDialogProps) {
   const [open, setOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const handleDateChange = (date: any) => {
-    setSelectedDate(date);
-  };
   const tradeValidationSchema = yup.object().shape({
     category: yup.string(),
     date: yup.date(),
@@ -71,6 +67,7 @@ export function AddTradeDialog({
     resolver: yupResolver(tradeValidationSchema),
     defaultValues: {
       category: 'BUY',
+      date: new Date().toISOString(),
       broker: holding.trades.slice(-1)[0]?.broker ?? '',
       priceCurrency: holding.currency,
     },
@@ -80,12 +77,12 @@ export function AddTradeDialog({
     setOpen(true);
   }
 
-  function handleCancel() {
+  function cancel() {
     setOpen(false);
   }
 
   async function onSubmit(data: IFormInput) {
-    let fxRate: number = Number(data.fxRate ?? 0);
+    let fxRate: number = Number(data.fxRate) ?? 0;
     if (!fxRate) {
       // An FX rate must always be provided even if the trade was made
       // in the user's currency.
@@ -93,7 +90,7 @@ export function AddTradeDialog({
     }
     const createTradeData: CreateTradeData = {
       holding: holding.id,
-      date: new Date().toISOString().split('.')[0].replace('T', ' '),
+      date: data.date.toISOString().split('.')[0].replace('T', ' '),
       category: data.category as TradeCategory,
       broker: data.broker ?? '',
       quantity: data.quantity,
@@ -118,48 +115,42 @@ export function AddTradeDialog({
       <Button variant='outlined' color='primary' onClick={handleClickOpen}>
         Add Trade
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleCancel}
-        aria-labelledby='form-dialog-title'>
+      <Dialog open={open} onClose={cancel} aria-labelledby='form-dialog-title'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle id='form-dialog-title'>
             Add Trade ({holding.symbol})
           </DialogTitle>
           <DialogContent className='DialogContent'>
-            <div className='Category'>
+            <div style={{textAlign: 'center'}}>
               <Controller
-                render={(category) => (
-                  <ToggleButtonGroup
-                    exclusive
-                    size={'medium'}
-                    aria-label='Category'
-                    {...category}
-                    onChange={(e, value) => {
-                      category.onChange(value);
-                    }}>
-                    <ToggleButton value='BUY' key='BUY'>
-                      BUY
-                    </ToggleButton>
-                    <ToggleButton value='SELL' key='SELL'>
-                      SELL
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                )}
                 label='Category'
                 name='category'
                 control={control}
-                inputRef={register}
+                render={({onChange, value}) => (
+                  <ToggleButtonGroup
+                    exclusive
+                    aria-label='Category'
+                    value={value}
+                    onChange={(e, value) => onChange(value)}>
+                    <ToggleButton value='BUY'>BUY</ToggleButton>
+                    <ToggleButton value='SELL'>SELL</ToggleButton>
+                  </ToggleButtonGroup>
+                )}
               />
             </div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <DateTimePicker
-                value={selectedDate}
-                onChange={handleDateChange}
-                label='Date'
-                variant='inline'
+              <Controller
                 name='date'
-                inputRef={register}
+                label='Date'
+                control={control}
+                render={({onChange, value}) => (
+                  <DateTimePicker
+                    value={value}
+                    onChange={(date) => onChange(date)}
+                    variant='inline'
+                    inputRef={register}
+                  />
+                )}
               />
             </MuiPickersUtilsProvider>
             <TextField
@@ -173,28 +164,28 @@ export function AddTradeDialog({
               label='Quantity'
               name='quantity'
               inputRef={register}
-              error={errors.quantity ? true : false}
+              error={!!errors.quantity}
             />
             <Controller
               name='priceCurrency'
               label='Currency'
               control={control}
-              as={
-                <Select inputRef={register}>
+              render={({onChange}) => (
+                <Select defaultValue={holding.currency}>
                   {CURRENCIES.map((c) => (
                     <MenuItem key={c} value={c}>
                       {c}
                     </MenuItem>
                   ))}
                 </Select>
-              }
+              )}
             />
             <TextField
               margin='dense'
               label='Unit Price'
               name='unitPrice'
               inputRef={register}
-              error={errors.unitPrice ? true : false}
+              error={!!errors.unitPrice}
             />
             <TextField
               margin='dense'
@@ -216,10 +207,10 @@ export function AddTradeDialog({
             />
           </DialogContent>
           <DialogActions>
-            {!!isSubmitting && (
+            {isSubmitting && (
               <CircularProgress size={25} style={{marginRight: '10px'}} />
             )}
-            <Button onClick={handleCancel} color='primary'>
+            <Button onClick={cancel} color='primary'>
               Cancel
             </Button>
             <Button type='submit' color='primary' disabled={isSubmitting}>
