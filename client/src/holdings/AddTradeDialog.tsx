@@ -165,15 +165,16 @@ export function AddTradeDialog({
               name='priceCurrency'
               label='Currency'
               control={control}
-              render={({onChange}) => (
-                <Select defaultValue={holding.currency}>
+              as={
+                // Should be using Render but won't pass default value correctly.
+                <Select>
                   {CURRENCIES.map((c) => (
                     <MenuItem key={c} value={c}>
                       {c}
                     </MenuItem>
                   ))}
                 </Select>
-              )}
+              }
             />
             <TextField
               margin='dense'
