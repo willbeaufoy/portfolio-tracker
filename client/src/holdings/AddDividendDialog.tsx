@@ -1,4 +1,4 @@
-import './AddTradeDialog.css';
+import './Dialog.css';
 
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';

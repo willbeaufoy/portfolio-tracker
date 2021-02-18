@@ -21,7 +21,7 @@ import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
 import {Dividend, FxRates, Holding, isTrade, Performance, Trade, Transaction, User} from '../types';
 import {AddDividendDialog} from './AddDividendDialog';
-import {AddHoldingForm} from './AddHoldingForm';
+import {AddHoldingDialog} from './AddHoldingDialog';
 import {AddTradeDialog} from './AddTradeDialog';
 import {PerformanceDisplay} from './PerformanceDisplay';
 import {TransactionsList} from './TransactionsList';
@@ -357,10 +357,10 @@ export function HoldingsList({user, fxRates, showNotification}: IProps) {
         </TableContainer>
       )}
       <div style={{margin: '20px 0'}}>
-        <AddHoldingForm
+        <AddHoldingDialog
           username={user.username}
           onHoldingCreated={(h: Holding) => addHolding(h)}
-          showNotification={showNotification}></AddHoldingForm>
+          showNotification={showNotification}></AddHoldingDialog>
       </div>
     </div>
   );
