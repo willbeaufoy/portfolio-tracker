@@ -15,11 +15,11 @@ import {PerformanceDisplay} from './PerformanceDisplay';
 import {formatValue, titleCase} from './utils/display';
 import {isBuyTrade} from './utils/performance';
 
-export type TransactionsListProps = {
+export interface TransactionsListProps {
   holding: Holding;
   user: User;
   onDeleteTransactionClicked: Function;
-};
+}
 
 /** Displays a holding's trades and dividends with the option to delete them. */
 export function TransactionsList({

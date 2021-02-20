@@ -39,11 +39,11 @@ interface IFormInput {
   fxRate: string;
 }
 
-export type AddTradeDialogProps = {
+export interface AddTradeDialogProps {
   holding: Holding;
   onTradeCreated: Function;
   showNotification: Function;
-};
+}
 
 export function AddTradeDialog({
   holding,

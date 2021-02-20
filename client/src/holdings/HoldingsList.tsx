@@ -19,7 +19,16 @@ import ShowChartIcon from '@material-ui/icons/ShowChart';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
-import {Dividend, FxRates, Holding, isTrade, Performance, Trade, Transaction, User} from '../types';
+import {
+  Dividend,
+  FxRates,
+  Holding,
+  isTrade,
+  Performance,
+  Trade,
+  Transaction,
+  User,
+} from '../types';
 import {AddDividendDialog} from './AddDividendDialog';
 import {AddHoldingDialog} from './AddHoldingDialog';
 import {AddTradeDialog} from './AddTradeDialog';
@@ -28,11 +37,11 @@ import {TransactionsList} from './TransactionsList';
 import {formatValue} from './utils/display';
 import {getTotalPerformance, PerfCalculator} from './utils/performance';
 
-export type IProps = {
+export interface IProps {
   user: User;
   fxRates: FxRates;
   showNotification: Function;
-};
+}
 
 /** Displays of all the user's holdings with the option to add more. */
 export function HoldingsList({user, fxRates, showNotification}: IProps) {

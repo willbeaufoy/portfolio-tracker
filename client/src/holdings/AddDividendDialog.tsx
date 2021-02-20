@@ -27,11 +27,11 @@ interface IFormInput {
   date: Date;
 }
 
-export type IProps = {
+export interface IProps {
   holding: Holding;
   onDividendCreated: Function;
   showNotification: Function;
-};
+}
 
 export function AddDividendDialog({
   holding,
