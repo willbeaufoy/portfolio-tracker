@@ -12,7 +12,7 @@ import {
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
-import {CreateInstrumentData, Currency} from '../types';
+import {Currency} from '../types';
 
 interface IFormInput {
   name: string;
@@ -23,11 +23,11 @@ interface IFormInput {
   exchange: string;
 }
 
-type AddHoldingDialogProps = {
+interface AddHoldingDialogProps {
   username: string;
   onHoldingCreated: Function;
   showNotification: Function;
-};
+}
 
 /** Form to add a holding. */
 export function AddHoldingDialog({
@@ -37,23 +37,24 @@ export function AddHoldingDialog({
 }: AddHoldingDialogProps) {
   const [open, setOpen] = useState(false);
   const holdingValidationSchema = yup.object().shape({
-    name: yup.string(),
-    symbol: yup.string(),
+    name: yup.string().required(),
+    symbol: yup.string().required(),
     category: yup.string(),
-    isin: yup.string(),
+    isin: yup.string().required(),
     currency: yup.string(),
-    exchange: yup.string(),
+    exchange: yup.string().required(),
   });
   const {
     register,
     handleSubmit,
     control,
+    errors,
     formState: {isSubmitting},
-  } = useForm<CreateInstrumentData>({
+  } = useForm<IFormInput>({
     resolver: yupResolver(holdingValidationSchema),
     defaultValues: {
       category: 'STOCK',
-      currency: CURRENCIES[0],
+      currency: 'USD',
     },
   });
 
@@ -139,24 +140,28 @@ export function AddHoldingDialog({
               label='Name'
               name='name'
               inputRef={register}
+              error={!!errors.name}
             />
             <TextField
               margin='dense'
               label='Ticker Symbol'
               name='symbol'
               inputRef={register}
+              error={!!errors.symbol}
             />
             <TextField
               margin='dense'
               label='ISIN'
               name='isin'
               inputRef={register}
+              error={!!errors.isin}
             />
             <TextField
               margin='dense'
               label='Exchange'
               name='exchange'
               inputRef={register}
+              error={!!errors.exchange}
             />
           </DialogContent>
           <DialogActions>

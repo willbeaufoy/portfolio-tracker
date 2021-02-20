@@ -58,7 +58,7 @@ export function AddTradeDialog({
     control,
     errors,
     formState: {isSubmitting},
-  } = useForm<CreateTradeData>({
+  } = useForm<IFormInput>({
     resolver: yupResolver(tradeValidationSchema),
     defaultValues: {
       category: 'BUY',
