@@ -7,7 +7,13 @@ import * as yup from 'yup';
 import DateFnsUtils from '@date-io/date-fns';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
-    Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from '@material-ui/core';
 import {DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 
@@ -114,7 +120,6 @@ export function AddDividendDialog({
                     value={value}
                     onChange={(date) => onChange(date)}
                     variant='inline'
-                    inputRef={register}
                   />
                 )}
               />

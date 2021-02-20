@@ -7,8 +7,18 @@ import * as yup from 'yup';
 import DateFnsUtils from '@date-io/date-fns';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
-    Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select,
-    TextField
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
 } from '@material-ui/core';
 import {ToggleButton, ToggleButtonGroup} from '@material-ui/lab';
 import {DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
@@ -143,7 +153,6 @@ export function AddTradeDialog({
                     value={value}
                     onChange={(date) => onChange(date)}
                     variant='inline'
-                    inputRef={register}
                   />
                 )}
               />
@@ -165,16 +174,22 @@ export function AddTradeDialog({
               name='priceCurrency'
               label='Currency'
               control={control}
-              as={
-                // Should be using Render but won't pass default value correctly.
-                <Select>
-                  {CURRENCIES.map((c) => (
-                    <MenuItem key={c} value={c}>
-                      {c}
-                    </MenuItem>
-                  ))}
-                </Select>
-              }
+              render={({onChange, value}) => (
+                <FormControl>
+                  <Tooltip title='The currency of the unit price (not the currency you paid in)'>
+                    <InputLabel>Unit Price Currency</InputLabel>
+                  </Tooltip>
+                  <Select
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}>
+                    {CURRENCIES.map((c) => (
+                      <MenuItem key={c} value={c}>
+                        {c}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
             />
             <TextField
               margin='dense'

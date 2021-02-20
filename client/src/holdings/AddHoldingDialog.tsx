@@ -6,8 +6,18 @@ import * as yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
-    Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Select,
-    TextField
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
 } from '@material-ui/core';
 
 import {API} from '../api';
@@ -111,29 +121,39 @@ export function AddHoldingDialog({
               name='category'
               label='Category'
               control={control}
-              as={
-                // Should be using Render but won't pass default value correctly.
-                <Select>
-                  <MenuItem value='STOCK'>Stock</MenuItem>
-                  <MenuItem value='ETF'>ETF</MenuItem>
-                  <MenuItem value='FUND'>Fund</MenuItem>
-                </Select>
-              }
+              render={({onChange, value}) => (
+                <FormControl>
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}>
+                    <MenuItem value='STOCK'>Stock</MenuItem>
+                    <MenuItem value='ETF'>ETF</MenuItem>
+                    <MenuItem value='FUND'>Fund</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
             />
             <Controller
               name='currency'
               label='Currency'
               control={control}
-              as={
-                // Should be using Render but won't pass default value correctly.
-                <Select>
-                  {CURRENCIES.map((c) => (
-                    <MenuItem key={c} value={c}>
-                      {c}
-                    </MenuItem>
-                  ))}
-                </Select>
-              }
+              render={({onChange, value}) => (
+                <FormControl>
+                  <Tooltip title='The currency the holding is priced in in the data source (currently FinKi)'>
+                    <InputLabel>Currency</InputLabel>
+                  </Tooltip>
+                  <Select
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}>
+                    {CURRENCIES.map((c) => (
+                      <MenuItem key={c} value={c}>
+                        {c}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
             />
             <TextField
               margin='dense'
