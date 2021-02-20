@@ -34,7 +34,11 @@ export class API {
 
   /** Creates a holding on the API */
   static createHolding(data: CreateHoldingData): Promise<Holding> {
+<<<<<<< HEAD
     const url = new URL('/holdings/', API_BASE);
+=======
+    const url = new URL('holdings', API_BASE);
+>>>>>>> x
     return fetch(url.toString(), {
       method: 'POST',
       headers: {
