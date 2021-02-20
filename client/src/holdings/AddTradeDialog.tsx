@@ -57,13 +57,13 @@ export function AddTradeDialog({
     handleSubmit,
     control,
     errors,
-    formState: { isSubmitting },
+    formState: {isSubmitting},
   } = useForm<IFormInput>({
     resolver: yupResolver(tradeValidationSchema),
     defaultValues: {
-      category: "BUY",
+      category: 'BUY',
       date: new Date().toISOString(),
-      broker: holding.trades.slice(-1)[0]?.broker ?? "",
+      broker: holding.trades.slice(-1)[0]?.broker ?? '',
       priceCurrency: holding.currency,
     },
   });
@@ -81,100 +81,98 @@ export function AddTradeDialog({
     if (!fxRate) {
       // An FX rate must always be provided even if the trade was made
       // in the user's currency.
-      fxRate = holding.currency === "GBX" ? 100 : 1;
+      fxRate = holding.currency === 'GBX' ? 100 : 1;
     }
     const createTradeData: CreateTradeData = {
       holding: holding.id,
-      date: data.date.toISOString().split(".")[0].replace("T", " "),
+      date: data.date.toISOString().split('.')[0].replace('T', ' '),
       category: data.category as TradeCategory,
-      broker: data.broker ?? "",
+      broker: data.broker ?? '',
       quantity: data.quantity,
       priceCurrency: data.priceCurrency,
       unitPrice: data.unitPrice,
       fee: Number(data.fee) ?? 0,
       tax: Number(data.tax) ?? 0,
       fxRate,
-      paymentCurrency: "GBP", // Assume trade was always paid for in GBP for now.
+      paymentCurrency: 'GBP', // Assume trade was always paid for in GBP for now.
     };
     try {
       const trade = await API.createTrade(createTradeData);
       onTradeCreated(trade);
       setOpen(false);
     } catch (err) {
-      showNotification(`Create trade for ${holding.symbol} failed!`, "error");
+      showNotification(`Create trade for ${holding.symbol} failed!`, 'error');
     }
   }
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={openDialog}>
+      <Button variant='outlined' color='primary' onClick={openDialog}>
         Add Trade
       </Button>
-      <Dialog open={open} onClose={cancel} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={cancel} aria-labelledby='form-dialog-title'>
         <form onSubmit={handleSubmit(submitForm)}>
-          <DialogTitle id="form-dialog-title" style={{ textAlign: "center" }}>
+          <DialogTitle id='form-dialog-title' style={{textAlign: 'center'}}>
             Add Trade ({holding.symbol})
           </DialogTitle>
-          <DialogContent className="DialogContent">
-            <div style={{ textAlign: "center" }}>
+          <DialogContent className='DialogContent'>
+            <div style={{textAlign: 'center'}}>
               <Controller
-                label="Category"
-                name="category"
+                label='Category'
+                name='category'
                 control={control}
-                render={({ onChange, value }) => (
+                render={({onChange, value}) => (
                   <ToggleButtonGroup
                     exclusive
-                    aria-label="Category"
+                    aria-label='Category'
                     value={value}
-                    onChange={(e, value) => onChange(value)}
-                  >
-                    <ToggleButton value="BUY">BUY</ToggleButton>
-                    <ToggleButton value="SELL">SELL</ToggleButton>
+                    onChange={(e, value) => onChange(value)}>
+                    <ToggleButton value='BUY'>BUY</ToggleButton>
+                    <ToggleButton value='SELL'>SELL</ToggleButton>
                   </ToggleButtonGroup>
                 )}
               />
             </div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Controller
-                name="date"
-                label="Date"
+                name='date'
+                label='Date'
                 control={control}
-                render={({ onChange, value }) => (
+                render={({onChange, value}) => (
                   <KeyboardDateTimePicker
                     value={value}
                     onChange={(date) => onChange(date)}
-                    variant="inline"
-                    format="dd-MM-yyyy HH:mm:ss"
+                    variant='inline'
+                    format='dd-MM-yyyy HH:mm:ss'
                   />
                 )}
               />
             </MuiPickersUtilsProvider>
             <TextField
-              margin="dense"
-              label="Broker"
-              name="broker"
+              margin='dense'
+              label='Broker'
+              name='broker'
               inputRef={register}
             />
             <TextField
-              margin="dense"
-              label="Quantity"
-              name="quantity"
+              margin='dense'
+              label='Quantity'
+              name='quantity'
               inputRef={register}
               error={!!errors.quantity}
             />
             <Controller
-              name="priceCurrency"
-              label="Currency"
+              name='priceCurrency'
+              label='Currency'
               control={control}
-              render={({ onChange, value }) => (
+              render={({onChange, value}) => (
                 <FormControl>
-                  <Tooltip title="The currency of the unit price (not the currency you paid in)">
+                  <Tooltip title='The currency of the unit price (not the currency you paid in)'>
                     <InputLabel>Unit Price Currency</InputLabel>
                   </Tooltip>
                   <Select
                     value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                  >
+                    onChange={(e) => onChange(e.target.value)}>
                     {CURRENCIES.map((c) => (
                       <MenuItem key={c} value={c}>
                         {c}
@@ -185,39 +183,39 @@ export function AddTradeDialog({
               )}
             />
             <TextField
-              margin="dense"
-              label="Unit Price"
-              name="unitPrice"
+              margin='dense'
+              label='Unit Price'
+              name='unitPrice'
               inputRef={register}
               error={!!errors.unitPrice}
             />
             <TextField
-              margin="dense"
-              label="Fee"
-              name="fee"
+              margin='dense'
+              label='Fee'
+              name='fee'
               inputRef={register}
             />
             <TextField
-              margin="dense"
-              label="Tax"
-              name="tax"
+              margin='dense'
+              label='Tax'
+              name='tax'
               inputRef={register}
             />
             <TextField
-              margin="dense"
-              label="FX Rate"
-              name="fxRate"
+              margin='dense'
+              label='FX Rate'
+              name='fxRate'
               inputRef={register}
             />
           </DialogContent>
           <DialogActions>
             {isSubmitting && (
-              <CircularProgress size={25} style={{ marginRight: "10px" }} />
+              <CircularProgress size={25} style={{marginRight: '10px'}} />
             )}
-            <Button onClick={cancel} color="primary">
+            <Button onClick={cancel} color='primary'>
               Cancel
             </Button>
-            <Button type="submit" color="primary" disabled={isSubmitting}>
+            <Button type='submit' color='primary' disabled={isSubmitting}>
               Add
             </Button>
           </DialogActions>
