@@ -1,4 +1,4 @@
-import './AddTradeDialog.css';
+import './Dialog.css';
 
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
@@ -58,7 +58,7 @@ export function AddTradeDialog({
     control,
     errors,
     formState: {isSubmitting},
-  } = useForm<CreateTradeData>({
+  } = useForm<IFormInput>({
     resolver: yupResolver(tradeValidationSchema),
     defaultValues: {
       category: 'BUY',

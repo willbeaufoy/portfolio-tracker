@@ -1,4 +1,4 @@
-import './AddTradeDialog.css';
+import './Dialog.css';
 
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
@@ -44,7 +44,7 @@ export function AddDividendDialog({
     control,
     errors,
     formState: {isSubmitting},
-  } = useForm<CreateDividendData>({
+  } = useForm<IFormInput>({
     resolver: yupResolver(diviValidationSchema),
     defaultValues: {
       broker: holding.trades.slice(-1)[0]?.broker ?? '',
