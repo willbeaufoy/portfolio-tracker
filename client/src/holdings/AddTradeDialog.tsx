@@ -1,5 +1,6 @@
 import './Dialog.css';
 
+import {debounce} from 'debounce';
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
@@ -7,11 +8,24 @@ import * as yup from 'yup';
 import DateFnsUtils from '@date-io/date-fns';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
-    Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
-    InputLabel, MenuItem, Select, TextField, Tooltip
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
 } from '@material-ui/core';
 import {ToggleButton, ToggleButtonGroup} from '@material-ui/lab';
-import {KeyboardDateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -141,9 +155,9 @@ export function AddTradeDialog({
                 render={({onChange, value}) => (
                   <KeyboardDateTimePicker
                     value={value}
-                    onChange={(date) => onChange(date)}
+                    onChange={debounce((date) => onChange(date), 1000)}
                     variant='inline'
-                    format='dd-MM-yyyy HH:mm:ss'
+                    format='dd/MM/yyyy HH:mm:ss'
                   />
                 )}
               />
