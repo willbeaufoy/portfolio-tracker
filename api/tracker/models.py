@@ -62,7 +62,7 @@ class Trade(models.Model):
         SELL = 'SELL'
 
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']
 
     holding = models.ForeignKey(
         Holding, related_name='trades', on_delete=models.CASCADE)
@@ -86,7 +86,7 @@ class Trade(models.Model):
 
 class Dividend(models.Model):
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']
 
     holding = models.ForeignKey(
         Holding, related_name='dividends', on_delete=models.CASCADE)
