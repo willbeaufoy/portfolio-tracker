@@ -6,18 +6,8 @@ import * as yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Tooltip,
+    Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
+    InputLabel, MenuItem, Select, TextField, Tooltip
 } from '@material-ui/core';
 
 import {API} from '../api';
@@ -88,7 +78,7 @@ export function AddHoldingDialog({
           isin: data.isin,
           currency: data.currency,
           exchange: data.exchange,
-          dataSource: 'FI',
+          dataSource: 'T2',
         });
       }
       const holding = await API.createHolding({
@@ -140,7 +130,7 @@ export function AddHoldingDialog({
               control={control}
               render={({onChange, value}) => (
                 <FormControl>
-                  <Tooltip title='The currency the holding is priced in in the data source (currently FinKi)'>
+                  <Tooltip title='The currency the holding is priced in in the data source (currently Trading 212)'>
                     <InputLabel>Currency</InputLabel>
                   </Tooltip>
                   <Select

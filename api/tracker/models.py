@@ -12,6 +12,7 @@ class Instrument(models.Model):
     class DataSource(models.TextChoices):
         FINKI = 'FI'
         MARKETSTACK = 'MS'
+        TRADING_212 = 'T2'
 
     class Meta:
         ordering = ['name']
@@ -23,7 +24,9 @@ class Instrument(models.Model):
     currency = models.CharField(max_length=3)
     exchange = models.CharField(max_length=50, blank=True)
     data_source = models.CharField(
-        max_length=2, choices=DataSource.choices, default=DataSource.FINKI)
+        max_length=2, choices=DataSource.choices, default=DataSource.TRADING_212)
+    # Code used to identify the instrument on the Trading 212 API
+    t212_code = models.CharField(max_length=50, blank=True)
     isin = models.CharField(max_length=12)
     bid_price = models.FloatField(null=True)
     bid_price_update_time = models.DateTimeField(null=True)

@@ -16,11 +16,6 @@ class InstrumentList(generics.ListCreateAPIView):
         isin = self.request.query_params.get('isin', '')
         return Instrument.objects.filter(isin=isin)
 
-    def post(self, request, *args, **kwargs):
-        res = self.create(request, *args, **kwargs)
-        sync_prices(isins=[request.data['isin']])
-        return res
-
 
 class InstrumentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Instrument.objects.all()

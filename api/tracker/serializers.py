@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from tracker.models import (Dividend, Holding, Instrument, InstrumentSplit,
                             Trade)
+from tracker.sync import apply_trading_212_codes, sync_prices
 
 
 class InstrumentSplitSerializer(serializers.ModelSerializer):
@@ -20,9 +21,13 @@ class InstrumentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """
-        Create and return a new `Instrument` instance, given the validated data.
+        Create a new `Instrument` instance given the validated data, apply its
+        Trading 212 code, sync its price and return it.
         """
-        return Instrument.objects.create(**validated_data)
+        inst = Instrument.objects.create(**validated_data)
+        apply_trading_212_codes(isins=[inst.isin])
+        sync_prices(isins=[inst.isin])
+        return inst
 
     def update(self, instance, validated_data):
         """
