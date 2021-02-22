@@ -1,5 +1,6 @@
 import './Dialog.css';
 
+import {debounce} from 'debounce';
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
@@ -15,7 +16,10 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import {DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 
 import {API} from '../api';
 import {USER_CURRENCY} from '../settings';
@@ -116,10 +120,11 @@ export function AddDividendDialog({
                 label='Date'
                 control={control}
                 render={({onChange, value}) => (
-                  <DateTimePicker
+                  <KeyboardDateTimePicker
                     value={value}
-                    onChange={(date) => onChange(date)}
+                    onChange={debounce((date) => onChange(date), 1000)}
                     variant='inline'
+                    format='dd/MM/yyyy HH:mm:ss'
                   />
                 )}
               />
