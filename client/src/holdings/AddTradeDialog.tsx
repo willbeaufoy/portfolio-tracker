@@ -8,24 +8,11 @@ import * as yup from 'yup';
 import DateFnsUtils from '@date-io/date-fns';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Tooltip,
+    Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
+    InputLabel, MenuItem, Select, TextField, Tooltip
 } from '@material-ui/core';
 import {ToggleButton, ToggleButtonGroup} from '@material-ui/lab';
-import {
-  KeyboardDateTimePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import {KeyboardDateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 
 import {API} from '../api';
 import {CURRENCIES} from '../constants';
@@ -78,7 +65,7 @@ export function AddTradeDialog({
       category: 'BUY',
       date: new Date().toISOString(),
       broker: holding.trades.slice(-1)[0]?.broker ?? '',
-      priceCurrency: holding.currency,
+      priceCurrency: holding.trades.slice(-1)[0]?.priceCurrency ?? '',
     },
   });
 
