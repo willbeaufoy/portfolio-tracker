@@ -65,7 +65,8 @@ export function AddTradeDialog({
       category: 'BUY',
       date: new Date().toISOString(),
       broker: holding.trades.slice(-1)[0]?.broker ?? '',
-      priceCurrency: holding.trades.slice(-1)[0]?.priceCurrency ?? '',
+      priceCurrency:
+        holding.trades.slice(-1)[0]?.priceCurrency ?? holding.currency,
     },
   });
 
